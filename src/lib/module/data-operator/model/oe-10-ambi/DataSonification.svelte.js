@@ -17,6 +17,7 @@ import { timingConfig }             from '$lib/module/data-operator/core/config/
 import { musicalScales }            from '$lib/module/data-operator/core/config/global/music-scale-config';
 import { paramInit }                from './parameter-map';
 
+// const base = `${window?.location.origin}/sounds/`
 
 // => DataSonification class
 export class DataSonification extends Sonification{
@@ -33,6 +34,7 @@ export class DataSonification extends Sonification{
 
     // Custom song code: always derived from 'state' (Ui) and 'params' 
     // Strudel code derived from state and params
+
     code = $derived(`
         /* 
          @title Open Electricity Data Jam: ${d3.timeFormat("%d-%m-%y")(this.data.model[this.state.selection.sceneIndex].day)}   
@@ -41,7 +43,14 @@ export class DataSonification extends Sonification{
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */
-               
+        
+
+        samples({
+            bassdrum: 'bd/BT0AADA.wav',
+            hihat: 'hh27/000_hh27closedhh.wav',
+            snaredrum: ['sd/rytm-01-classic.wav', 'sd/rytm-00-hard.wav'],
+        }, '/samples/');
+
         setcpm(${this.param.global.bpm / timingConfig.beats.perBar})
 
         stack(
@@ -118,13 +127,15 @@ export class DataSonification extends Sonification{
             ,
             // Group C.
             stack( // Part 1: Membrane percussion sounds
-                s("${this.param.C.part["1"].sound.pattern}").bank("${this.param.C.part["1"].sound.bank}")  // Beat
-                    ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}  
-                ,  // Part 2: Metal and misc percussion sounds
-                s("${this.param.C.part["2"].sound.pattern}").bank("${this.param.C.part["2"].sound.bank}")   // Hats
-                    .velocity(perlin.range(.5, 0.75))
-                    .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})   // Euclidean pulse
-                    ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`}                     
+                s("bassdrum snaredrum:0 bassdrum snaredrum:1, hihat*16")
+
+                // s("${this.param.C.part["1"].sound.pattern}").bank("${this.param.C.part["1"].sound.bank}")  // Beat
+                //     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}  
+                // ,  // Part 2: Metal and misc percussion sounds
+                // s("${this.param.C.part["2"].sound.pattern}").bank("${this.param.C.part["2"].sound.bank}")   // Hats
+                //     .velocity(perlin.range(.5, 0.75))
+                //     .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})   // Euclidean pulse
+                //     ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`}                     
                 , // Part 3: Harmony: sampled chord
                 n(${ this.param.C.part["3"].sound.pattern }) // I IV V VI
                     .scale("${this.param.global.scale.root}${this.param.C.part["3"].octave}:${this.param.global.scale.type}")     
