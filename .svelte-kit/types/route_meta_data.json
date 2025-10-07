@@ -1,0 +1,65 @@
+{
+	"/": [
+		"src/routes/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/api/open-electricity": [
+		"src/routes/api/open-electricity/+server.js"
+	],
+	"/data/open-electricity": [
+		"src/routes/+layout.js",
+		"src/routes/data/open-electricity/+server.js"
+	],
+	"/docs": [
+		"src/routes/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/docs/design": [
+		"src/routes/+layout.js"
+	],
+	"/docs/model/oe-10": [
+		"src/routes/+layout.js"
+	],
+	"/docs/model/oe-dfam": [
+		"src/routes/+layout.js"
+	],
+	"/docs/quick-start": [
+		"src/routes/+layout.js"
+	],
+	"/docs/sonification": [
+		"src/routes/+layout.js"
+	],
+	"/docs/sonification/oe-10-ambi": [
+		"src/routes/+layout.js"
+	],
+	"/docs/sonification/oe-10-dfam": [
+		"src/routes/+layout.js"
+	],
+	"/docs/sonification/oe-10": [
+		"src/routes/+layout.js"
+	],
+	"/docs/user-manual": [
+		"src/routes/+layout.js"
+	],
+	"/oe-10-ambi": [
+		"src/routes/oe-10-ambi/+page.js",
+		"src/routes/oe-10-ambi/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/oe-10-ambi/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/oe-10-dfam": [
+		"src/routes/oe-10-dfam/+page.js",
+		"src/routes/oe-10-dfam/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/oe-10-dfam/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/oe-10": [
+		"src/routes/oe-10/+page.js",
+		"src/routes/oe-10/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/oe-10/+layout.js",
+		"src/routes/+layout.js"
+	]
+}

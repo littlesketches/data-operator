@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/docs/model/oe-10/+page.svelte";
