@@ -41,7 +41,8 @@ export const paramInit = {
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            clockDivider:       1               // Clock divider
         },
         velocity: {
             pattern:            undefined
@@ -63,7 +64,9 @@ export const paramInit = {
             transpose:          -24,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,      // Legato version of pulse sequencer pattern
+            clockDivider:       1               // Clock divider
+
         },
         noise: {
             pattern:            undefined       // Mapped to noise velocity
@@ -81,28 +84,30 @@ export const paramInit = {
                 gain:           0.8,            // Sets group level with group
                 mute:           false,
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    bank:       'RolandTR909',  // Sound bank alias 
-                    length:     16,             // 
-                    pulse:      16,             // Euclidean pulse
-                    rotation:   0,              // Euclidean rotation
+                    pattern:        undefined,      // sound part pattern
+                    bank:           'RolandTR909',  // Sound bank alias 
+                    length:         16,             // 
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
+                    clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:    undefined,     // velocity pattern
+                    pattern:        undefined,     // velocity pattern
                 }
             },
             2: { // "Hats"
                 gain:           0.8,            // Sets group level with group
                 mute:           false,
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    bank:       'RolandTR909',  // Sound bank alias 
-                    length:      16,            // 
-                    pulse:       16,            // Euclidean pulse
-                    rotation:    0,             // Euclidean rotation
+                    pattern:        undefined,      // sound part pattern
+                    bank:           'RolandTR909',  // Sound bank alias 
+                    length:         16,             // 
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
+                    clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:    undefined,     // Velocity pattern
+                    pattern:        undefined,     // Velocity pattern
                 }
             },
             3: {    // Chords
@@ -110,10 +115,14 @@ export const paramInit = {
                 mute:           false,
                 octave:         3,              // Scale octave
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    sample:     undefined,
-                    modifier:   null,
-                    length:     undefined
+                    pattern:        undefined,      // sound part pattern
+                    sample:         undefined,
+                    modifier:       null,
+                    length:         undefined,
+                    clockDivider:   2                 // Clock divider
+                },
+                velocity: {     
+                    pattern:        undefined,     // Velocity pattern
                 }
             }
         }

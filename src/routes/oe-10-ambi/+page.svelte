@@ -24,7 +24,6 @@
     // Add handler methods (requires strudel to be instantiated)
     sonification.addHandlers(strudel)
 
-
     /**
      *  II. SONIFICATION COMPOSITION composition associated with sonification
      */
@@ -35,7 +34,6 @@
     $effect( () => {
         composition.schedule
     })
-
 
     /**
      *  III. MODEL PROP 

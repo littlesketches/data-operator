@@ -1,11 +1,12 @@
-<!-- ABOUT SILENT SHOUT-->
+<!-- SONIFICATION NOTES-->
 <script>
-
+    // Libs and utils
+	import { fade }         from 'svelte/transition';
 </script>
 
 
 <!-- HTML MARKUP-->
-<article>
+<article in:fade>
     <div class = 'content-wrapper'>
 
         <h1>Data Operator</h1>
@@ -29,7 +30,7 @@
             <ul>
                 <li>It must be fun to use. depth and advanced features (e.g. sound design) are pared back whenever in doubt. This does not mean 'Fischer Price music toy' approach, but it means that there are at least, a limited depth applied to  "button combinations".
                 </li>
-                <li>It must be interactive and provide users with immediate feedback to their actions: primarily audio, and/or through supporting visual/information. The immediacy of feedback is a a key acharacteristic of a creative tool or 'tool for expression'.</li>
+                <li>It must be interactive and provide users with immediate feedback to their actions: primarily audio, and/or through supporting visual/information. The immediacy of feedback is a key characteristic of a creative tool or 'tool for expression'.</li>
                 <li>It must work across mobile phone, tablet and traditional computer-with-keyboard devices.
                     <ul>
                         <li>This presents a 'minimum interface' and associated control/input(e.g. touch vs keyboard vs mouse) challenge that often set the design direction and bound the possible design solution space for the sonification (parameter mapping). In short, the interface is/was found to be the limiting factor for sound design (over say, technical limitations od devices)
@@ -38,7 +39,7 @@
                         <li>Multiple 'optimised' interfaces are required, particularly for small touch screens (i.e. mobile phones)</li>
                     </ul>
                 </li>
-                <li>It should showcase data that 'swappable': this requirement is more to showcase how a data sonification 'platform' and associated 'instrument' interface can be scalable. This places more emphasis on designing a robust parameter mapping design algorithm that supports 'lots of data', rather than focusing on a tweaking a bespoke sonificaiton composition. It also puts more focus on 'instrument design choices' and data mapping for timbral and dynamics parameters.
+                <li>It should showcase data that 'swappable': this requirement is more to showcase how a data sonification 'platform' and associated 'instrument' interface can be scalable. This places more emphasis on designing a robust parameter mapping design algorithm that supports 'lots of data', rather than focusing on a tweaking a bespoke sonification composition. It also puts more focus on 'instrument design choices' and data mapping for timbral and dynamics parameters.
                 </li>
                 <li>It should preference musicality and sonic aesthetics. It should sound "good" and musical, wherever possible. This is a design choice to appeal to a wider audience (see, 'fun')</li>
             </ul>
@@ -57,59 +58,6 @@
     p, li{
         line-height: 1.75;
     }
-    /* Navigation */
-    nav{
-        padding:            0.5rem 1rem;
-
-    }
-    nav a:visited,
-    nav div,
-    nav a {
-        /* color:           #fff; */
-        text-decoration:    none;
-    }
-
-
-    /* Keyboard key style */
-    span.key{
-        display:            inline-block;
-        border-top:         solid 2px;
-        border-left:        solid 2px;
-        border-right:       solid 0.25px;
-        border-bottom:      solid 0.25px;
-        border-radius:      0.25rem;
-        padding:            0.1rem 0.5rem;
-        margin:             0rem 0;
-        min-width:          1rem;
-        text-align:         center;  
-        font-size:          1rem;
-    }
-    span.key span{
-        font-size:          1rem;
-    }
-    /* In text 'button' style */
-    span.text-button{
-        display:            inline-block;
-        border-top:         solid 2px;
-        border-left:        solid 2px;
-        border-right:       solid 0.25px;
-        border-bottom:      solid 0.25px;
-        border-radius:      1rem;
-        padding:            0rem 0.5rem;
-        margin:             0rem 0;
-        min-width:          1rem;
-        text-align:         center;   
-    }
-
-    /* Slide container */
-    .slide-button{
-        text-decoration:    underline dotted;
-        cursor:             pointer;
-    }
-    .slide-button:hover{
-        width: 100%;
-    }
-
 
     /* Overrides */
     li{

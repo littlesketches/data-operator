@@ -74,7 +74,7 @@
         <!-- CALCULATOR BUTTONS -->
         {#if !sonification.state.sequencer.ui.isOpen}
         <CalculatorPad {model} />
-        <div id = "open-sequencer" data-group = 'A'   class = 'sequencer-toggle button side' 
+        <!-- <div id = "open-sequencer" data-group = 'A'   class = 'sequencer-toggle button side' 
             style  = 'grid-column: 1; grid-row: 2; display: {sonification.state.isMobile ? 'none' : 'init'}'
             onpointerdown="{handle.click}" >
             <div class = 'button__wrapper'>
@@ -87,7 +87,7 @@
             <div class = 'button__wrapper'>
                 <div class = 'button-label'>SEQ. B</div>
             </div>
-        </div>
+        </div> -->
 
         {:else}
         <!-- STEP SEQUENCER -->
@@ -189,10 +189,12 @@
         transition:             all 200ms;
         opacity:                1;
         line-height:            1;
+
     }
 
     #playStop .button-label span{ 
         font-size:              4vh;
+        color:                  var(--col-light);  
     }
 
     /*** SEQUENCER BUTTONS */

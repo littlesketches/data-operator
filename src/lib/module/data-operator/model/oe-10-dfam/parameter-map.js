@@ -7,7 +7,8 @@
 export const paramInit = {
     synth: {
         DFAM: {
-            orbit:          2,          // 2 = duckOrbit
+            duck:           false,
+            orbit:          2,          // 1 = no d=ucking; 2 = duckOrbit
             // VCO / PITCH ENVELOPE
             vcoAttack:      0,          // Does not seem to work
             vcoMax:         12,         // [VCO Decay] Pitch env "range" (in semitones) shared between VCO1+2 
@@ -54,8 +55,8 @@ export const paramInit = {
             transpose:          24,             // OSC 2 transpose
             scaleTranspose:     0,               // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined       // Legato version of pulse sequencer pattern
-
+            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            clockDivider:       1               // Clock divider
         },
     },
     // Group B: [melodic] bass (and/or chord/drone) 
@@ -79,47 +80,51 @@ export const paramInit = {
         },
         part: {     
             1: {  // "Beat":  mostly set for selected series in updateParameterMap
-                gain:           1,
-                mute:           false,
+                gain:               1,
+                mute:               false,
                 sound: {
-                    pattern:    {},      // sound part pattern
-                    bank:       'RolandTR909',  // Sound bank alias 
-                    length:     16,             // 
-                    pulse:      16,             // Euclidean pulse
-                    rotation:   0,              // Euclidean rotation
+                    pattern:        {},      // sound part pattern
+                    bank:           'RolandTR909',  // Sound bank alias 
+                    length:         16,             // 
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
+                    clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:    undefined,             // velocity pattern
-                    length:     16,            // Euclidean pulse
-                    pulse:      16,            // Euclidean pulse
-                    rotation:   0,             // Euclidean rotation
+                    pattern:        undefined,      // velocity pattern
+                    length:         16,             // Euclidean pulse
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
                 }
             },
             2: { // "Hats"
-                gain:           1,
-                mute:           false,
+                gain:               1,
+                mute:               false,
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    bank:       'RolandTR909',  // Sound bank alias 
-                    length:      16,            // 
-                    pulse:       16,            // Euclidean pulse
-                    rotation:    0,             // Euclidean rotation
+                    pattern:        undefined,      // sound part pattern
+                    bank:           'RolandTR909',  // Sound bank alias 
+                    length:         16,             // 
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
+                    clockDivider:   1               // Clock divider
+
                 },
                 velocity: {     
-                    pattern:    undefined,     // velocity pattern
-                    pulse:      16,            // Euclidean pulse
-                    rotation:   0,             // Euclidean rotation
+                    pattern:        undefined,      // velocity pattern
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
                 }
             },
             3: {    // Chords
-                gain:           0.5,           // Sets group level with group
-                mute:           false,
-                octave:         3,              // Scale octave
+                gain:               0.5,            // Sets group level with group
+                mute:               false,
+                octave:             3,              // Scale octave
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    sample:     undefined,
-                    modifier:   null,
-                    length:     undefined
+                    pattern:        undefined,      // sound part pattern
+                    sample:         undefined,
+                    modifier:       null,
+                    length:         undefined,
+                    clockDivider:   1               // Clock divider
                 }
             }
         }

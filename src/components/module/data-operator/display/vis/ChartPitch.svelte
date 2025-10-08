@@ -16,8 +16,8 @@
     const isMobile = sonification.state.isMobile
     const scaleType = paramName === 'pitch' ? 'quantized' : 'value'
 
-    let sequencerOn = $derived(sonification.state.sequencer.ui.isOpen),
-        sequencerGroup = $derived(sonification.state.sequencer.ui.group)
+    let sequencerOn     = $derived(sonification.state.sequencer.ui.isOpen),
+        sequencerGroup  = $derived(sonification.state.sequencer.ui.group)
 
     /**
      *  CHART CONFIG
@@ -29,8 +29,10 @@
         half:       {width: 1920, height: 500,  symbolSize: 1250 }, 
         quarter:    {width: 1920, height: 300,  symbolSize: 1250 }
     }
+
     // ii. Init config obj
     const config = {
+        steps:      16,         // fixed
         dims: {
             canvas: {
                 width:      dimsByType[chartType].width,
@@ -60,16 +62,17 @@
 
     // i. Selections and params
     const dataInterval = sonification.schema.group[group][paramName].interval,
-        type = sonification.schema.group[group].type
+        type          = sonification.schema.group[group].type
 
-    let sceneIndex  = $derived(sonification.state.selection.sceneIndex),
-        data          = $derived(dataModel.model[sceneIndex]),        // Modelled data for selected day
-        series        = $derived(sonification.state.selection.group[group][`${paramName}Pattern`]),
-        length        = $derived(sonification.param[group][paramName].length),
-        pulseArray    = $derived(sonification.state.sequencer[group].active ? sonification.state.sequencer[group].array : sonification.state.selection.group[group].euclideanArray  ),
-        seriesScaleY  = $derived(data.scale[dataInterval][group][paramName][series]),      
-        scaleArrayY   = $derived(Array.from({ length: seriesScaleY.range()[1] - seriesScaleY.range()[0] + 1 }, (d, i) => seriesScaleY.range()[0] + i)),
-        seriesData    = $derived({
+    let sceneIndex      = $derived(sonification.state.selection.sceneIndex),
+        data            = $derived(dataModel.model[sceneIndex]),        // Modelled data for selected day
+        series          = $derived(sonification.state.selection.group[group][`${paramName}Pattern`]),
+        length          = $derived(sonification.param[group][paramName].length),
+        clockDivider    = $derived(sonification.param[group][paramName].clockDivider ?? 1),
+        pulseArray      = $derived(sonification.state.sequencer[group].active ? sonification.state.sequencer[group].array : sonification.state.selection.group[group].euclideanArray  ),
+        seriesScaleY    = $derived(data.scale[dataInterval][group][paramName][series]),      
+        scaleArrayY     = $derived(Array.from({ length: seriesScaleY.range()[1] - seriesScaleY.range()[0] + 1 }, (d, i) => seriesScaleY.range()[0] + i)),
+        seriesData      = $derived({
                             quantized:  data.scaledData[dataInterval][group][paramName].map(d => d[series].quantized),
                             value:      data.scaledData[dataInterval][group][paramName].map(d => d[series].value)
                         })
@@ -83,12 +86,14 @@
                     .range([config.dims.chart.height, 0])
         }
     })
+
 </script>
 
 
 <!-- HTML COMPONENT MARKUP-->
 <svg bind:this={svg} viewBox = "0 0 {config.dims.canvas.width} {config.dims.canvas.height}" 
     class:seq={sequencerOn && sequencerGroup === group}>
+
     <g id = "chart" transform="translate({config.dims.canvas.margin.left}, {config.dims.canvas.margin.top})"
         class:solo={sonification.state.snapshot.solo.current?.group === group}
         class:mute={sonification.param[group].mute} >
@@ -107,10 +112,13 @@
         
         <g class = 'marker__container'>
             {#each seriesData[scaleType] as d, i}     
+            {@const cycleIndex = strudel.state.time.cycle - 1}
+            {@const divAdd = cycleIndex % clockDivider * config.steps}
+
             <g class = 'marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(d)})">
                 <path class = 'marker' 
-                    class:active={strudel.state.time.step === i * 16 / length && strudel.state.transport === 'playing'} 
-                    class:pulse={pulseArray[i]}
+                    class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length) * clockDivider) && strudel.state.transport === 'playing'} 
+                    class:pulse={pulseArray[i] }
                     d = {config.symbol[group]()}
                 />
             </g>

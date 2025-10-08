@@ -1,6 +1,11 @@
 <script>
     // Libs and utils
-	import { fade } from 'svelte/transition';
+	import { fade }         from 'svelte/transition';
+    // Parts
+    import Intro            from './Intro.svelte';
+    import DataNoteOE10     from './DataNote_OE10.svelte';
+    import Acknowledgements from './Acknowledgements.svelte';
+    import DataContextPlaceholder from './DataContext_placeholder.svelte';
     // Props
     let {isSideGuide = false} = $props()
 </script>
@@ -11,15 +16,8 @@
         <h1 class = 'header'>Data Operator </h1>
         <p class = 'subtitle'>Data sonification summary</p>
 
-        <section>
-            <p>This is a (slightly technical) set of [draft] notes documenting key points of data sonification process. They are provided for 'completeness' and to provide curious users with some context for the data and instruments they are playing with in this particular <i>Data Operator</i> model and version.</p>
-        </section>
-
-        <section>
-            <h3>OE-10: Data from Open Electricity</h3>
-            <p>Data is source in this sonification comes from  <a href='https://openelectricity.org.au/' target="_blank">Open Electricity</a> and contains daily data about the Australian National Energy Market (NEM). Time interval data for over 10 data series are extracted, including volumes by electricity generation source and market price. Aggregation types (fossil fuel vs renewable energy) and various proportions (i.e. ratios) are also calculated. Data is reported in near 'real time', and is separated into 24 hour blocks to produce data for a 'scene'. For this sonification, the highest time-highest resolution used in the sonifications is 16 divisions (equivalent to 1.5 hour blocks).
-            </p>
-        </section>
+        <Intro/>
+        <DataNoteOE10/>
 
         <section>
             <h3>DFAM: Instrumentation &times; parameter mapping</h3>
@@ -33,17 +31,8 @@
             </ul>
         </section>
 
-
-        <section>
-            <h3>Data context and story</h3>
-            <p>Coming soon...maybe. For more detailed and deliberate/directed works, the mapping and instrumentation choices may be closely matched in theme, to the source data. In these early experiments however, there is more emphasis on exploring the sound and interface design potential of the <i>Data Operator</i> platform. The forthcoming addition/use of the <i>Composition</i> component is expected to be a more suitable tool for 'data storytelling' with the <i>Data Operator</i>. 
-            </p>
-        </section>
-
-        <section>
-            <h3>Acknowledgements</h3>
-            <p>Please refer to the documentation for details of technologies used and licenses. Very quickly though, this is project is open source. It uses open source data, open source technologies, and open sourced samples.</p>
-        </section>
+        <DataContextPlaceholder/>
+        <Acknowledgements/>
     </div>
 </article>
 

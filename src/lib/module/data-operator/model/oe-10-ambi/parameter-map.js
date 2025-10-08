@@ -6,8 +6,8 @@
 
 export const paramInit = {
     synth: {
-        TB303: {
-            oscType:        'sawtooth',
+        lead: {
+            sound:        'handbells',
             filter: {
                 cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
                 Q:          'sine.range(2,6).slow(2)',  
@@ -19,7 +19,8 @@ export const paramInit = {
                 }
             }
         },
-        ModelD: {
+        bass: {
+            sound:      'piano',
             noise: {
                 velocity:   '1'
             }
@@ -27,7 +28,7 @@ export const paramInit = {
     },
     // Group A: [melodic] 'synth'    
     A: {
-        gain:           0.5,            // Group level gain 
+        gain:           0.85,            // Group level gain 
         mute:           false,          // Mute available at group level
         octave:         3,              // Scale octave
         swing: {
@@ -41,7 +42,8 @@ export const paramInit = {
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            clockDivider:       2              // Clock divider
         },
         velocity: {
             pattern:            undefined
@@ -49,7 +51,7 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.85,           // Group level gain
+        gain:           0.25,           // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
@@ -63,7 +65,8 @@ export const paramInit = {
             transpose:          -24,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            clockDivider:       4               // Clock divider
         },
         noise: {
             pattern:            undefined       // Mapped to noise velocity
@@ -71,7 +74,7 @@ export const paramInit = {
     },
     // Group C: [pattern] percussion
     C: {
-        gain:           0.5,            // Used for group level and mute
+        gain:           0.25,            // Used for group level and mute
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
@@ -81,11 +84,12 @@ export const paramInit = {
                 gain:           0.8,            // Sets group level with group
                 mute:           false,
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    bank:       'RolandTR909',  // Sound bank alias 
-                    length:     16,             // 
-                    pulse:      16,             // Euclidean pulse
-                    rotation:   0,              // Euclidean rotation
+                    pattern:        undefined,      // sound part pattern
+                    bank:           null,  // Sound bank alias 
+                    length:         16,             // 
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
+                    clockDivider:   1               // Clock divider
                 },
                 velocity: {     
                     pattern:    undefined,     // velocity pattern
@@ -95,25 +99,27 @@ export const paramInit = {
                 gain:           0.8,            // Sets group level with group
                 mute:           false,
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    bank:       'RolandTR909',  // Sound bank alias 
-                    length:      16,            // 
-                    pulse:       16,            // Euclidean pulse
-                    rotation:    0,             // Euclidean rotation
+                    pattern:        undefined,      // sound part pattern
+                    bank:           null,  // Sound bank alias 
+                    length:         16,            // 
+                    pulse:          16,            // Euclidean pulse
+                    rotation:       0,             // Euclidean rotation
+                    clockDivider:   1               // Clock divider
                 },
                 velocity: {     
                     pattern:    undefined,     // Velocity pattern
                 }
             },
             3: {    // Chords
-                gain:           0.65,           // Sets group level with group
+                gain:           0.35,           // Sets group level with group
                 mute:           false,
                 octave:         3,              // Scale octave
                 sound: {
-                    pattern:    undefined,      // sound part pattern
-                    sample:     undefined,
-                    modifier:   null,
-                    length:     undefined
+                    pattern:        undefined,      // sound part pattern
+                    sample:         undefined,
+                    modifier:       null,
+                    length:         undefined,
+                    clockDivider:   1               // Clock divider
                 }
             }
         }
@@ -128,12 +134,12 @@ export const paramInit = {
     },
     // Global params: tempo and FX settings
     global: {
-        bpm:                90,          // tempo
+        bpm:                70,          // tempo
         scale: {
             pitch:           undefined,             // Musical scale
             root:           'C',                    // pitch root
             octave:         3,                      // octave of lead
-            type:           'major:pentatonic',     // Default/starting scale type
+            type:           'lydian',       // Default/starting scale type
         },
         // Punch FX config: params could potentially exposed
         fx: {
@@ -143,9 +149,9 @@ export const paramInit = {
     // Strudel in-built visualisation
     visual:  {
         color: {
-            A:              '#fff', // '#f15a22',
+            A:              '#d40481', // '#f15a22',
             B:              '#fff',
-            C:              'cyan',
+            C:              '#d40481',
         },
         type: {
             none:           '',

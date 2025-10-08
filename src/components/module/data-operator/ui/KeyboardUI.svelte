@@ -273,7 +273,23 @@
                                 sonification.handle.punchInFX(group, fxNames[fxIndex], true)
                                 break
                             case 'modify':    // Modify
-                                sonification.handle.adjustBPM(direction)  
+                                let type 
+                                switch(group){
+                                    case 'master':
+                                        sonification.handle.adjustBPM(direction)  
+                                        break   
+                                    case 'A': case 'B':
+                                        group = ui === 'custom-dfam' ? 'A' : group
+                                        type = sonification.schema.group[group].type
+                                        part = undefined    
+                                        sonification.handle.cycleClock(group, part, type, direction)
+                                        break
+                                    case 'C':
+                                        type = 'sound' 
+                                        part = group === 'C' ? part :undefined
+                                        sonification.handle.cycleClock(group, part, type, direction)
+                                        break
+                                }
                                 break
                             case 'select':    // Cycle scene data
                                 sonification.handle.cycleScene(-direction)      
@@ -281,9 +297,10 @@
                             case 'shift':   // Swing adjust: group level
                                 switch(group){
                                     case 'master':
-                                        if(direction === -1){
+                                        if(direction === -1){ // -
                                             sonification.handle.exportCode()
                                             sonification.state.userMessage.overlay.isShown = true
+                                        } else { // +
                                         }
                                         break   
                                     default:

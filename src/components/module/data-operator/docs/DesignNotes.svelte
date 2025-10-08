@@ -1,11 +1,14 @@
 <!-- ABOUT SILENT SHOUT-->
 <script>
-
+    // Libs and utils
+	import { fade } from 'svelte/transition';
+    // Props
+    let {isSideGuide = false} = $props()
 </script>
 
 
 <!-- HTML MARKUP-->
-<article>
+<article class:isSideGuide={isSideGuide} in:fade>
     <div class = 'content-wrapper'>
 
         <h1>Data Operator</h1>

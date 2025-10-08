@@ -65,7 +65,8 @@ export class DataSonification extends Sonification{
                 s("${this.param.synth.DFAM.noiseType}")
                     .gain("${this.param.B.velocity.pattern}".mul("${this.param.synth.DFAM.noiseLvl}").mul(${this.param.A.mute ? 0: this.param.A.gain }))
                 )
-                .orbit("${this.param.synth.DFAM.orbit}")
+                .slow(${this.param.A.pitch.clockDivider})                
+                ${ this.param.synth.DFAM.duck ? `.orbit("${this.param.synth.DFAM.orbit}")` : ''}
                 ${this.state.sequencer.A.active ? `.struct("${this.param.A.pitch.legato ? this.param.A.pitch.structLegato : this.param.A.pitch.struct}")` 
                     : this.param.A.pitch.legato ? `.euclidLegatoRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})` : `.euclidRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})`}  
                 .attack("${this.param.synth.DFAM.vcaAttack}")
@@ -97,7 +98,8 @@ export class DataSonification extends Sonification{
             // Group C. "percussion" sounds
             stack( // Beat: "ducked" part
                 s("${this.param.C.part["1"].sound.pattern.ducked}").bank("${this.param.C.part["1"].sound.bank}")
-                    .duckorbit(2).duckattack(0.1).duckdepth(1)
+                    ${this.param.synth.DFAM.duck  ? `.duckorbit(2).duckattack(0.1).duckdepth(1)` : ''}
+                    .slow(${this.param.C.part["1"].sound.clockDivider})                
                     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}
                     .delay(0.25).delayfb(0.5) 
                 // Beat: "nomrmal" part
@@ -109,15 +111,16 @@ export class DataSonification extends Sonification{
                 s("${this.param.C.part["2"].sound.pattern}").bank("${this.param.C.part["2"].sound.bank}")  
                     .velocity(perlin.range(.5, 0.75))
                     .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})  
+                    .slow(${this.param.C.part["2"].sound.clockDivider})                
                     ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`} 
                 , // Part 3: Harmony: sampled chord
                 n(${ this.param.C.part["3"].sound.pattern }) 
                     .scale("${this.param.global.scale.root}${this.param.C.part["3"].octave}:${this.param.global.scale.type}")     
+                    .slow(${this.param.C.part["3"].sound.clockDivider})                
                     ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].gain * this.param.C.gain})`}  
                     .s("${this.param.C.part["3"].sound.sample}")
                     ${this.param.C.part["3"].sound.modifier ?? ''}
             )
-
             .color("${this.param.visual.color.C}")
             .swingBy(${this.param.C.swing.level}, 8)  
             ${this.param.C.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.C.gain * 0.75})` : ''}
@@ -232,7 +235,8 @@ export class DataSonification extends Sonification{
 
         this.handle.toggleSidechain = () => {
             // 1. Update orbt (toggle between 1 and 2)
-            this.param.synth.DFAM.orbit = this.param.synth.DFAM.orbit === 1 ? 2 : 1
+            this.param.synth.DFAM.duck = !this.param.synth.DFAM.duck
+
             // 2. Handle user message
             this.state.userMessage.text = `Ducking is ${this.param.synth.DFAM.orbit === 1 ? 'off' : 'on' }`
             this.handle.userMessage()
@@ -303,16 +307,16 @@ export class DataSonification extends Sonification{
 
         // Part 1. Beat pattern: "membrane" percussion
         // i. Update pattern params for 'ducked' and normal components
-        if(group.C["1"][this.state.selection.group.C.part["1"].series].pattern.ducked){
-            this.param.C.part["1"].sound.pattern.ducked =  group.C["1"][this.state.selection.group.C.part["1"].series].pattern.ducked
+        if(group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern.ducked){
+            this.param.C.part["1"].sound.pattern.ducked =  group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern.ducked
         }
-        if(group.C["1"][this.state.selection.group.C.part["1"].series].pattern.normal){
-            this.param.C.part["1"].sound.pattern.normal =  group.C["1"][this.state.selection.group.C.part["1"].series].pattern?.normal
+        if(group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern.normal){
+            this.param.C.part["1"].sound.pattern.normal =  group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern?.normal
         }
 
         // Part 2. Hats pattern: "metal" percussion
         // i. Update pattern params
-        this.param.C.part["2"].sound.pattern = group.C["2"]?.[this.state.selection.group.C.part["2"].series].pattern
+        this.param.C.part["2"].sound.pattern = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
 
         // Part 3. Chord progression notes and params
         group.C["3"].interval = "4n"

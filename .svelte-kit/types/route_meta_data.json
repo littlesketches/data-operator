@@ -14,13 +14,13 @@
 		"src/routes/+layout.js",
 		"src/routes/+layout.js"
 	],
-	"/docs/design": [
-		"src/routes/+layout.js"
-	],
 	"/docs/model/oe-10": [
 		"src/routes/+layout.js"
 	],
 	"/docs/model/oe-dfam": [
+		"src/routes/+layout.js"
+	],
+	"/docs/operator-design": [
 		"src/routes/+layout.js"
 	],
 	"/docs/quick-start": [

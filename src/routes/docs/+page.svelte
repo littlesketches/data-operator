@@ -1,23 +1,25 @@
 <!-- DOCUMENTATION HOME: ABOUT DATA OPERATOR -->
 <script>
-    import { slide } from "svelte/transition";
+     // Libs and utils
+	import { fade, slide } from 'svelte/transition';
 
+    // Variables 
     const view = {
-        'release-notes': false
+        'release-notes': false,
+        'roadmap': false
     }
 
     const handle = {
         toggleView: function(){
             const sectionId = this.getAttribute('data-section')
             view[sectionId] = !view[sectionId]
-            console.log(view )
         }
     }
 </script>
 
 
 <!-- HTML MARKUP-->
-<article>
+<article in:fade>
     <div class = 'content-wrapper'>
         <h1>Hello Data Operator</h1>
 
@@ -39,12 +41,7 @@
                 <li><a href = '/docs/quick-start'>Quick start guide &rarr;</a></li>
                 <li><a href = '/docs/user-manual'>User manual &rarr;</a></li>
                 <li><a href = '/docs/design'>Design notes &rarr;</a></li>
-                <li><a href = '/docs/design'>Sonification approach &rarr;</a>
-                    <!-- <ul>
-                        <li>OE-10</li>
-                        <li>OE-DFAM</li>
-                    </ul> -->
-                </li>
+                <li><a href = '/docs/design'>Sonification approach &rarr;</a></li>
             </ul>
         </section>
 
@@ -96,11 +93,8 @@
             <section transition:slide>
                 <p>For development documentation purposes, this version:</p>
                     <ul>
-                        <li>Screen buttons to be updated once keyboard interface is settled (i.e. to match)</li>
                         <li>Touch screen interface to be optimised (especially for phone)</li>
                         <li>Composition component to be explored. Works but not really used. Would be best used in a 'storytelling' like context</li>
-                        <li>Add integrated/side-by-side guide for computers</li>
-                        <li>Fix on start guidance and start (i.e. button interaction to star,t not keyboard shortcut)</li>
                     </ul>
             </section>
             {/if}

@@ -1,9 +1,10 @@
+<!-- QUICK START GUIDE -->
 <script>
     // Libs and utils
 	import { fade } from 'svelte/transition';
+
     // Props
     let {isSideGuide = false} = $props()
-
 </script>
 
 <!-- HTML MARKUP-->

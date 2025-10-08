@@ -12,7 +12,7 @@ type EnsureDefined<T> = T extends null | undefined ? {} : T;
 type OptionalUnion<U extends Record<string, any>, A extends keyof U = U extends U ? keyof U : never> = U extends unknown ? { [P in Exclude<A, keyof U>]?: never } & U : never;
 export type Snapshot<T = any> = Kit.Snapshot<T>;
 type PageParentData = EnsureDefined<LayoutData>;
-type LayoutRouteId = RouteId | "/" | "/data/open-electricity" | "/docs" | "/docs/design" | "/docs/model/oe-10" | "/docs/model/oe-dfam" | "/docs/quick-start" | "/docs/sonification" | "/docs/sonification/oe-10" | "/docs/sonification/oe-10-ambi" | "/docs/sonification/oe-10-dfam" | "/docs/user-manual" | "/oe-10" | "/oe-10-ambi" | "/oe-10-dfam" | null
+type LayoutRouteId = RouteId | "/" | "/data/open-electricity" | "/docs" | "/docs/model/oe-10" | "/docs/model/oe-dfam" | "/docs/operator-design" | "/docs/quick-start" | "/docs/sonification" | "/docs/sonification/oe-10" | "/docs/sonification/oe-10-ambi" | "/docs/sonification/oe-10-dfam" | "/docs/user-manual" | "/oe-10" | "/oe-10-ambi" | "/oe-10-dfam" | null
 type LayoutParams = RouteParams & {  }
 type LayoutParentData = EnsureDefined<{}>;
 

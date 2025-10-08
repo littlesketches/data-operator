@@ -32,7 +32,7 @@ export const groupConfig = {
         label:      'Bass',  
         type:       'pitch',
         pitch: {
-            interval:   '16n',  
+            interval:   '16n',
             series: [   
                 'fossil',       'coal',         'gas', 
                 'ratio-fossil', 'ratio-coal',   'ratio-gas', 
@@ -46,10 +46,10 @@ export const groupConfig = {
         type:       'pattern',
         part: {         
             1: {
-                series:    Object.keys(groupPartPresets["1"]).map(d => +d)
+                series:    Object.keys(groupPartPresets["1"].sound).map(d => +d)
             },
             2: {
-                series:    Object.keys(groupPartPresets["2"]).map(d => +d)
+                series:    Object.keys(groupPartPresets["2"].sound).map(d => +d)
             },
             3: {
                 series:    Object.keys(groupPartPresets["3"].sound).map(d => +d)

@@ -10,16 +10,16 @@ export const keyguide = {
             group:  'Select<br>BEATS<br>(C-1)'
         },
         2: {
-            master: 'select<br>PERC.<br>(C-2)',
-            group:  'select<br>PERC.<br>(C-2)'
+            master: 'Select<br>PERC.<br>(C-2)',
+            group:  'Select<br>PERC.<br>(C-2)'
         },
         3: {
-            master: 'select<br>CHORDS<br>(C-3)',
-            group:  'select<br>CHORDS<br>(C-3)'
+            master: 'Select<br>CHORDS<br>(C-3)',
+            group:  'Select<br>CHORDS<br>(C-3)'
         },
         4: {
-            master: 'select<br>BASS<br>(B)',
-            group:  'select<br>BASS<br>(B)'
+            master: 'Select<br>BASS<br>(B)',
+            group:  'Select<br>BASS<br>(B)'
         },
         5: {
             master: '<br>Scale<br>root<br>-',
@@ -30,8 +30,8 @@ export const keyguide = {
             group:  '<br>Scale<br>root<br>+'
         },
         7: {
-            master: 'select<br>LEAD<br>(A)',
-            group:  'select<br>LEAD<br>(A)'
+            master: 'Select<br>LEAD<br>(A)',
+            group:  'Select<br>LEAD<br>(A)'
         },
         8: {
             master: '<br>Scale<br>type<br>-',
@@ -56,54 +56,54 @@ export const keyguide = {
     },
     modify:{
         1: {
-            master: 'mute<br>BEATS',
-            group:  'mute<br>BEATS'
+            master: 'Mute<br>BEATS',
+            group:  'Mute<br>BEATS'
         },
         2: {
-            master: 'mute<br>PERC.',
-            group:  'mute<br>PERC.'
+            master: 'Mute<br>PERC.',
+            group:  'Mute<br>PERC.'
         },
         3: {
-            master: 'mute<br>CHORDS',
-            group:  'mute<br>CHORDS'
+            master: 'Mute<br>CHORDS',
+            group:  'Mute<br>CHORDS'
         },
         4: {
-            master: 'mute<br>BASS',
-            group:  'mute<br>BASS'
+            master: 'Mute<br>BASS',
+            group:  'Mute<br>BASS'
         },
         5: {
-            master: 'open<br>bass<br>sequencer',
+            master: 'Open<br>bass<br>sequencer',
             group:  {
-                A: '<span class = "group"><br>Euclidean rotation A<br>-</span>',
-                B: '<span class = "group"><br>Euclidean rotation B<br>-</span>',
+                A: '<span class = "group">Lead euclidean rotation A<br>-</span>',
+                B: '<span class = "group">Bass euclidean rotation B<br>-</span>',
                 C: ' '
             }
         },
         6: {
             master: 'Bass<br>legato<br>notes',
             group:  {
-                A: '<span class = "group"><br>Euclidean rotation A<br>+</span>',
-                B: '<span class = "group"><br>Euclidean rotation B<br>+</span>',
+                A: '<span class = "group">Lead euclidean rotation A<br>+</span>',
+                B: '<span class = "group">Bass euclidean rotation B<br>+</span>',
                 C: ' '
             }
         },
         7: {
-            master: 'mute<br>LEAD',
-            group:  'mute<br>LEAD'
+            master: 'Mute<br>LEAD',
+            group:  'Mute<br>LEAD'
         },
         8: {
             master: 'Open<br>lead<br>sequencer',
             group:  {
-                A: '<span class = "group"><br>Euclidean pulse A<br>-</span>',
-                B: '<span class = "group"><br>Euclidean pulse B<br>-</span>',
+                A: '<span class = "group">Lead euclidean pulse<br>-</span>',
+                B: '<span class = "group">Bass euclidean pulse<br>-</span>',
                 C: ' '
             }
         },
         9: {
             master: 'Lead<br>legato<br>notes',
             group:  {
-                A: '<span class = "group"><br>Euclidean pulse A<br>+</span>',
-                B: '<span class = "group"><br>Euclidean pulse B<br>+</span>',
+                A: '<span class = "group">Lead euclidean pulse<br>+</span>',
+                B: '<span class = "group">Bass euclidean pulse<br>+</span>',
                 C: ' '
             }
         },
@@ -113,17 +113,25 @@ export const keyguide = {
         },
         plus: {     
             master: 'Increase tempo',
-            group:  'Increase tempo',
+            group:  {
+                A: '<span class = "group">Lead<br>clock divider<br>+</span>',
+                B: '<span class = "group">Bass<br>clock divider<br>+</span>',
+                C: '<span class = "group">Part<br>clock divider<br>+</span>',
+            }
         },
         minus: {
             master: 'Reduce tempo',
-            group:  'Reduce tempo',
+            group:  {
+                A: '<span class = "group">Lead<br>clock divider<br>-</span>',
+                B: '<span class = "group">Bass<br>clock divider<br>-</span>',
+                C: '<span class = "group">Part<br>clock divider<br>-</span>',
+            }
         },
     },
     shift: {
         1: {
-            master: 'Solo<br>BEAS',
-            group:  'Solo<br>BEAS'
+            master: 'Solo<br>BEATS',
+            group:  'Solo<br>BEATS'
         },
         2: {
             master: 'Solo<br>PERC.',

@@ -57,20 +57,20 @@ export const keyguide = {
     },
     modify:{
         1: {
-            master: 'mute<br>BEATS',
-            group:  'mute<br>BEATS'
+            master: 'Mute<br>BEATS',
+            group:  'Mute<br>BEATS'
         },
         2: {
-            master: 'mute<br>PERC.',
-            group:  'mute<br>PERC.'
+            master: 'Mute<br>PERC.',
+            group:  'Mute<br>PERC.'
         },
         3: {
-            master: 'mute<br>CHORDS',
-            group:  'mute<br>CHORDS'
+            master: 'Mute<br>CHORDS',
+            group:  'Mute<br>CHORDS'
         },
         4: {
-            master: 'mute<br>Oscillator<br>#2',
-            group:  'mute<br>Oscillator<br>#2',
+            master: 'Mute<br>Oscillator<br>#2',
+            group:  'Mute<br>Oscillator<br>#2',
         },
         5: {
             master: 'Noise<br>type',  
@@ -89,8 +89,8 @@ export const keyguide = {
             }
         },
         7: {
-            master: 'mute<br>Oscillator<br>#1',
-            group:  'mute<br>Oscillator<br>#1',
+            master: 'Mute<br>Oscillator<br>#1',
+            group:  'Mute<br>Oscillator<br>#1',
         },
         8: {
             master: 'Open<br>pulse<br>sequencer',
@@ -114,11 +114,19 @@ export const keyguide = {
         },
         plus: {     
             master: 'Increase tempo',
-            group:  'Increase tempo',
+            group:  {
+                A: '<span class = "group">Synth<br>clock divider<br>+</span>',
+                B: '<span class = "group">Synth<br>clock divider<br>+</span>',
+                C: '<span class = "group">Part<br>clock divider<br>+</span>',
+            }
         },
         minus: {
             master: 'Reduce tempo',
-            group:  'Reduce tempo',
+            group:  {
+                A: '<span class = "group">Synth<br>clock divider<br>-</span>',
+                B: '<span class = "group">Synth<br>clock divider<br>-</span>',
+                C: '<span class = "group">Part<br>clock divider<br>-</span>',
+            }
         },
     },
     shift: {

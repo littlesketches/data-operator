@@ -220,13 +220,30 @@
                 }
             }
 
+
             function navkeyAction(mode, direction, fxIndex){
                 switch(mode){
                     case 'fx':         // Punch FX:                                                              
                         sonification.handle.punchInFX(group, fxNames[fxIndex], true)
                         break
                     case 'modify':    // Modify
-                        sonification.handle.adjustBPM(direction)  
+                        let type 
+                        switch(group){
+                            case 'master':
+                                sonification.handle.adjustBPM(direction)  
+                                break   
+                            case 'A': case 'B':
+                                group = ui === 'custom-dfam' ? 'A' : group
+                                type = sonification.schema.group[group].type
+                                part = undefined    
+                                sonification.handle.cycleClock(group, part, type, direction)
+                                break
+                            case 'C':
+                                type = 'sound' 
+                                part = group === 'C' ? part :undefined
+                                sonification.handle.cycleClock(group, part, type, direction)
+                                break
+                        }
                         break
                     case 'select':    // Cycle scene data
                         sonification.handle.cycleScene(-direction)      
@@ -234,9 +251,10 @@
                     case 'shift':   // Swing adjust: group level
                         switch(group){
                             case 'master':
-                                if(direction === -1){
+                                if(direction === -1){ // -
                                     sonification.handle.exportCode()
-                                    sonification.state.userMessage.showOverlay = true
+                                    sonification.state.userMessage.overlay.isShown = true
+                                } else { // +
                                 }
                                 break   
                             default:
@@ -247,7 +265,6 @@
                         sonification.handle.adjustGain(0.05 * direction, group)                             
                 } 
             }
-            
         },
         pointerup: function(ev){
             const type = this.getAttribute('data-type')
@@ -654,19 +671,19 @@
                                 -2.5px -2.5px 5px #fff;
     }
 
-    .button.numpad .button__wrapper{
+    .numpad .button__wrapper{
         color:                  var(--col-light);
     }
-    .button.numpad.row-1  .button__wrapper{
+    .numpad.row-1  .button__wrapper{
         background:             var(--col-grad-2);
     }  
-    .button.numpad.row-2  .button__wrapper{
+    .numpad.row-2  .button__wrapper{
         background:             var(--col-grad-3);
     }  
-    .button.numpad.row-3  .button__wrapper{
+    .numpad.row-3  .button__wrapper{
         background:             var(--col-grad-5);
     }  
-    .button.numpad.row-4  .button__wrapper{
+    .numpad.row-4  .button__wrapper{
         background:             var(--col-grad-5);
     }  
     .mode .button__wrapper{
@@ -717,7 +734,7 @@
     .nav .button-label{
         font-size:              4.25vh;
         margin-top:             -0.5vh;
-        color:                  var(--col-grad-3);
+        color:                  rgb(0, 0, 0, 0.5);
     }
 
     .button-label__wrapper{
@@ -776,7 +793,7 @@
 
     /** BUTTON GUIDANCE */
     .button-guidance{
-        font-family: 'Orbit';
+        font-family:            'Orbit';
         font-size:              1.25vh;        
         font-weight:            700;
         text-align:             center;

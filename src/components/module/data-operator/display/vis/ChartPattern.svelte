@@ -29,6 +29,7 @@
 
     // ii. Init config obj
     const config = {
+        steps:      16,         // fixed
         dims: {
             canvas: {
                 width:      dimsByType[chartType].width,
@@ -74,17 +75,23 @@
     // i. Selections and params
     const dataInterval = sonification.schema.group[group].interval
 
+    let clockDivider = $derived({
+        1: sonification.param[group].part["1"].sound.clockDivider ?? 1,
+        2: sonification.param[group].part["2"].sound.clockDivider ?? 1,
+        3: sonification.param[group].part["3"].sound.clockDivider ?? 1
+    })
+
     let sceneIndex  = $derived(sonification.state.selection.sceneIndex),
         data        = $derived(dataModel.model[sceneIndex])        // Modelled data for selected day
 
-    let part1_array = $derived(groupPartPresets["1"][sonification.state.selection.group[group].part["1"].series]?.vis),
-        part2_array = $derived(groupPartPresets["2"][sonification.state.selection.group[group].part["2"].series]?.vis),
-        part3_array = $derived(groupPartPresets["3"][sonification.state.selection.group[group].part["3"].series]?.vis)
+    let part1_array = $derived(groupPartPresets["1"].sound[sonification.state.selection.group[group].part["1"].series]?.vis),
+        part2_array = $derived(groupPartPresets["2"].sound[sonification.state.selection.group[group].part["2"].series]?.vis),
+        part3_array = $derived(groupPartPresets["3"].sound[sonification.state.selection.group[group].part["3"].series]?.vis)
 
     let length = $derived({
         part1: sonification.param[group].part["1"].sound.length,
         part2: sonification.param[group].part["2"].sound.length, 
-        part3: sonification.param[group].part["3"].sound.length, 
+        part3: sonification.param[group].part["3"].sound.length
     })
 
     // ii. Construct drumkit array from part1 and 2
@@ -126,34 +133,37 @@
         <g class = 'grid__container'>
         {#each yGrid as yPos}
             {#each drumkitData as d, i}   
-            {#if yPos === Math.floor(yPos) || chartType === 'full' }
-            <g class = 'grid-marker__wrapper' transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(yPos)})">
-                <path class = 'grid-marker' d = {d3.symbol(d3.symbolCircle).size(symbolSize)()}/>
-            </g> 
-            {/if}
+                {#if yPos === Math.floor(yPos) || chartType === 'full' }
+                <g class = 'grid-marker__wrapper' transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(yPos)})">
+                    <path class = 'grid-marker' d = {d3.symbol(d3.symbolCircle).size(symbolSize)()}/>
+                </g> 
+                {/if}
             {/each}
         {/each}
         </g>
         
         <g class = 'drumkit-group'>
         {#each drumkitData as {part1, part2}, i}              
+            {@const cycleIndex = strudel.state.time.cycle - 1}
             {#each part1 as drum}
-            {#if Object.keys(config.drumkit).includes(drum)}
-            {@const d = config.drumkit[drum]}
-            <g class = 'marker__wrapper {d.type}'
-                class:solo={sonification.state.snapshot.solo.current?.part === 1 }
-                class:mute={sonification.param[group].part["1"].mute}
-                transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(d.pos)})">
-                <path class = 'marker' 
-                    class:active={strudel.state.time.step === i * 16 / length.part1  && strudel.state.transport === 'playing'} 
-                    class:pulse={sonification.state.selection.group.C.part["1"].euclideanArray[i]}
-                    d = {config.drumkit[drum].symbol()}
-                />
-            </g>
-            {/if}
+                {@const divAdd = cycleIndex % clockDivider["1"] * config.steps}
+                {#if Object.keys(config.drumkit).includes(drum)}
+                {@const d = config.drumkit[drum]}
+                <g class = 'marker__wrapper {d.type}'
+                    class:solo={sonification.state.snapshot.solo.current?.part === 1 }
+                    class:mute={sonification.param[group].part["1"].mute}
+                    transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(d.pos)})">
+                    <path class = 'marker' 
+                        class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length.part1) * clockDivider["1"]) && strudel.state.transport === 'playing'} 
+                        class:pulse={sonification.state.selection.group.C.part["1"].euclideanArray[i]}
+                        d = {config.drumkit[drum].symbol()}
+                    />
+                </g>
+                {/if}
             {/each}
 
             {#each part2 as drum}
+            {@const divAdd = cycleIndex % clockDivider["2"] * config.steps}
             {#if Object.keys(config.drumkit).includes(drum)}
             {@const d = config.drumkit[drum]}
             <g class = 'marker-wrapper {d.type}'
@@ -161,9 +171,10 @@
                 class:mute={sonification.param[group].part["2"].mute}
                 transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(d.pos)})" >
                 <path class = 'marker' 
-                    class:active={strudel.state.time.step === i * 16 / length.part2  && strudel.state.transport === 'playing'} 
+                    class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length.part2) * clockDivider["2"]) && strudel.state.transport === 'playing'} 
                     class:pulse={sonification.state.selection.group.C.part["2"].euclideanArray[i]}
-                    d = {config.drumkit[drum].symbol()}/>
+                    d = {config.drumkit[drum].symbol()}
+                />
             </g>
             {/if}
             {/each}
@@ -172,12 +183,15 @@
 
         <g class = 'chord-group'>
         {#each chordData as d, i}
-        {@const height = (scale.chord.y(0) - scale.chord.y(1)) * 0.5}
-        {@const width = scale.chord.x(1) - scale.chord.x(0)}
-        <rect class = 'chord-marker' class:active={(strudel.state.time.cycle - 1) % 4=== i }
-            x = {scale.chord.x(i)} y = {scale.chord.y(d) + height}  
-            width = {width} height = {height} rx = {height * 0.5}/>
-
+            {@const height = (scale.chord.y(0) - scale.chord.y(1)) * 0.5}
+            {@const width = scale.chord.x(1) - scale.chord.x(0)}
+            {@const cycleIndex = strudel.state.time.cycle - 1}
+            {@const divAdd = cycleIndex % clockDivider["3"] * config.steps}
+            <rect class = 'chord-marker' 
+                class:active={( Math.floor(cycleIndex /clockDivider["3"])%  length.part3 ) === i  && strudel.state.transport === 'playing'} 
+                x = {scale.chord.x(i)} y = {scale.chord.y(d) + height}  
+                width = {width} height = {height} rx = {height * 0.5}
+            />
         {/each}
         </g>
     </g> 

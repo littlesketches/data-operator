@@ -29,6 +29,7 @@
 
     // ii. Init config obj
     const config = {
+        steps:      16,         // fixed
         dims: {
             canvas: {
                 width:      dimsByType[chartType].width,
@@ -64,6 +65,7 @@
         data            = $derived(dataModel.model[sceneIndex]),        // Modelled data for selected day
         pitchSeries     = $derived(sonification.state.selection.group.A[`${paramNameA}Pattern`]),
         velocitySeries  = $derived(sonification.state.selection.group.B[`${paramNameB}Pattern`]),
+        clockDivider    = $derived(sonification.param.A[paramNameA].clockDivider ?? 1),
         pulseArray      = $derived(sonification.state.sequencer.A.active ? sonification.state.sequencer.A.array  : sonification.state.selection.group.A.euclideanArray ),
         seriesScaleY    = $derived(data.scale[dataIntervalA].A[paramNameA][pitchSeries]),      
         scaleArrayY     = $derived(Array.from({ length: seriesScaleY.range()[1] - seriesScaleY.range()[0] + 1 }, (d, i) => seriesScaleY.range()[0] + i)),
@@ -105,10 +107,12 @@
         
         <g class = 'marker__container'>
             {#each pitchSeriesData as d, i}     
+            {@const cycleIndex = strudel.state.time.cycle - 1}
+            {@const divAdd = cycleIndex % clockDivider * config.steps}
             <g class = 'marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(d)}) scale({scale.r(velocitySeriesData[i])})">
-
                 <path class = 'marker' 
-                    class:active={strudel.state.time.step === i && strudel.state.transport === 'playing'} 
+                    class:active={(strudel.state.time.step + divAdd ) === ( i  * clockDivider) && strudel.state.transport === 'playing'} 
+
                     class:pulse={pulseArray[i]}
                     d = {config.symbol.A()}
                 />

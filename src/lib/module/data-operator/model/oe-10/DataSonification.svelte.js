@@ -51,7 +51,7 @@ export class DataSonification extends Sonification{
                 .scaleTranspose(${this.param.A.pitch.scaleTranspose})
                 ${this.state.sequencer.A.active ? `.struct("${this.param.A.pitch.legato ? this.param.A.pitch.structLegato : this.param.A.pitch.struct}")` 
                     : this.param.A.pitch.legato ? `.euclidLegatoRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})` : `.euclidRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})`  }             
-                
+                .slow(${this.param.A.pitch.clockDivider})                
                 .s("${this.param.synth.TB303.oscType}")               // Sound source
                 .velocity("${this.param.A.velocity.pattern}")
                 .adsr("0.01:0.1:0.8:0.5")                             // Amp envelope (ADSR)
@@ -98,6 +98,7 @@ export class DataSonification extends Sonification{
             )
             ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
                 : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
+            .slow(${this.param.B.pitch.clockDivider})    
             .ftype("ladder")
             .lpf(440)
             .lpenv(3)
@@ -119,17 +120,20 @@ export class DataSonification extends Sonification{
             // Group C.
             stack( // Part 1: Membrane percussion sounds
                 s("${this.param.C.part["1"].sound.pattern}").bank("${this.param.C.part["1"].sound.bank}")  // Beat
+                    .slow(${this.param.C.part["1"].sound.clockDivider})                
                     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}  
                 ,  // Part 2: Metal and misc percussion sounds
                 s("${this.param.C.part["2"].sound.pattern}").bank("${this.param.C.part["2"].sound.bank}")   // Hats
                     .velocity(perlin.range(.5, 0.75))
                     .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})   // Euclidean pulse
+                    .slow(${this.param.C.part["2"].sound.clockDivider})    
                     ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`}                     
                 , // Part 3: Harmony: sampled chord
                 n(${ this.param.C.part["3"].sound.pattern }) // I IV V VI
                     .scale("${this.param.global.scale.root}${this.param.C.part["3"].octave}:${this.param.global.scale.type}")     
                     ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].gain * this.param.C.gain})`}  
                     .s("${this.param.C.part["3"].sound.sample}")
+                    .slow(${this.param.C.part["3"].sound.clockDivider})                
                     ${this.param.C.part["3"].sound.modifier ?? ''}
             )
             .color("${this.param.visual.color.C}")
@@ -283,18 +287,17 @@ export class DataSonification extends Sonification{
         group.B.noise.array         = dayData.scaledData[group.B.noise.interval].B.noise.map(d => d[group.B.noise.series].value * noiseRange)
         this.param.synth.ModelD.noise.velocity  = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
-
         /**
          *  GROUP C. Pattern "percussion" parts
          */ 
 
         // Part 1. Beat pattern: "membrane" percussion
         // i. Update pattern params
-        this.param.C.part["1"].sound.pattern = group.C["1"][this.state.selection.group.C.part["1"].series].pattern
+        this.param.C.part["1"].sound.pattern = group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern
 
         // Part 2. Hats pattern: "metal" percussion
         // i. Update pattern params
-        this.param.C.part["2"].sound.pattern = group.C["2"]?.[this.state.selection.group.C.part["2"].series].pattern
+        this.param.C.part["2"].sound.pattern = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
 
         // Part 3. Chord progression notes and params
         group.C["3"].interval = "4n"

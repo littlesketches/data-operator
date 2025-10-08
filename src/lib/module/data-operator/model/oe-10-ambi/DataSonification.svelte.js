@@ -44,33 +44,24 @@ export class DataSonification extends Sonification{
          @license CC BY-NC-SA
          */
         
-
-        samples({
-            bassdrum: 'bd/BT0AADA.wav',
-            hihat: 'hh27/000_hh27closedhh.wav',
-            snaredrum: ['sd/rytm-01-classic.wav', 'sd/rytm-00-hard.wav'],
-        }, '/samples/');
+        // samples({
+        //     bassdrum:   'bd/bd_BT0AADA.wav',
+        //     hihat:      'hh/hh27_000_hh27closedhh.wav',
+        //     snaredrum: ['sd/sd_rytm-01-classic.wav', 'sd/sd_rytm-00-hard.wav'],
+        // }, 'https://raw.githubusercontent.com/littlesketches/data-operator/main/static/samples/');
 
         setcpm(${this.param.global.bpm / timingConfig.beats.perBar})
 
         stack(
-            // Group A. Lead synth
+            // Group A. Lead chimes
             n("${this.param.A.pitch.pattern}")      // Data for "${this.state.selection.group.A.pitchPattern}" scaled to pitch 
                 .scale("${this.param.global.scale.root}${this.param.A.octave}:${this.param.global.scale.type}")            
                 .scaleTranspose(${this.param.A.pitch.scaleTranspose})
                 ${this.state.sequencer.A.active ? `.struct("${this.param.A.pitch.legato ? this.param.A.pitch.structLegato : this.param.A.pitch.struct}")` 
-                    : this.param.A.pitch.legato ? `.euclidLegatoRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})` : `.euclidRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})`  }             
-                
-                .s("${this.param.synth.TB303.oscType}")               // Sound source
+                    : this.param.A.pitch.legato ? `.euclidLegatoRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})` : `.euclidRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})`  }                             
+                .s("${this.param.synth.lead.sound}")               // Sound source
+                .slow(${this.param.A.pitch.clockDivider})                
                 .velocity("${this.param.A.velocity.pattern}")
-                .adsr("0.01:0.1:0.8:0.5")                             // Amp envelope (ADSR)
-                .lpf(${this.param.synth.TB303.filter.cutoff})         // LPF cutoff follows sine wave whose range is determined by "${this.state.selection.group.A.pitchPattern}" data at "4n" intervals
-                .lpq(${this.param.synth.TB303.filter.Q})              // LPF resonance
-                .ftype("24db")                                        // LPF type
-                .lpenv(${this.param.synth.TB303.filter.env.depth})    // filter env: modulation depth
-                .lpa(${this.param.synth.TB303.filter.env.A})          // filter env attack
-                .lpd(${this.param.synth.TB303.filter.env.D})          // filter env decay
-                .lps(${this.param.synth.TB303.filter.env.S})          // filter env sustain
                 .swingBy(${this.param.A.swing.level}, 8)              // - swing applied on 1/8 notes
                 ${this.param.A.fx.juxRev       ? `${this.param.global.fx.juxRev}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.juxPress     ? `${this.param.global.fx.juxPress}.gain(${this.param.A.gain * 0.75})` : ''}
@@ -88,63 +79,60 @@ export class DataSonification extends Sonification{
                 ${this.param.A.mute            ? this.param.global.fx.mute : `.gain(${this.param.A.gain})`}  
                 .color("${this.param.visual.color.A}")
             ,
-            // Group B. "Moog-ish bass" 
-            stack(  
-                n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
-                    .layer(
-                        x=>x.s("sawtooth").vib(4),
-                        x=>x.s("square").add(note(-12))
-                    )
-                    .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
-                    .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
-                    .scaleTranspose(${this.param.B.pitch.scaleTranspose})
-                    .adsr("0.0:0.1:0.8:0.5")         
+            // Group B. "Bass" 
+            n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
+                .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
+                .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
+                .scaleTranspose(${this.param.B.pitch.scaleTranspose})
+                // .adsr("0.0:0.1:0.8:0.5")         
+                ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
+                    : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
+                .s("${this.param.synth.bass.sound}")               // Sound source
+                .slow(${this.param.B.pitch.clockDivider})                
+                .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
+                ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
+                ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
+                ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}
+                ${this.param.B.fx.vibrato      ? this.param.global.fx.vibrato  : ''}
+                ${this.param.B.fx.phaser       ? this.param.global.fx.phaser  : ''}
+                ${this.param.B.fx.delay        ? this.param.global.fx.delay  : ''}
+                ${this.param.B.fx.filterLP     ? this.param.global.fx.filterLP  : ''}
+                ${this.param.B.fx.filterHP     ? this.param.global.fx.filterHP  : ''}
+                ${this.param.B.fx.reverb       ? `.room(${this.param.master.reverb.size * 3})` : ''}  
+                ${this.param.B.mute            ? this.param.global.fx.mute : `.gain(${this.param.B.gain})`}  
+                ${this.param.B.fx.halfTime     ? this.param.global.fx.halfTime  : ''}
+                ${this.param.B.fx.doubleTime   ? this.param.global.fx.doubleTime  : ''}    
+                .color("${this.param.visual.color.B}")
                 ,
-                n("${this.param.B.pitch.pattern}")      
-                    .velocity("${this.param.synth.ModelD.noise.velocity}")
-                    .s("white") 
-                    .adsr("0.01:1:0:0")   
-            )
-            ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
-                : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
-            .ftype("ladder")
-            .lpf(440)
-            .lpenv(3)
-            .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
-            ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
-            ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
-            ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}
-            ${this.param.B.fx.vibrato      ? this.param.global.fx.vibrato  : ''}
-            ${this.param.B.fx.phaser       ? this.param.global.fx.phaser  : ''}
-            ${this.param.B.fx.delay        ? this.param.global.fx.delay  : ''}
-            ${this.param.B.fx.filterLP     ? this.param.global.fx.filterLP  : ''}
-            ${this.param.B.fx.filterHP     ? this.param.global.fx.filterHP  : ''}
-            ${this.param.B.fx.reverb       ? `.room(${this.param.master.reverb.size * 3})` : ''}  
-            ${this.param.B.mute            ? this.param.global.fx.mute : `.gain(${this.param.B.gain})`}  
-            ${this.param.B.fx.halfTime     ? this.param.global.fx.halfTime  : ''}
-            ${this.param.B.fx.doubleTime   ? this.param.global.fx.doubleTime  : ''}    
-            .color("${this.param.visual.color.B}")
-            ,
             // Group C.
             stack( // Part 1: Membrane percussion sounds
-                s("bassdrum snaredrum:0 bassdrum snaredrum:1, hihat*16")
-
-                // s("${this.param.C.part["1"].sound.pattern}").bank("${this.param.C.part["1"].sound.bank}")  // Beat
-                //     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}  
-                // ,  // Part 2: Metal and misc percussion sounds
-                // s("${this.param.C.part["2"].sound.pattern}").bank("${this.param.C.part["2"].sound.bank}")   // Hats
-                //     .velocity(perlin.range(.5, 0.75))
-                //     .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})   // Euclidean pulse
-                //     ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`}                     
-                , // Part 3: Harmony: sampled chord
-                n(${ this.param.C.part["3"].sound.pattern }) // I IV V VI
-                    .scale("${this.param.global.scale.root}${this.param.C.part["3"].octave}:${this.param.global.scale.type}")     
-                    ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].gain * this.param.C.gain})`}  
-                    .s("gm_string_ensemble_1")
-                    ${this.param.C.part["3"].sound.modifier ?? ''}
+                s("${this.param.C.part["1"].sound.pattern}")
+                    ${this.param.C.part["1"].sound.bank  ? `.bank("${this.param.C.part["1"].sound.bank}")` : ""}  // Beat
+                    ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}  
+                ,  // Part 2: Metal and misc percussion sounds
+                s("${this.param.C.part["2"].sound.pattern}")
+                    ${this.param.C.part["2"].sound.bank  ? `.bank("${this.param.C.part["2"].sound.bank}")` : ""}  // Hats
+                    .velocity(perlin.range(.5, 0.75))
+                    .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})   // Euclidean pulse
+                    ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`}                     
+                , // Part 3: Harmony: synth
+                stack( // a. Oscillator
+                    n(${ this.param.C.part["3"].sound.pattern }) // I IV V VI
+                        .scale("${this.param.global.scale.root}${this.param.C.part["3"].octave}:${this.param.global.scale.type}")     
+                        ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].gain * this.param.C.gain})`}  
+                        .s("supersaw")
+                        .lpf(sine.range(1200,1500).slow(4))
+                        .phaser(0.25)
+                        .tremolo(0.5)
+                        .tremolodepth(sine.range(0.25,0.5).slow(16))
+                        .tremolosync(1)
+                        .tremoloshape("sine")  
+                        .delay(0.25)
+                )
+                .adsr("1.5:0.1:0.8:0.25")
             )
             .color("${this.param.visual.color.C}")
-            .swingBy(${this.param.C.swing.level}, 8)          // - swing applied on 1/8 pitchs
+            .swingBy(${this.param.C.swing.level}, 8)          // - swing applied on 1/8 notes
             ${this.param.C.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.C.gain * 0.75})` : ''}
             ${this.param.C.fx.crusher      ? this.param.global.fx.crusher : ''}
             ${this.param.C.fx.distortion   ? this.param.global.fx.distortion  : ''}
@@ -270,15 +258,15 @@ export class DataSonification extends Sonification{
         group.A.velocity.array = dayData.scaledData[group.A.velocity.interval].A.velocity.map(d => { return d[group.A.velocity.series].value})
         this.param.A.velocity.pattern  = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
-        // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
-        group.A.lpf.array = dayData.scaledData[group.A.lpf.interval].A.lpf.map(d => Math.round(d[group.A.lpf.series].value))
-        const cutoffRangeString     = `"[${rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
-        this.param.synth.TB303.filter.cutoff = `sine.range(${cutoffRangeString}).slow(4)`
+        // // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
+        // group.A.lpf.array = dayData.scaledData[group.A.lpf.interval].A.lpf.map(d => Math.round(d[group.A.lpf.series].value))
+        // const cutoffRangeString     = `"[${rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
+        // this.param.synth.TB303.filter.cutoff = `sine.range(${cutoffRangeString}).slow(4)`
 
-        // iii. Filter resonance:  constructed from selected data => update params: set for change on 2n
-        group.A.lpq.array = dayData.scaledData[group.A.lpq.interval].A.lpq.map(d => d[group.A.lpq.series].value)
-        const resonanceRangeString     = `"[${rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
-        this.param.synth.TB303.filter.resonance = `sine.range(${resonanceRangeString}).slow(8)`
+        // // iii. Filter resonance:  constructed from selected data => update params: set for change on 2n
+        // group.A.lpq.array = dayData.scaledData[group.A.lpq.interval].A.lpq.map(d => d[group.A.lpq.series].value)
+        // const resonanceRangeString     = `"[${rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
+        // this.param.synth.TB303.filter.resonance = `sine.range(${resonanceRangeString}).slow(8)`
 
 
         /**
@@ -289,10 +277,10 @@ export class DataSonification extends Sonification{
         group.B.pitch.array         = dayData.scaledData[group.B.pitch.interval].B.pitch.map(d => d[group.B.pitch.series][scaleLock])
         this.param.B.pitch.pattern  = `${JSON.stringify(group.B.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
-        // ii. Noise part level "velocity": constructed from data 
-        const noiseRange = 1 ?? dayData.scaledData["1m"].B.noise[0][group.B.noise.series].value
-        group.B.noise.array         = dayData.scaledData[group.B.noise.interval].B.noise.map(d => d[group.B.noise.series].value * noiseRange)
-        this.param.synth.ModelD.noise.velocity  = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
+        // // ii. Noise part level "velocity": constructed from data 
+        // const noiseRange = 1 ?? dayData.scaledData["1m"].B.noise[0][group.B.noise.series].value
+        // group.B.noise.array         = dayData.scaledData[group.B.noise.interval].B.noise.map(d => d[group.B.noise.series].value * noiseRange)
+        // this.param.synth.ModelD.noise.velocity  = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
 
         /**
@@ -301,11 +289,11 @@ export class DataSonification extends Sonification{
 
         // Part 1. Beat pattern: "membrane" percussion
         // i. Update pattern params
-        this.param.C.part["1"].sound.pattern = group.C["1"][this.state.selection.group.C.part["1"].series].pattern
+        this.param.C.part["1"].sound.pattern = group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern
 
         // Part 2. Hats pattern: "metal" percussion
         // i. Update pattern params
-        this.param.C.part["2"].sound.pattern = group.C["2"]?.[this.state.selection.group.C.part["2"].series].pattern
+        this.param.C.part["2"].sound.pattern = group.C["2"].sound[this.state.selection.group.C.part["2"].series].pattern
 
         // Part 3. Chord progression notes and params
         group.C["3"].interval = "4n"
@@ -321,7 +309,7 @@ export class DataSonification extends Sonification{
         this.param.C.part["3"].sound.sample = c3.name
         this.param.C.part["3"].sound.modifier = c3.modifier
         this.param.C.part["3"].gain = c3.gain
-
+console.log(this.param.C.part["3"].sound.pattern )
 
         console.log('--UPDATE PARAM MAP', {dayData},)
     };

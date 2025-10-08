@@ -45,9 +45,9 @@
         const part1_mute = sonification.param.C.part["1"].mute,
             part2_mute = sonification.param.C.part["2"].mute
 
-        const part1_array = groupPartPresets["1"][sonification?.state.selection.group["C"].part["1"].series]?.vis
+        const part1_array = groupPartPresets["1"].sound[sonification?.state.selection.group["C"].part["1"].series]?.vis
                                 .map( (d, i) => sonification.state.selection.group.C.part["1"].euclideanArray[i] && !part1_mute ? d : []) ,
-            part2_array   = groupPartPresets["2"][sonification?.state.selection.group["C"].part["2"].series]?.vis
+            part2_array   = groupPartPresets["2"].sound[sonification?.state.selection.group["C"].part["2"].series]?.vis
                                  .map( (d, i) => sonification.state.selection.group.C.part["2"].euclideanArray[i] && !part2_mute  ? d : []) 
 
         return part1_array.map( (part1, i) =>  part1.concat(part2_array[i]) )

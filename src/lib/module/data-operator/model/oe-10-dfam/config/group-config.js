@@ -16,6 +16,7 @@ export const groupConfig = {
         type:       'pitch',
         pitch: {
             interval:   '16n',          // This may be the default for all, i.e. 16 step sequencer
+            division:       1,
             series: [  
                 'renewable',    'solar',    'wind',     
                 'hydro',        'fossil',   'coal',     
@@ -29,6 +30,7 @@ export const groupConfig = {
         type:       'velocity',
         velocity: {
             interval:   '16n',  
+            division:       1,
             series: [   
                 'renewable',    'solar',    'wind',     
                 'hydro',        'fossil',   'coal',     
@@ -42,10 +44,10 @@ export const groupConfig = {
         type:       'pattern',
         part: {         
             1: {
-                series:     Object.keys(groupPartPresets["1"]).map(d => +d)
+                series:     Object.keys(groupPartPresets["1"].sound).map(d => +d)
             },
             2: {
-                series:      Object.keys(groupPartPresets["2"]).map(d => +d)
+                series:      Object.keys(groupPartPresets["2"].sound).map(d => +d)
             },
             3: {
                 series:    Object.keys(groupPartPresets["3"].sound).map(d => +d)

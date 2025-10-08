@@ -1,6 +1,11 @@
 <script>
     // Libs and utils
-	import { fade } from 'svelte/transition';
+	import { fade }         from 'svelte/transition';
+    // Parts
+    import Intro            from './Intro.svelte';
+    import DataNoteOE10     from './DataNote_OE10.svelte';
+    import Acknowledgements from './Acknowledgements.svelte';
+    import DataContextPlaceholder from './DataContext_placeholder.svelte';
     // Props
     let {isSideGuide = false} = $props()
 </script>
@@ -11,15 +16,8 @@
         <h1 class = 'header'>Data Operator </h1>
         <p class = 'subtitle'>Data sonification summary</p>
 
-        <section>
-            <p>This is a (slightly technical) set of [draft] notes documenting key points of data sonification process. They are provided for 'completeness' and to provide curious users with some context for the data and instruments they are playing with in this particular <i>Data Operator</i> model and version.</p>
-        </section>
-
-        <section>
-            <h2>OE-10: Data from Open Electricity</h2>
-            <p>Data in this sonification comes from  <a href='https://openelectricity.org.au/' target="_blank">Open Electricity</a>. It contains daily data about the Australian National Energy Market (NEM), reported at time intervals (at up to 5min resolution) for across multiple data series including volumes of electricity generation by 'source type', and market price (in the NEM). For this sonificaiton, data series are also aggregated by useful category (e.g. fossil fuel vs renewable energy) and various proportions (i.e. ratios) are  calculated. For appropriate use with musical timing, data has been rolled up to a maximum division of 16 steps/sixteenth notes (equivalent to 1.5 hour blocks).
-            </p>
-        </section>
+        <Intro/>
+        <DataNoteOE10/>
 
         <section>
             <h2>Instrumentation &times; parameter mapping</h2>
@@ -40,11 +38,8 @@
             </p>
         </section>
 
-        <section>
-            <h2>Acknowledgements</h2>
-            <p>Please refer to the documentation for details of technologies used and licenses. Very quickly though, this is project is open source. It uses open source data, open source technologies, and open sourced samples.</p>
-        </section>
-
+        <DataContextPlaceholder/>
+        <Acknowledgements/>
     </div>
 </article>
 

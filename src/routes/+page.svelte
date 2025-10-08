@@ -1,5 +1,7 @@
 <!-- DATA OPERATOR HOMEPAGE -->
 <script>
+    // Libs and utils
+	import { fade } from 'svelte/transition';
 
     /**
      *   DATA OPERATOR MENU ITEMS
@@ -63,8 +65,8 @@
 
 
 <!-- HTML COMPONENTS-->
-<section class = 'content__container'>
-    <div class = 'title__container'>
+<section class = 'content__container' in:fade>
+    <div class = 'title__container' >
         <h1>
             <span class="blink">
                 <span class="word word-a">HELLO</span>
@@ -78,25 +80,27 @@
     <div class = 'menu__container'>
         <ul class = 'track'>
             {#each items as item}
-            <li class="menu-item"><a href={item.href}>
+            <li class="menu-item">
                 <div>
                     <h3 class = 'item-title'>{item.title}</h3> 
                     {#if item.subtitle}<h4 class = 'item-subtitle'>{item.subtitle}</h4>{/if}
                 </div>
                 
+
                 <div>
                     {#if item.description}<div class = 'item-description'>{item.description}</div>{/if}
-                    <div class = 'item-link'>&rarr; </div>
-        
+                    <a href={item.href}>
+                        <div class = 'item-link'>&rarr;</div>
+                    </a>
                 </div>
-                </a>
+
             </li>
             {/each}
         </ul>
     </div>
 
     <div class = 'tagline__container'> 
-        <div class = 'tagline'>Super fun happy data sonification toys.</div>
+        <div class = 'tagline'>Super fun data instruments</div>
     </div>
 </section>
 
@@ -134,7 +138,6 @@
     h2.subtitle{
         font-size:              5dvh;
         margin-block-start:     0;
-
         display:                flex;
         width:                  fit-content;
     }
@@ -231,12 +234,13 @@
         display:            flex;
         transition:         all 500ms;
         transform-origin:   50% 50%;
-    }
-    li.menu-item a{
         display:            flex;
         flex-direction:     column;
         justify-content:    space-between;
-        height: 100%;
+        /* height:             100%; */
+    }
+    li.menu-item a{
+
     }
     li.menu-item:hover{
         filter:             brightness(1.4);
@@ -281,12 +285,15 @@
     }
 
     .item-description{
-        font-size: 1.5vh;
-        opacity: 0;
-        transition: all 500ms;
+        font-size:          1.5vh;
+        opacity:            0;
+        transition:         all 500ms;
+        font-weight:        600;
+        width:              70%;
     }
     li:hover .item-description{
-        opacity:            1;
+        opacity:            0.75;
+
     }
     /* Remove mask on screens narrower than 800px */
     @media (max-width: 800px) {

@@ -51,7 +51,6 @@ export class Sonification{
                     type:           undefined,          // 'type' tepmlate for overlay message
                     link:           undefined            // generated strudel.cc link 
                 }
-
             },
             sequencer: {    // Pulse sequencer: Group A nd B
                 ui: {   // ui state for storing group/part being edited
@@ -131,6 +130,10 @@ export class Sonification{
         this.updateStrudel =  (autoplay = true) => strudel?.repl?.evaluate(this.code, autoplay)
     }
 
+    //////////////////////////
+    ////  PUBLIC METHODS  ////
+    //////////////////////////
+
     initParam(punchFX){
         // i. Add group-level parameter mapped series lengths: called after custom groupConfig is added, but beore hte init paramMa
         if(this.param.A.pitch)      this.param.A.pitch.length       = +this.schema.group.A.pitch.interval.slice(0, -1)
@@ -155,9 +158,6 @@ export class Sonification{
         }
     }
 
-    //////////////////////////
-    ////  PUBLIC METHODS  ////
-    //////////////////////////
 
     addHandlers(strudel, editorUI){
         // Bind this to variable for use when methods are bound touch button-bound keys
@@ -279,7 +279,7 @@ export class Sonification{
                 // Presets
                 const presets = [80, 100, 120, 140]
 
-                // Get "current" closet and new bpm
+                // i. Get "current" closet and new bpm
                 const closest = (arr, num) => arr.reduce((a, b) => Math.abs(b - num) < Math.abs(a - num) ? b : a);
                 const currentClosest = closest(presets, sonification?.param.global.bpm)
                 const newBPM = cycleFromValue(presets, currentClosest, 1)
@@ -317,6 +317,25 @@ export class Sonification{
                 // => Update REPL
                 this.updateREPL(strudel.state.transport === "playing")
             }, 
+            cycleClock(group, part, type, direction = 1){
+                // i. Available divisions
+                const divisionArray = [1, 2, 3 ,4, 5, 6, 7, 8]
+
+                // ii. Update param
+                if(!part){
+                    sonification.param[group][type].clockDivider = cycleFromValue(divisionArray, sonification.param[group][type].clockDivider, direction)
+                    sonification.state.userMessage.text = `${group} > Clock divider set to ${sonification.param[group][type].clockDivider} `
+                } else {
+                    sonification.param[group].part[part][type].clockDivider = cycleFromValue(divisionArray, sonification.param[group].part[part][type].clockDivider, direction)
+                    sonification.state.userMessage.text = `${group}.${part} > Clock divider set to ${sonification.param[group].part[part][type].clockDivider } `
+                }
+
+                // iii. Handle user message
+                sonification.handle.userMessage()
+
+                // => Update REPL                
+                this.updateREPL(strudel.state.transport === "playing")
+            },
             // Data selection and update 
             selectPattern: (index, group, part) => {
                 // i. Update pattern selection based on type

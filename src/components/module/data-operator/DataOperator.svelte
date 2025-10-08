@@ -1,7 +1,8 @@
 <!-- DATA OPERATOR  -->
 <script>
     // Libs and utils
-	import { fade } from 'svelte/transition';
+	import { fade }         from 'svelte/transition';
+
     // Components
     import TopPanel         from "./ui/TopPanel.svelte";
     import Display          from "./display/Display.svelte";
@@ -49,7 +50,8 @@
 <!-- HTML COMPONENT MARKUP -->
 <KeyboardUI {model}/>
 
-<div class = 'data-operator__container theme={operatorConfig.theme}' class:mobile={sonification.state.isMobile}>
+<div class = 'data-operator__container theme={operatorConfig.theme}'
+    class:mobile={sonification.state.isMobile} in:fade>
     <div class = 'interface__wrapper'>
         <TopPanel {model}/>
         <Display {model}/>

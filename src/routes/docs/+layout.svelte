@@ -21,7 +21,7 @@
 <nav>
     <ul>
         <li class = 'home'>
-            <a href = '/'>&#8612;&#393;&#xd6;</a>
+            <a href = '/'>デ.オ.</a>
         </li>
         <li class:active={docRoute === 'docs'}>
             <a href = '/docs'>About</a>
@@ -33,10 +33,10 @@
             <a href = '/docs/user-manual'>User manual</a>
         </li>
         <li class:active={docRoute === 'design'}>
-            <a href = '/docs/design'>Design</a>
+            <a href = '/docs/operator-design'>Operator design</a>
         </li>
         <li class:active={docRoute === 'sonification'}>
-            <a href = '/docs/sonification'>Sonification</a>
+            <a href = '/docs/sonification'>Sonification notes</a>
         </li>
     </ul>
 </nav>

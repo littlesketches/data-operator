@@ -8,7 +8,7 @@
 export const scaleConfig = {
     A: {
         pitch: { 
-            min: 0,     max: 10       // scale degree 2 octave range (inclusive)
+            min: 0,     max: 5       // scale degree 2 octave range (inclusive)
         },
         velocity: { 
             min: 0.5,   max: 1        // Note velocity
@@ -22,7 +22,7 @@ export const scaleConfig = {
     },
     B: {
         pitch: { 
-            min: 0,     max:  5       // scale degree: 1 octave pentatonic
+            min: 0,     max:  10       // scale degree: 1 octave pentatonic
         },
         noise: { 
             min: 0.1,   max:  1       // Mapped to noise component of the bass sytnh

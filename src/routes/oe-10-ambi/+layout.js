@@ -27,7 +27,7 @@ const modelName = 'oe-10-ambi'
 // 2. Operator config object 
 const operatorConfig = {
     modelName,
-    theme:          'rainbow',        // Specify theme
+    theme:          'ambient',        // Specify theme
     ui: {
         type:       'std',      // Specify UI
         keyguide,

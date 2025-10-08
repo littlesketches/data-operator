@@ -70,7 +70,16 @@ canvas#test-canvas{
     --pixel-4:              hsl(0, 0%, 20%);
 }
 
-[data-theme="rainbow"] {
+
+[data-theme="rainbow2"] .interface__wrapper{
+    background:
+        linear-gradient(red, transparent),
+        linear-gradient(to top left, lime, transparent),
+        linear-gradient(to top right, blue, transparent);
+    background-blend-mode: screen;
+}
+
+[data-theme="ambient"] {
     --col-body:             #ccc;
     --col-grad-0:           hsl(0,0%,85%);
     --col-grad-1:           hsl(0,0%,75%);
@@ -79,8 +88,8 @@ canvas#test-canvas{
     --col-grad-4:           hsl(0,0%,15%);
     --col-grad-5:           hsl(0,0%,10%);
     --col-dark:             hsl(0,0%,0%);
-    --col-light:            #fff;
-    --col-highlight:        #f15a22;
+    --col-light:            #d4d4d4;
+    --col-highlight:        #d40481;
     --col-highlight-alt:    rgb(35, 230, 248);
 
     --screen-bg:            #000;
@@ -90,6 +99,30 @@ canvas#test-canvas{
     --pixel-3:              hsl(0, 0%, 40%);
     --pixel-4:              hsl(0, 0%, 20%);
 }
+
+[data-theme="ambient"] .interface__wrapper{
+    background:
+        linear-gradient(rgb(168, 53, 188), transparent),
+        linear-gradient(to top left, rgb(209, 207, 45), transparent),
+        linear-gradient(to top right, rgb(10, 178, 184), transparent);
+    background-blend-mode: screen;
+}
+
+[data-theme="ambient"] .button__wrapper,
+[data-theme="ambient"] .button.numpad .button__wrapper{
+    background: rgb(255, 255, 255, 0.15)     
+} 
+[data-theme="ambient"] .button-guidance,
+[data-theme="ambient"] .button-label,
+[data-theme="ambient"] .button-label.invert{
+    color:                  rgb(0, 0, 0, 0.5);
+}
+
+[data-theme="ambient"] .button-label.invert{
+    background:          rgb(0, 0, 0, 0.35);
+    color:              var(--col-light);
+    /* opacity: 0.5; */
+}   
 
 [data-theme="plaid"] {
     --col-body:             #ccc;
@@ -138,13 +171,6 @@ canvas#test-canvas{
     background:             var(--col-body);
 }
 
-[data-theme="rainbow"] .interface__wrapper{
-    background:
-        linear-gradient(red, transparent),
-        linear-gradient(to top left, lime, transparent),
-        linear-gradient(to top right, blue, transparent);
-    background-blend-mode: screen;
-}
 
 [data-theme="plaid"] .interface__wrapper{
     background:
