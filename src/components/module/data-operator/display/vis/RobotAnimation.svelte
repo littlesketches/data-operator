@@ -1,7 +1,7 @@
 <!-- ROBOT DRUMMER: INSTRUMENT SYNCED SVG ANIMATION -->
 <script>
     // Config
-    import { groupPartPresets } from '$lib/module/data-operator/model/oe-10/config/part-config';
+    import { groupPartPresets } from '$src/lib/module/data-operator/model/oe-10/operator/config/part-config';
 
     // Props
     let {model} = $props()
@@ -84,14 +84,14 @@
         bassDataInterval = sonification.schema.group.B.pitch?.interval
 
     let sceneIndex = $derived(sonification.state.selection.sceneIndex),
-        data     = $derived(dataModel.model[sceneIndex])       // Modelled data for selected day
+        data     = $derived(dataModel.scene[sceneIndex])       // Modelled data for selected day
 
     // ii. Derive lead pitch data with euclidean pulses and mutes
     let leadData = $derived.by( () => {
         const pitchSeries = sonification.state.selection.group.A.pitchPattern,
             scale      = data.scale[leadDataInterval].A.pitch[pitchSeries].pitchScale,
             euclidean  = sonification.state.selection.group.A.euclideanArray,
-            pitchData   = data.scaledData[leadDataInterval].A.pitch.map(d => d[pitchSeries].quantized),
+            pitchData   = data.scaledData[leadDataInterval].A.pitch[pitchSeries].map(d => d.quantized),
             muted      = sonification.param.A.mute
         
         return pitchData.map( (d, i) => euclidean[i] && !muted? d : null ) 
@@ -104,7 +104,7 @@
         const pitchSeries = sonification.state.selection.group.B.pitchPattern,
             scale      = data.scale[leadDataInterval].B.pitch[pitchSeries].pitchScale,
             euclidean  = sonification.state.selection.group.B.euclideanArray,
-            pitchData   = data.scaledData[leadDataInterval].B.pitch.map(d => d[pitchSeries].quantized),
+            pitchData   = data.scaledData[leadDataInterval].B.pitch[pitchSeries].map(d => d.quantized),
             muted      = sonification.param.B.mute
 
         return pitchData.map( (d, i) => euclidean[i] && !muted ? d : null ) 

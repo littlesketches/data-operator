@@ -1,0 +1,1 @@
+export { default as component } from "../../../../src/routes/docs/sonification/oe-10-dfam/+page.svelte";

@@ -6,7 +6,7 @@
     import ChartPitch       from './vis/ChartPitch.svelte';
     import ChartPitchVelocity from './vis/ChartPitchVelocity.svelte';
     import ChartPattern     from './vis/ChartPattern.svelte';
-    import DataSelector     from './info/DataSelector.svelte';
+    import SceneSelector     from './info/SceneSelector.svelte';
     import UserMessage      from './info/UserMessage.svelte';
     import RobotAnimation   from './vis/RobotAnimation.svelte';
     import Overlay          from './info/Overlay.svelte';
@@ -35,7 +35,7 @@
         </div>
 
         <div class = 'data-label__container'> 
-            <DataSelector {model}/>
+            <SceneSelector {model}/>
         </div>
 
         <div class = 'group__container'>
@@ -125,7 +125,7 @@
         display:                flex;
         justify-content:        end;
         font-size:              1.5vh;
-        grid-area:              4 / 3 / 5 / 4;
+        grid-area:              4 / 2 / 5 / 4;
     }
 
     .group__container{

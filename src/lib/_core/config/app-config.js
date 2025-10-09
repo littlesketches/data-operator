@@ -1,7 +1,7 @@
 export const appConfig = {
     data: {
         'open-electricity':{
-            url: './data/open-electricity/open-electricity.csv'
+            url: '/data/open-electricity/open-electricity.csv'
         },
         'climate-watch': {
 

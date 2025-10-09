@@ -12,9 +12,12 @@ import * as d3              from 'd3'
 // Classes 
 import { DataModel }        from '$lib/module/data-operator/core/js/DataModel.svelte'
 // Config
-import { timingInterval }   from '$lib/module/data-operator/core/config/global/timing-config'
-import { dataPropMap, 
-    dataAggregationMap }    from './data-maps'
+import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config'
+import { rootPath, 
+    staticDataStructure, 
+    loader }                    from "./config/static-data"
+import { adaptationDataMeta }   from "./config/data-meta-info"
+import { unfcccCountryMap }     from '../../model/cw-193/operator/config/unfccc-country-categorisation'
 
 // Private variable
 let scaleConfig
@@ -35,7 +38,7 @@ export class DataModel_CW extends DataModel{
     constructor(app, _fetch, _scaleConfig){
 
         super(app, _fetch)
-        
+
         scaleConfig = _scaleConfig  // Assign custom scale config to private variable for use in data modelling
     }
 
@@ -43,99 +46,275 @@ export class DataModel_CW extends DataModel{
     ////  PRIVATE METHODS  ////
     ///////////////////////////
 
-    async #loadData(){
-        // i. Load and parse CSV data 
-        const res = await this.fetch(this.app.config.data['open-electricity'].url);
-        if (!res.ok) throw new Error('Failed to fetch');
-        let responseData = await res.text();
-        const inputData  = d3.csvParse(responseData)
+    async #loadData() {
+        // i. Init data object
+        const inputData = {}
 
-        // ii. Cast number and date types
-        inputData.forEach( row => {
-            Object.entries(row).forEach(([key, value]) => {
-                if(!isNaN(+value)) row[key] = +value        // Parse numbers
-                if(key === 'date') row.date =  d3.timeParse("%d/%m/%Y %H:%M")(value)        // Parse date to day and time
+        // ii. Load and prase data all staticData sources
+        for(const [folderName, fileObj] of Object.entries(staticDataStructure)){
+        
+            inputData[folderName] = {}
+        
+            for(const [fileName, fileMeta] of Object.entries(fileObj)){
+                // a. Load data from local files
+                const url = `${rootPath}/${folderName}/${fileName}.${fileMeta.type}`,
+                    data =  await loader[fileMeta.type](this.fetch, url)
+
+                // b. Parse text to numbers and trim text
+                for(const dataObj of Object.values(data)){
+                    for(let [key, value] of Object.entries(dataObj)){
+
+                        if(!isNaN(value) && value!== null ) {
+                        dataObj[key] = +value
+                        } else {
+                            dataObj[key] = value.trim()
+                        }
+                    }
+                }
+
+                // c. Add data and meta 
+                inputData[folderName][fileName] = {
+                    data,
+                    meta: fileMeta
+                }
+            }
+        }
+
+        // => Return data object
+        return inputData
+    }
+
+    #extractSchema(inputData){
+        // i. Init schema obj
+        const schema = {
+            list: {
+                countryCodes: [...new Set(this.input['historical-emissions']['CW_HistoricalEmissions_ClimateWatch'].data
+                                .map(d => d.Country))]
+                                .filter(d => d !== 'EUU' && d !== 'WORLD'),     // Scene index
+                series:     {},
+                availableYears: Object.keys(this.input['historical-emissions']['CW_HistoricalEmissions_ClimateWatch'].data[0])
+                                .filter( d => !isNaN(d)).map(d => +d),
+                metricType:    [
+                    'annual', 
+                    'annualPerCapita', 
+                    // 'annualPerGDP', 
+                    'cumulative', 
+                    'cumulativePerCapita', 
+                    // 'cumulativePerGDP'
+                ],
+                ghgType:    ['net', 'source', 'sink', 'gross']
+
+            }, 
+            map: {
+                countryMeta:    unfcccCountryMap        
+            }
+        }
+
+        // ii. Add country in dex
+        schema.list.countryIndex = schema.list.countryCodes.map((d, i) => i)
+
+        // => Return schema
+        return schema
+    }
+
+    #transformData(inputData){
+
+        // i. Init data structure for model (shaped for visualisation/representation)
+        const modelData =  {
+            adaptation: {
+                raw:    inputData['adaptation']['CW_adaptation'].data,
+                byCountry: {}
+            },
+            ghg: {
+                raw:   inputData['historical-emissions']['CW_HistoricalEmissions_ClimateWatch'].data
+                        .filter(d => d.Gas === 'All GHG' &&  (d.Sector === 'Total excluding LUCF' || d.Sector === 'Land-Use Change and Forestry'))      
+                        .filter(d => d.Country !== 'EUU' && d.Country !== 'WORLD'),
+                byCountry:  {},
+                extent:     {}   // Extent across all countries, all metrics
+            },  
+            gdp:  {
+                raw:        inputData['socio-economics']['CW_gdp'].data,
+                byCountry:  {}
+            },
+            ndc: {
+                raw:        inputData['ndc-content']['CW_NDC_data_highlevel'].data,
+                byCountry:  {}
+            },
+            population: {
+                raw:        inputData['socio-economics']['CW_population'].data,
+                byCountry:  {}
+            },
+        }
+
+        // ii. Calculate country annual gross, net, sink and source: on total and per capita
+        this.schema.list.countryCodes.forEach( countryCode => {
+
+            // a. Init props with obj for each country
+            modelData.population.byCountry[countryCode] = {}
+            modelData.ghg.byCountry[countryCode] =  (() => {
+                //  Init ghg object for all metrics and ghg measure types
+                const obj = {}
+                this.schema.list.metricType.forEach( metric => {
+                    obj[metric] = {}
+                    this.schema.list.ghgType.forEach(type => {
+                        obj[metric][type] = {}
+                    })
+                })
+                // => Return complete structured obj 
+                return obj
+            })()
+
+            // b. Get country GHG data
+            const totalExLand   = modelData.ghg.raw.filter( d => d.Country === countryCode && d.Sector === "Total excluding LUCF")[0],
+                landSector      = modelData.ghg.raw.filter( d => d.Country === countryCode && d.Sector === "Land-Use Change and Forestry")[0]
+
+            // c. Store population
+            modelData.population.byCountry[countryCode] = modelData.population.raw.filter( d => d['Country Code'] === countryCode)[0]   
+            modelData.gdp.byCountry[countryCode] = modelData.gdp.raw.filter( d => d['Country Code'] === countryCode)[0]   
+
+            // d. Add 'gross' emissions and 'sinks'
+            const countryDataYears = Object.keys(totalExLand).filter(d => !isNaN(d)).map(d => +d)   // Available years for the country to ensure there is data
+
+            countryDataYears.forEach((year, i) => {
+                // a. References (for calc clarity)
+                const population        = modelData.population.byCountry[countryCode][year],
+                    netAnnual           = modelData.ghg.byCountry[countryCode].annual.net,
+                    sourceAnnual        = modelData.ghg.byCountry[countryCode].annual.source,         
+                    sinkAnnual          = modelData.ghg.byCountry[countryCode].annual.sink,
+                    grossAnnual         = modelData.ghg.byCountry[countryCode].annual.gross,
+                    netPerCapita        = modelData.ghg.byCountry[countryCode].annualPerCapita.net,
+                    sourcePerCapita     = modelData.ghg.byCountry[countryCode].annualPerCapita.source,
+                    sinkPerCapita       = modelData.ghg.byCountry[countryCode].annualPerCapita.sink,
+                    grossPerCapita      = modelData.ghg.byCountry[countryCode].annualPerCapita.gross,
+                    netCumulative       = modelData.ghg.byCountry[countryCode].cumulative.net,
+                    sourceCumulative    = modelData.ghg.byCountry[countryCode].cumulative.source,
+                    sinkCumulative      = modelData.ghg.byCountry[countryCode].cumulative.sink,
+                    grossCumulative     = modelData.ghg.byCountry[countryCode].cumulative.gross,
+                    netCumulativePC     = modelData.ghg.byCountry[countryCode].cumulativePerCapita.net,
+                    sourceCumulativePC  = modelData.ghg.byCountry[countryCode].cumulativePerCapita.source,
+                    sinkCumulativePC    = modelData.ghg.byCountry[countryCode].cumulativePerCapita.sink,
+                    grossCumulativePC   = modelData.ghg.byCountry[countryCode].cumulativePerCapita.gross
+
+                // b. Total calcs with/without landSector available years
+                netAnnual[year]         = totalExLand[year] + landSector[year] 
+                sourceAnnual[year]      = totalExLand[year] + (landSector[year] > 0 ? landSector[year] : 0)  // Add positive land sector contribution
+                sinkAnnual[year]        = landSector[year] <= 0 ? -landSector[year] : 0     
+                grossAnnual[year]       = sourceAnnual[year] + sinkAnnual[year]          
+
+                // c. Per capita calcs (all years) in tonnes per person.year
+                netPerCapita[year]      = netAnnual[year]    / population * 1000000
+                sourcePerCapita[year]   = sourceAnnual[year] / population * 1000000
+                sinkPerCapita[year]     = sinkAnnual[year]   / population * 1000000
+                grossPerCapita[year]    = grossAnnual[year]  / population * 1000000
+
+                // Init cumulative for "year zero at zero"
+                if(i === 0){
+                    netCumulative[year]     = sourceCumulative[year]   = sinkCumulative[year]   = grossCumulative[year]   = 0
+                    netCumulativePC[year]   = sourceCumulativePC[year] = sinkCumulativePC[year] = grossCumulativePC[year] = 0
+                } 
+                // d. Cumulative annual: at end of year
+                netCumulative[year+1]       = netCumulative[year] + netAnnual[year]
+                sourceCumulative[year+1]    = sourceCumulative[year] + sourceAnnual[year]
+                sinkCumulative[year+1]      = sinkCumulative[year] + sinkAnnual[year]
+                grossCumulative[year+1]     = grossCumulative[year] + grossAnnual[year]
+
+                // e. Cumulative per capita:  at end of year
+                netCumulativePC[year+1]     = netCumulativePC[year] + netPerCapita[year]
+                sourceCumulativePC[year+1]  = sourceCumulativePC[year] + sourcePerCapita[year]
+                sinkCumulativePC[year+1]    = sinkCumulativePC[year] + sinkPerCapita[year]
+                grossCumulativePC[year+1]   = grossCumulativePC[year] + grossPerCapita[year]
+            })
+
+            // e. Store climate risk scores
+            const adaptationData = modelData.adaptation.raw.filter( d => d['country'] === countryCode)[0] 
+            modelData.adaptation.byCountry[countryCode] = {
+                vulnerabilityScore:     adaptationData.vulnerability,
+                vulnerabilityRank:      adaptationData.vulnerability_rank,
+                readinessScore:         adaptationData.readiness,
+                readinessRank:          adaptationData.readiness_rank,
+                climateRiskIndex:       adaptationData.climate_risks,
+                climateRiskRank:        adaptationData.climate_risks_rank,
+                povertyPopPercent:      adaptationData.poverty_14,
+            }
+
+            // f. Store national determined contributions (NDC) data
+            modelData.ndc.byCountry[countryCode] = {
+                dates:  modelData.ndc.raw
+                        .filter( d => d['ISO'] === countryCode)
+                        .map(d =>  {
+                            return {
+                                ndc_date:       d3.timeParse("%m/%d/%Y")(d.ndc_date),
+                                mitigation:     d.mitigation_contribution_type,
+                                adaptation:     d.adaptation_label,
+                                conditionality: d.conditionality_label,
+                                document:       d.document,
+                                indc_summary:   d.indc_summary,
+                                target:         d.target
+                            }
+                        })
+    
+            }
+        })
+
+        // iii. Add extent data for scales (across all years)
+        const allCountryGHG = Object.values(modelData.ghg.byCountry)
+
+        this.schema.list.metricType.forEach( metric => {
+            modelData.ghg.extent[metric] = {}
+            this.schema.list.ghgType.forEach(type => {
+                const ghgData =  allCountryGHG.map(d => Object.values(d[metric][type])).flat()
+                modelData.ghg.extent[metric][type] = d3.extent(ghgData)
             })
         })
 
-        // => Return input data
-        return inputData
+        // => Return 
+        return modelData
     }
-  
-    #transformData(inputData){
 
-        /**
-         *  CUSTOM DATA TRANSFORMATION AND SHAPING
-         *  - For https://openelectricity.org.au/ 30min interval grouper data
-         */
+    #createDataScenes(modelData){
+        console.log({modelData, scaleConfig, timingConfig})
 
-        // 1. Group input data into days ('composition' blocks)
-        const daysMap = d3.group(inputData, d => d3.timeDay.floor(d.date));
+        // i. Init sceneData array
+        const sceneData = []
 
-        // 2. Transform data for each full day "model"
-        const model = Array.from(daysMap, ([day, values]) => {
-            // a. Ensure data is for a full day
-            if (values.length !== 48) return null;      
+        // ii. Variables for timing and series
+        const dataPointsPerMeasure = this.schema.list.availableYears.length
+        const timingInterval = {    // Interval mapped to bins
+            '1m': 1,    '2n': 2,    '4n': 4,   '8n': 8,     '16n': 16,     
+        }
 
-            // b. Init model props
+        // iii. Build model of each country as "scene"
+        const model = this.schema.list.countryCodes.map( (countryCode, countryIndex) => {
+
+            // i. Init model props
             const intervalData = {},
                 scale = {},
-                scaledData = {}          
+                scaledData = {}     
 
-            // c. Create interval data and derived scales/scaled data
-            Object.entries(timingInterval).forEach( ([interval, mins]) => {
-                // i. Roll up daily data to the interval
-                const rollupData = d3.rollup(
-                    values, // (1). Data
-                    v => {  // (2). Aggregation method
-                        const result = {};
-                        for (const [origKey, d] of Object.entries(dataPropMap)) {
-                            const newKey = d.alias, isMW = origKey.slice(-2) === "MW"
-                            // i. For energy volume (MW) => convert to MWh
-                            if(isMW) {
-                                const sumMW = v.reduce((acc, d) => acc + d[origKey], 0);    // Sum MW per 1/2 hr
-                                result[newKey] = sumMW / (timingInterval[interval] / 60);   // convert MW → MWh in 90min
-                            // ii. Otherwise average
-                            } else {
-                                result[newKey] = d3.mean(v.map( d => d[origKey]))
-                            }
-                        }   
-                        // => Return rollup result
-                        return result;
-                    },
-                    d => {  // (3). Specify to roll up to 90mins: find which 'step index' each datums data belongs to
-                        const mins = d.date.getHours() * 60 + d.date.getMinutes();
-                        return Math.floor(mins / timingInterval[interval]); 
-                    }
-                );
+            // ii. Reference country GHG and adaption data
+            const ghg       = modelData.ghg.byCountry[countryCode],
+                adaptation  = modelData.adaptation.byCountry[countryCode]
 
-                // ii. Add ratios and aggregation prop groups
-                rollupData.forEach(d => {
-                    // Add aggregation 
-                    for(let [newKey, obj] of Object.entries(dataAggregationMap)){
-                        d[newKey] = d3.sum(obj.series.map(e => d[e]))                  
-                    }
-                    // Add aggregation ratios
-                    d['ratio-renewable'] = d.renewable / d.totalExBattery
-                    d['ratio-fossil']    = d.fossil / d.totalExBattery
-                    d['ratio-solar']     = d.solar / d.totalExBattery
-                    d['ratio-coal']      = d.coal / d.totalExBattery
-                    d['ratio-gas']       = d.gas / d.totalExBattery
+            const seriesData = {
+                netGhg:               Object.values(ghg.annual.net),
+                sourceGhg:            Object.values(ghg.annual.source),
+                sinkGhg:              Object.values(ghg.annual.sink),
+                netGhg_perCapita:     Object.values(ghg.annualPerCapita.net),
+                sourceGhg_perCapita:  Object.values(ghg.annualPerCapita.source),
+                sinkGhg_perCapita:    Object.values(ghg.annualPerCapita.sink),
+            }
 
-                    // Add ratios for all energy series
-                    for(let [origKey, obj] of Object.entries(dataPropMap)){
-                        const newKey = obj.alias, isMW = origKey.slice(-2) === "MW"
-                        if(isMW) {
-                            d[`ratio-${newKey}`] = d[newKey] / d.totalExBattery
-                        } 
-                    }
+            // iii. Transform data into timing intervals
+            Object.entries(timingInterval).forEach( ([interval, bins]) => {
+
+                // i. Interval data (weighted bins)
+                intervalData[interval] = {}
+                Object.entries(seriesData).forEach( ([seriesName, array]) => {
+                    intervalData[interval][seriesName] = weightedBins(array, bins)    
                 })
 
-                // iii. Convert rollupData to array of intervalData
-                intervalData[interval] = Array.from(rollupData, ([step, props]) => ({ step, ...props }))
-
-                // iv. Create scale for each property from their extent
-                scale[interval] = {}
+                // ii. Create data scales and scaled data
+                scale[interval] = {}    
                 scaledData[interval] = {}
 
                 for( let [group, obj] of Object.entries(scaleConfig)){
@@ -152,47 +331,20 @@ export class DataModel_CW extends DataModel{
                                 scaledData[interval][group][paramName] = {}
 
                                 // I. Create scales 
-                                for (let [key, d] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                    key = d.alias ?? key
+                                for (let [seriesName, d] of Object.entries(seriesData)) {
                                     // a. Add scale for key
-                                    scale[interval][group][paramName][key] =  d3.scaleLinear()
-                                                                                .domain(d3.extent(intervalData[interval], d => d[key]))
+                                    const dataScale = scale[interval][group][paramName][seriesName] =  d3.scaleLinear()
+                                                                                .domain(d3.extent(intervalData[interval][seriesName]))
                                                                                 .range([groupScale[paramName].min, groupScale[paramName].max])
-                                    
-                                    // b. Add scale for ratio version 
-                                    if(intervalData[interval][0][`ratio-${key}`]){
-                                        scale[interval][group][paramName][`ratio-${key}`] =  d3.scaleLinear()
-                                                                .domain(d3.extent(intervalData[interval], d => d[`ratio-${key}`]))
-                                                                .range([groupScale[paramName].min, groupScale[paramName].max])
-                                    
-                                    }
+                                    // b. Add scaled data
+                                    scaledData[interval][group][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
+                                        return {
+                                            value:          dataScale(d),
+                                            quantized:      Math.round(dataScale(d))
+                                        }
+                                    })
                                 }
-
-                                // II. Create scaledData 
-                                scaledData[interval][group][paramName] = intervalData[interval].map(d => {
-                                    const obj = {}
-                                    // a. Add scaled data for each data prop
-                                    for (let [key, e] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                        key = e.alias ?? key
-                                        obj[key] = {
-                                            value:          scale[interval][group][paramName][key](d[key]),
-                                            quantized:      Math.round(scale[interval][group][paramName][key](d[key]))
-                                        }
-
-                                        // b. Add scaled data for ratio version 
-                                        if(intervalData[interval][0][`ratio-${key}`]){
-                                            obj[`ratio-${key}`] = {
-                                                value:          scale[interval][group][paramName][`ratio-${key}`](d[`ratio-${key}`]),
-                                                quantized:      Math.round(scale[interval][group][paramName][`ratio-${key}`](d[`ratio-${key}`]))
-                                            }
-                                        }
-                                    }
-
-                                    // => Return obj
-                                    return obj;
-                                })
                             }
-
                             break
 
                         case "C":
@@ -208,106 +360,68 @@ export class DataModel_CW extends DataModel{
                                     scaledData[interval][group][part][paramName] = {}
 
                                     // I. Create scales 
-                                    for (let [key, d] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                        key = d.alias ?? key
+                                    for (let [seriesName, d] of Object.entries(seriesData)) {
                                         // a. Add scale for key
-                                        scale[interval][group][part][paramName][key] =  d3.scaleLinear()
-                                                                                            .domain(d3.extent(intervalData[interval], d => d[key]))
+                                        const dataScale = scale[interval][group][part][paramName][seriesName] =  d3.scaleLinear()
+                                                                                            .domain(d3.extent(intervalData[interval][seriesName]))
                                                                                             .range([partScale[paramName].min, partScale[paramName].max])
-                                        
-                                        // b. Add scale for ratio version 
-                                        if(intervalData[interval][0][`ratio-${key}`]){
-                                            scale[interval][group][part][paramName][`ratio-${key}`] = d3.scaleLinear()
-                                                                                                        .domain(d3.extent(intervalData[interval], d => d[`ratio-${key}`]))
-                                                                                                        .range([partScale[paramName].min, partScale[paramName].max])
-                                        }
+                                    
+                                        // b. Add scaled data
+                                        scaledData[interval][group][part][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
+                                            return {
+                                                value:          dataScale(d),
+                                                quantized:      Math.round(dataScale(d))
+                                            }
+                                        })
                                     }
-
-                                    // II. Create scaledData 
-                                    scaledData[interval][group][part][paramName] = intervalData[interval].map(d => {
-                                        const obj = {}
-                                        // a. Add scaled data for each data prop
-                                        for (let [key, e] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                            key = e.alias ?? key
-                                            obj[key] = {
-                                                value:          scale[interval][group][part][paramName][key](d[key]),
-                                                quantized:      Math.round(scale[interval][group][part][paramName][key](d[key]))
-                                            }
-
-                                            // b. Add scaled data for ratio version 
-                                            if(intervalData[interval][0][`ratio-${key}`]){
-                                                obj[`ratio-${key}`] = {
-                                                    value:          scale[interval][group][part][paramName][`ratio-${key}`](d[`ratio-${key}`]),
-                                                    quantized:      Math.round(scale[interval][group][part][paramName][`ratio-${key}`](d[`ratio-${key}`]))
-                                                }
-                                            }
-                                        }
-
-                                        // => Return obj
-                                        return obj;
-                                    })
                                 }
                             }
                             break
                     }
-                }     
+                }
+
             })
 
-            // => Return
-            return { day, intervalData, scale, scaledData}
-        }).filter(d => d !== null);
-
-        // => Return model object
-        return model.reverse()
-    }
-
-    #extractSchema(inputData, modelData){
-        // Init schema obj
-        const schema = {
-            list: {
-                dayIndex:   [...modelData.keys()],  
-                series:     {}
-            }, 
-            map: {
-                dayIndex:       Object.fromEntries(modelData.map((obj, i) => [i, obj.day])),
-                series:     {
-                    electricity:    Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => d[0] !== 'price-per-MWh' )),
-                    renewable:      Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.renewable.series.includes(d[0]) )),
-                    solar:          Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.solar.series.includes(d[0]) )),
-                    fossil:         Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.fossil.series.includes(d[0]) )),
-                    coal:           Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.coal.series.includes(d[0]) )),
-                    other:          {
-                        ...Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => d[0] === 'price-per-MWh' )),
-                        'ratio-renewable':  {label: 'renew. %'},
-                        'ratio-fossil':     {label: 'fossil %' },
-                        'ratio-solar':      {label: 'solar %'},
-                        'ratio-coal':       {label: 'coal %'},
-                        'ratio-gas':        {label: 'gas %'},
-                    }  // Price and ratio
-                }
-            }
-        }
-
-        // i. Add series lists        
-        Object.entries(schema.map.series).forEach( ([group, map]) => {         
-            // Add lists
-            schema.list.series[group] = Object.keys(map)
-            // Add electricity ratios
-            if(group === 'electricity'){
-                Object.entries(map).forEach(([key, d]) =>  schema.map.series.other[`ratio-${key}`] = {label: `${d.label} %`})
+            // => Return model object 
+            return  {
+                meta:        this.schema.map.countryMeta[countryCode],
+                intervalData,
+                scale,
+                scaledData,
             }
         })
 
-        // ii Add series map 'all
-        schema.map.series.all = {
-            ...schema.map.series.electricity,
-            ...schema.map.series.other,
-            ...dataAggregationMap
+
+        // => Return 
+        return model
+
+        // Helper > Fractional weighted bins
+        function weightedBins(data, numBins) {
+            const n = data.length;
+            const binSize = n / numBins;
+            const result = [];
+
+            for (let b = 0; b < numBins; b++) {
+                const start = b * binSize;
+                const end = (b + 1) * binSize;
+                let sum = 0, weight = 0;
+
+                for (let i = Math.floor(start); i < Math.ceil(end); i++) {
+                // compute overlap of sample i with [start, end)
+                const left = Math.max(i, start);
+                const right = Math.min(i + 1, end);
+                const w = right - left;
+                sum += data[i] * w;
+                weight += w;
+                }
+                result.push(sum / weight);
+            }
+
+        return result;
         }
 
-        // => Return schema
-        return schema
     }
+
 
     //////////////////////////
     ////  PUBLIC METHODS  ////
@@ -315,12 +429,26 @@ export class DataModel_CW extends DataModel{
 
     async init(){
         // i. Get input data 
-        this.input = await this.#loadData()
+        this.input =  await this.#loadData()
+        
 
-        // ii. Transform data for sonification
+        // ii. Extract schema for UI and visuals
+        this.schema = this.#extractSchema(this.input)
+
+        // iii. Transform data for sonification
         this.model = this.#transformData(this.input)
 
-        // iii. Extract schema for UI and visuals
-        this.schema = this.#extractSchema(this.input, this.model)
+        // iii. Transform data for sonification
+        this.scene = this.#createDataScenes(this.model)
+
+        console.log(this)
     };
+
+    getSceneLabel(sceneIndex){
+        // Get country name as label
+        const countryCode =  this.schema.list.countryCodes[sceneIndex],
+            countryName = this.schema.map.countryMeta[countryCode].name
+        // => Return 
+        return countryName
+    }
 };

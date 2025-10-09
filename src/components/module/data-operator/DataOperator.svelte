@@ -8,7 +8,7 @@
     import Display          from "./display/Display.svelte";
     import PadUI            from "./ui/PadUI.svelte";
     import KeyboardUI       from "./ui/KeyboardUI.svelte";
-    import Guide            from "./guide/Guide.svelte";
+    import SideGuide        from "./guide/SideGuide.svelte";
 
     // Props
     let { model } = $props()
@@ -65,7 +65,7 @@
 <div class = 'guidance__container' class:closed={!viewGuide}>
     {#if viewGuide}
     <div class = 'guidance__wrapper' in:fade={{delay: 500}} out:fade={{duration: 50}}>    
-        <Guide {model} {viewGuide} {guideType}/>
+        <SideGuide {model} {viewGuide} {guideType}/>
     </div>
     {/if}
 </div>

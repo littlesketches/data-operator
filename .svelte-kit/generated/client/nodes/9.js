@@ -1,1 +1,3 @@
-export { default as component } from "../../../../src/routes/docs/model/oe-10/+page.svelte";
+import * as universal from "../../../../src/routes/model/oe-10/dfam/+layout.js";
+export { universal };
+export { default as component } from "../../../../src/routes/model/oe-10/dfam/+layout.svelte";

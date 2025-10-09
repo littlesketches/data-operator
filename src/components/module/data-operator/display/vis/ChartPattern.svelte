@@ -82,7 +82,7 @@
     })
 
     let sceneIndex  = $derived(sonification.state.selection.sceneIndex),
-        data        = $derived(dataModel.model[sceneIndex])        // Modelled data for selected day
+        data        = $derived(dataModel.scene[sceneIndex])        // Modelled data for selected day
 
     let part1_array = $derived(groupPartPresets["1"].sound[sonification.state.selection.group[group].part["1"].series]?.vis),
         part2_array = $derived(groupPartPresets["2"].sound[sonification.state.selection.group[group].part["2"].series]?.vis),
@@ -103,8 +103,9 @@
     })
     
     // iii. Construct harmony array
+
     let chordSeries = $derived(sonification.state.selection.group.A.pitchPattern)
-    let chordData = $derived(data.scaledData[groupPartPresets["3"].interval]?.C["3"].chord.map(d => d[chordSeries].quantized)  ) 
+    let chordData = $derived(data.scaledData[groupPartPresets["3"].interval]?.C["3"].chord[chordSeries].map(d => d.quantized)  ) 
 
     // iii. Add chart scale        
     let scale = $derived.by(() => {

@@ -15,19 +15,35 @@
         },
         { 
             id: 2,      title: "OE-10",   
-            href:       "./oe-10", 
+            href:       "./model/oe-10/", 
             description: `Instrument to explore open electricity data.`
         },
+        // { 
+        //     id: 3,      title: "OE-10",    subtitle: "DFAM",  
+        //     href:       "./model/oe-10/dfam", 
+        //     description: `A dark and dirty take on open electricity data.`
+        // },
+        // { 
+        //     id: 3,      title: "OE-10",    subtitle: "AMBI",  
+        //     href:       "./model/oe-10/ambi", 
+        //     description: `Slow vibeS X open electricity data `
+        // },
         { 
-            id: 3,      title: "OE-10",    subtitle: "DFAM",  
-            href:       "./oe-10-dfam", 
-            description: `A dark and dirty take open electricity data.`
+            id: 4,      title: "CW-193",   
+            href:       "./model/cw-193/", 
+            description: `Instrument to explore climate data.`
         },
-        { 
-            id: 3,      title: "OE-10",    subtitle: "AMBI",  
-            href:       "./oe-10-ambi", 
-            description: `Slow vibe machine meets open electricity data `
-        },
+        // { 
+        //     id: 5,       title: "CW-193",   subtitle: "DFAM",  
+        //     href:       "./model/cw-193/dfam", 
+        //     description: `A dark and dirty take on climate data.`
+        // },
+        // { 
+        //     id: 6,       title: "CW-193",    subtitle: "AMBI",  
+        //     href:       "./model/cw-193/ambi", 
+        //     description: `Slow vibes X climate data `
+        // },
+
         // { id: 4, title: "CC-193" },
         // { id: 4, title: "MC-09" },
         // { id: 5, title: "DS-FAM" },

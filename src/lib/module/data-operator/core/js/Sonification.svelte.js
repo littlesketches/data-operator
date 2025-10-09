@@ -379,11 +379,11 @@ export class Sonification{
                         this.state.selection.group[group].part[partId].series = cycleFromValue(this.schema.group[group].part[partId].series, this.state.selection.group[group].part[partId].series , Math.sign(directionIndex) )
                         sonification.state.userMessage.text = `${group}.${part} > Pattern change to #${this.state.selection.group[group].part[partId].series }`
 
-                        if(this.param[group].part[partId].sound.sample){ // UPdate sound params
+                        if(this.param[group].part[partId].sound.code){ // UPdate sound params
                             const param = this.schema.pattern[group][partId].sound[this.state.selection.group[group].part[partId].series]
-                            this.param[group].part[partId].sound.sample     = param.name
-                            this.param[group].part[partId].sound.modifier   = param.modifier
+                            this.param[group].part[partId].sound.code     = param.code
                             this.param[group].part[partId].gain   = param.gain
+
                             sonification.state.userMessage.text = `${group}.${part} > ${param.label }`
                         }
                         break
@@ -404,11 +404,11 @@ export class Sonification{
                 this.handle.update()
             },
             cycleScene: (dataChange) => {
+console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
                 // i. Update sceneIndex
-                this.state.selection.sceneIndex =  cycleFromValue(this.schema.sceneIndex, this.state.selection.sceneIndex , dataChange)     
-                const data = $derived(sonification.data.model[this.state.selection.sceneIndex])        
+                this.state.selection.sceneIndex =  cycleFromValue(this.schema.sceneIndex, this.state.selection.sceneIndex , dataChange)       
                 /// ii. Handle user message
-                sonification.state.userMessage.text = `Data loaded for ${d3.timeFormat("%d-%m-%y")(data.day)}`
+                sonification.state.userMessage.text = `Data loaded for ${sonification.data.getSceneLabel(this.state.selection.sceneIndex)}`
                 sonification.handle.userMessage()
                 // => Update
                 this.handle.update()

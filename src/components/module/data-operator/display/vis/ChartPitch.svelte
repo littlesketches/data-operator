@@ -65,16 +65,16 @@
         type          = sonification.schema.group[group].type
 
     let sceneIndex      = $derived(sonification.state.selection.sceneIndex),
-        data            = $derived(dataModel.model[sceneIndex]),        // Modelled data for selected day
+        data            = $derived(dataModel.scene[sceneIndex]),        // Modelled data for selected day
         series          = $derived(sonification.state.selection.group[group][`${paramName}Pattern`]),
         length          = $derived(sonification.param[group][paramName].length),
         clockDivider    = $derived(sonification.param[group][paramName].clockDivider ?? 1),
         pulseArray      = $derived(sonification.state.sequencer[group].active ? sonification.state.sequencer[group].array : sonification.state.selection.group[group].euclideanArray  ),
-        seriesScaleY    = $derived(data.scale[dataInterval][group][paramName][series]),      
-        scaleArrayY     = $derived(Array.from({ length: seriesScaleY.range()[1] - seriesScaleY.range()[0] + 1 }, (d, i) => seriesScaleY.range()[0] + i)),
+        seriesScaleY    = $derived(data?.scale[dataInterval][group][paramName][series]),      
+        scaleArrayY     = $derived(Array.from({ length: seriesScaleY?.range()[1] - seriesScaleY?.range()[0] + 1 }, (d, i) => seriesScaleY?.range()[0] + i)),
         seriesData      = $derived({
-                            quantized:  data.scaledData[dataInterval][group][paramName].map(d => d[series].quantized),
-                            value:      data.scaledData[dataInterval][group][paramName].map(d => d[series].value)
+                            quantized:  data?.scaledData[dataInterval][group][paramName][series].map(d => d.quantized),
+                            value:      data?.scaledData[dataInterval][group][paramName][series].map(d => d.value)
                         })
 
     // ii. Add chart scale        

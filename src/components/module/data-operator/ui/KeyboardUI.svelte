@@ -292,6 +292,7 @@
                                 }
                                 break
                             case 'select':    // Cycle scene data
+console.log(direction)
                                 sonification.handle.cycleScene(-direction)      
                                 break
                             case 'shift':   // Swing adjust: group level

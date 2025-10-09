@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/docs/sonification/oe-10-ambi/+page.svelte";
+export { default as component } from "../../../../src/routes/docs/model/oe-dfam/+page.svelte";

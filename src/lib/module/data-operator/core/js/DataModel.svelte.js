@@ -1,7 +1,9 @@
 
 /**
  *  DATA MODEL BASE CLASS: 
- *  - Base class for Sonification X StrudelUtility Class
+ *  - Base class for Sonification X StrudelUtility DataModel class
+ *  - Provides template for strogin input and transformed data, and extracted/manually defined schema
+ *  - Extended DataModels contains specific transformation and schema to match the DataSonification class and Data Operator (Svelte) components
  */
 
 
@@ -35,7 +37,9 @@ export class DataModel{
 
         // Data model, schema and output by composition "group"
         this.schema = undefined
-        this.model  = undefined        
+        this.model  = undefined         // Used for storing data modelling objects (prior to scene output)
+        this.scene  = undefined         // Used for creating the outputed 'data scenes' for the Data Operator
+
     }
 
     ///////////////////////////
@@ -44,9 +48,11 @@ export class DataModel{
 
     async #loadData(){ return null}
  
-    #transformData(inputData){ return null }
+    #transformData(){ return null }
 
-    #extractSchema(inputData, modelData){  return null}
+    #createDataScenes(){ return null }
+
+    #extractSchema(){  return null}
 
     //////////////////////////
     ////  PUBLIC METHODS  ////
@@ -56,11 +62,15 @@ export class DataModel{
         // i. Get input data 
         this.input = await this.#loadData()
 
-        // ii. Transform data for sonification
-        this.model = this.#transformData(this.input)
+        // ii. Perform data transformations/modelling
+        this.model = this.#transformData()
 
-        // iii. Extract schema for UI and visuals
+        // iii.a. Transform data for sonification
+        this.scene = this.#createDataScenes(this.input)
+
+        // iii.b. Extract schema for UI and visuals [may be before or after transformData]
         this.schema = this.#extractSchema(this.input, this.model)
 
     };
+
 };

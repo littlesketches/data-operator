@@ -1,14 +1,15 @@
 {
 	"/": [
+		"src/routes/+page.js",
 		"src/routes/+layout.js",
 		"src/routes/+layout.js"
 	],
+	"/_data/open-electricity": [
+		"src/routes/+layout.js",
+		"src/routes/_data/open-electricity/+server.js"
+	],
 	"/api/open-electricity": [
 		"src/routes/api/open-electricity/+server.js"
-	],
-	"/data/open-electricity": [
-		"src/routes/+layout.js",
-		"src/routes/data/open-electricity/+server.js"
 	],
 	"/docs": [
 		"src/routes/+layout.js",
@@ -41,25 +42,67 @@
 	"/docs/user-manual": [
 		"src/routes/+layout.js"
 	],
-	"/oe-10-ambi": [
-		"src/routes/oe-10-ambi/+page.js",
-		"src/routes/oe-10-ambi/+layout.js",
+	"/model": [
+		"src/routes/model/+page.server.js",
 		"src/routes/+layout.js",
-		"src/routes/oe-10-ambi/+layout.js",
 		"src/routes/+layout.js"
 	],
-	"/oe-10-dfam": [
-		"src/routes/oe-10-dfam/+page.js",
-		"src/routes/oe-10-dfam/+layout.js",
-		"src/routes/+layout.js",
-		"src/routes/oe-10-dfam/+layout.js",
+	"/model/cw-193": [
 		"src/routes/+layout.js"
 	],
-	"/oe-10": [
-		"src/routes/oe-10/+page.js",
-		"src/routes/oe-10/+layout.js",
+	"/model/cw-193/ambi": [
+		"src/routes/model/cw-193/ambi/+page.js",
+		"src/routes/model/cw-193/ambi/+layout.js",
 		"src/routes/+layout.js",
-		"src/routes/oe-10/+layout.js",
+		"src/routes/model/cw-193/ambi/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/model/cw-193/dfam": [
+		"src/routes/model/cw-193/dfam/+page.js",
+		"src/routes/model/cw-193/dfam/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/cw-193/dfam/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/model/cw-193/operator": [
+		"src/routes/model/cw-193/operator/+page.js",
+		"src/routes/model/cw-193/operator/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/cw-193/operator/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/model/ds-87": [
+		"src/routes/+layout.js"
+	],
+	"/model/ds-87/operator": [
+		"src/routes/model/ds-87/operator/+page.js",
+		"src/routes/model/ds-87/operator/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/ds-87/operator/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/model/oe-10": [
+		"src/routes/+layout.js"
+	],
+	"/model/oe-10/ambi": [
+		"src/routes/model/oe-10/ambi/+page.js",
+		"src/routes/model/oe-10/ambi/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/oe-10/ambi/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/model/oe-10/dfam": [
+		"src/routes/model/oe-10/dfam/+page.js",
+		"src/routes/model/oe-10/dfam/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/oe-10/dfam/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/model/oe-10/operator": [
+		"src/routes/model/oe-10/operator/+page.js",
+		"src/routes/model/oe-10/operator/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/oe-10/operator/+layout.js",
 		"src/routes/+layout.js"
 	]
 }
