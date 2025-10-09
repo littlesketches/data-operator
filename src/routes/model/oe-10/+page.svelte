@@ -9,9 +9,9 @@
     <h2>Editions</h2>
     <p>List and links (cards menu )</p>
     <ul>
-        <li><a href = "./oe-10/operator">Operator edition</a></li>
-        <li><a href = "./oe-10/dfam">Data From Another Mother (DFAM) edition</a></li>
-        <li><a href = "./oe-10/ambi">Ambient (AMBI) edition</a></li>
+        <li><a href = "/model/oe-10/operator">Operator edition</a></li>
+        <li><a href = "/model/oe-10/dfam">Data From Another Mother (DFAM) edition</a></li>
+        <li><a href = "/model/oe-10/ambi">Ambient (AMBI) edition</a></li>
     </ul>
 
     <h2>Open electricity data</h2>

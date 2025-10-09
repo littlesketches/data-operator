@@ -83,8 +83,8 @@ export class DataSonification extends Sonification{
             stack(  
                 n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
                     .layer(
-                        x=>x.s("sawtooth").vib(4),
-                        x=>x.s("square").add(note(-12))
+                        x=>x.s("pulse").vib(4),
+                        // x=>x.s("square").add(note(-12))
                     )
                     .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
                     .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   

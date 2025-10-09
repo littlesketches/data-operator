@@ -9,9 +9,9 @@
     <h2>Editions</h2>
     <p>List and links (cards menu )</p>
     <ul>
-        <li><a href = "./ds-87/operator">Operator edition</a></li>
-        <li><a href = "./ds-87/dfam">Data From Another Mother (DFAM) edition</a></li>
-        <li><a href = "./ds-87/ambi">Ambient (AMBI) edition</a></li>
+        <li><a href = "/model/ds-87/operator">Operator edition</a></li>
+        <li><a href = "/model/ds-87/dfam">Data From Another Mother (DFAM) edition</a></li>
+        <li><a href = "/model/ds-87/ambi">Ambient (AMBI) edition</a></li>
     </ul>
 
     <h2>IDMC displacement data</h2>
