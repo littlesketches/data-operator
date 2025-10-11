@@ -3,9 +3,9 @@
  */
 
 // Classes
-import { App }              from '$lib/_core/app/App.svelte';
-import { DataModel_CW }     from '$lib/module/data-operator/data/climate-watch/DataModel.svelte.js';
-import { DataSonification } from '$src/lib/module/data-operator/model/ds-87/operator/DataSonification.svelte.js';
+import { App }                          from '$lib/_core/app/App.svelte';
+import { DataSonification }             from '$src/lib/module/data-operator/model/ds-86/operator/DataSonification.svelte.js';
+import { DataModel_IDMC as DataModel}   from '$lib/module/data-operator/data/idmc//DataModel.svelte.js';
 
 // Config
 import { appConfig }        from '$lib/_core/config/app-config';
@@ -13,16 +13,16 @@ import { appConfig }        from '$lib/_core/config/app-config';
 // Custom Data Operator model config
 import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/standard/keyguide.js';
 import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/standard/fx-config.js';
-import { scaleConfig }      from '$src/lib/module/data-operator/model/ds-87/operator/config/scale-config.js';
-import { groupConfig }      from '$src/lib/module/data-operator/model/ds-87/operator/config/group-config.js';
-import { groupPartPresets } from '$src/lib/module/data-operator/model/ds-87/operator/config/part-config.js';
+import { scaleConfig }      from '$src/lib/module/data-operator/model/ds-86/operator/config/scale-config.js';
+import { groupConfig }      from '$src/lib/module/data-operator/model/ds-86/operator/config/group-config.js';
+import { groupPartPresets } from '$src/lib/module/data-operator/model/ds-86/operator/config/part-config.js';
 
 /**
  *  CUSTOM DATA OPERATOR CONFIG & MODEL PROP 
  */
 
 // 1. Data operator model name (matched to route)
-const modelName = 'ds-87'       
+const modelName = 'ds-86'       
 
 // 2. Operator config object 
 const operatorConfig = {
@@ -44,24 +44,21 @@ const config = {
     }   
 }
 
-
 // => Load function
 export async function load({ fetch, url }) {
-    // i. Init/get app 
+    // i. Init/get app and reference sonification for +layout.svelte
     const app = new App(appConfig, fetch)
+    let sonification
 
     // ii. Init models 
     if(app.module.data[modelName] === undefined && app.module['data-operator'][modelName] === undefined){
         // a. Init data model
-        const model  = app.module.data[modelName] = new DataModel_CW(app, fetch, scaleConfig)
+        const model  = app.module.data[modelName] = new DataModel(app, fetch, scaleConfig)
         await model.init()  // Load data (async) => must be initialised prior to sonification init
 
         // b. Init data sonification model
-        const sonification = app.module['data-operator'][modelName] = new DataSonification(app, model, config) 
+        sonification = app.module['data-operator'][modelName] = new DataSonification(app, model, config) 
     } 
-
-    // iii. Reference sonification for +layout.svelte
-    const sonification =  app.module['data-operator'][modelName] 
 
     // => Return 
     return { url, app, modelName, sonification, operatorConfig };

@@ -3,11 +3,13 @@
  *  - Custom data load/parse and transformation: model, schema and output for strudel
  *  - Strudel 'code' template with parameters and data sonification input strings
  */
+
 // Libs and utils
 import * as d3                      from 'd3'
 import { getPattern}                from 'euclidean-rhythms';
-import { cycleFromValue, 
-    rotateArray }                   from '$lib/module/data-operator/core/js/utils';
+import { randomItem,
+    cycleFromValue, 
+    rotateArray}                   from '$lib/module/data-operator/core/js/utils';
 
 // Classes
 import { Sonification }             from '$lib/module/data-operator/core/js/Sonification.svelte';
@@ -36,8 +38,8 @@ export class DataSonification extends Sonification{
     code = $derived(`
         /* 
          @title IDMC Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
-         @by Data Operator CW-193
-         @details Sonification of Climate Watch data 
+         @by Data Operator DS-86
+         @details Sonification of Internal discplacemet tdata (from IDMC)
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */
@@ -83,13 +85,13 @@ export class DataSonification extends Sonification{
             stack(  
                 n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
                     .layer(
-                        x=>x.s("pulse").vib(4),
-                        // x=>x.s("square").add(note(-12))
+                        x=>x.s("pulse").vib(4).add(note("0,.1")) ,
+                        x=>x.s("square").add(note(-12))
                     )
                     .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
                     .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
                     .scaleTranspose(${this.param.B.pitch.scaleTranspose})
-                    .adsr("0.0:0.1:0.8:0.5")         
+                    .adsr("0.0:0.1:0.8:0.25")         
                 ,
                 n("${this.param.B.pitch.pattern}")      
                     .velocity("${this.param.synth.ModelD.noise.velocity}")
@@ -168,6 +170,7 @@ export class DataSonification extends Sonification{
     `
     )
 
+
     /////////////////////
     //// CONSTRUCTOR ////
     /////////////////////
@@ -182,18 +185,20 @@ export class DataSonification extends Sonification{
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
-
         this.schema.sceneIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
+
+        // Randomise scene
+        this.state.selection.sceneIndex =  randomItem(this.schema.sceneIndex)
 
         // Update params with model group and FX config to match data selection
         this.initParam(config.fx)
         this.updateParameterMap(true)
     }
 
+
     //////////////////////////
     ////  PUBLIC METHODS  ////
     //////////////////////////
-
 
     updateParameterMap(init = false){
         /**
@@ -201,8 +206,8 @@ export class DataSonification extends Sonification{
          */
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern = this.schema.group.A.pitch.series[0]
-            this.state.selection.group.B.pitchPattern = this.schema.group.B.pitch.series[0]
+            this.state.selection.group.A.pitchPattern = randomItem(this.schema.group.A.pitch.series)
+            this.state.selection.group.B.pitchPattern = randomItem(this.schema.group.B.pitch.series)
 
             // i. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
             this.state.selection.group.A.euclideanArray = rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
@@ -313,7 +318,6 @@ export class DataSonification extends Sonification{
         this.param.C.part["3"].sound.length = group.C["3"].array.length
         this.param.C.part["3"].sound.code = c3.code
         this.param.C.part["3"].gain = c3.gain
-
 
         console.log('--UPDATE PARAM MAP', {sceneData},)
     };

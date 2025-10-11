@@ -26,7 +26,7 @@ canvas#test-canvas{
 }
 
 :root{
-    /* --col-body:             #ccc;
+    --col-body:             #ccc;
     --col-grad-0:           hsl(0,0%,85%);
     --col-grad-1:           hsl(0,0%,75%);
     --col-grad-2:           hsl(0,0%,55%);
@@ -43,8 +43,15 @@ canvas#test-canvas{
     --pixel-1:              hsl(0, 0%, 80%);
     --pixel-2:              hsl(0, 0%, 60%);
     --pixel-3:              hsl(0, 0%, 40%);
-    --pixel-4:              hsl(0, 0%, 20%); */
-}
+    --pixel-4:              hsl(0, 0%, 20%);
+
+    /* EDITION HIGHLIGHT COLOURS*/
+    --col-operator-highlight:           #f15a22;
+    --col-operator-highlight-alt:       rgb(35, 230, 248);
+    --col-dfam-highlight:            hsl(90, 100%,40%);
+    --col-dfam-highlight-alt:       rgb(149, 35, 248);
+
+}   
 
 /**
  *  THEMES
@@ -70,15 +77,15 @@ canvas#test-canvas{
     --pixel-4:              hsl(0, 0%, 20%);
 }
 
-
-[data-theme="rainbow2"] .interface__wrapper{
-    background:
-        linear-gradient(red, transparent),
-        linear-gradient(to top left, lime, transparent),
-        linear-gradient(to top right, blue, transparent);
-    background-blend-mode: screen;
+[data-theme="ko-ii"] .interface__wrapper{
+    background:             var(--col-body);
 }
 
+
+
+/**
+ * THEME: "AMBIENT"   
+ */
 [data-theme="ambient"] {
     --col-body:             #ccc;
     --col-grad-0:           hsl(0,0%,85%);
@@ -121,8 +128,38 @@ canvas#test-canvas{
 [data-theme="ambient"] .button-label.invert{
     background:          rgb(0, 0, 0, 0.35);
     color:              var(--col-light);
-    /* opacity: 0.5; */
 }   
+
+/**
+ * THEME: "DFAM"   
+ */
+[data-theme="dfam"] {
+    --col-body:             #7e7e7e;
+    --col-grad-0:           hsl(0,0%,85%);
+    --col-grad-1:           hsl(0,0%,75%);
+    --col-grad-2:           hsl(0,0%,55%);
+    --col-grad-3:           hsl(0,0%,30%);
+    --col-grad-4:           hsl(0,0%,15%);
+    --col-grad-5:           hsl(0,0%,10%);
+    --col-dark:             hsl(0,0%,0%);
+    --col-light:            #fff;
+    --col-highlight:         hsl(90, 100%,40%);
+    --col-highlight-alt:    rgb(149, 35, 248);
+
+    --screen-bg:            #000000;
+    --pixel-0:              hsl(90, 100%, 80%);
+    --pixel-1:              hsl(90, 100%, 60%);
+    --pixel-2:              hsl(90, 100%, 40%);
+    --pixel-3:              hsl(90, 100%, 20%);
+    --pixel-4:              hsl(90, 100%, 00%);
+}
+
+
+
+
+/**
+ * THEME: "PLAID"   
+ */
 
 [data-theme="plaid"] {
     --col-body:             #ccc;
@@ -145,31 +182,6 @@ canvas#test-canvas{
     --pixel-4:              hsl(0, 0%, 20%);
 }
 
-[data-theme="dfam"] {
-    --col-body:             #7e7e7e;
-    --col-grad-0:           hsl(0,0%,85%);
-    --col-grad-1:           hsl(0,0%,75%);
-    --col-grad-2:           hsl(0,0%,55%);
-    --col-grad-3:           hsl(0,0%,30%);
-    --col-grad-4:           hsl(0,0%,15%);
-    --col-grad-5:           hsl(0,0%,10%);
-    --col-dark:             hsl(0,0%,0%);
-    --col-light:            #fff;
-    --col-highlight:         hsl(90, 100%,40%);
-    --col-highlight-alt:    rgb(35, 230, 248);
-
-    --screen-bg:            #000000;
-    --pixel-0:              hsl(90, 100%, 80%);
-    --pixel-1:              hsl(90, 100%, 60%);
-    --pixel-2:              hsl(90, 100%, 40%);
-    --pixel-3:              hsl(90, 100%, 20%);
-    --pixel-4:              hsl(90, 100%, 00%);
-}
-
-
-[data-theme="ko-ii"] .interface__wrapper{
-    background:             var(--col-body);
-}
 
 
 [data-theme="plaid"] .interface__wrapper{
@@ -204,21 +216,39 @@ canvas#test-canvas{
 }
 
 
-    span.key{
-        display:            inline-block;
-        border-top:         solid 2px;
-        border-left:        solid 2px;
-        border-right:       solid 0.25px;
-        border-bottom:      solid 0.25px;
-        border-radius:      1rem;
-        padding:            0rem 0.5rem;
-        margin:             0rem 0;
-        min-width:          1rem;
-        text-align:         center;  
-        font-size:          1rem;
-    }
-    span.key span{
-        font-size:          1rem;
-        margin-top:         0.5rem;
-        margin-bottom:      -0.5rem;
-    }
+/**
+ * THEME: "RAINBOW"   
+ */
+
+
+[data-theme="rainbow"] .interface__wrapper{
+    background:
+        linear-gradient(red, transparent),
+        linear-gradient(to top left, lime, transparent),
+        linear-gradient(to top right, blue, transparent);
+    background-blend-mode: screen;
+}
+
+
+
+/**
+ *  "KEY" FORMATTING STYLE FOR DOCS
+ */
+span.key{
+    display:            inline-block;
+    border-top:         solid 2px;
+    border-left:        solid 2px;
+    border-right:       solid 0.25px;
+    border-bottom:      solid 0.25px;
+    border-radius:      1rem;
+    padding:            0rem 0.5rem;
+    margin:             0rem 0;
+    min-width:          1rem;
+    text-align:         center;  
+    font-size:          1rem;
+}
+span.key span{
+    font-size:          1rem;
+    margin-top:         0.5rem;
+    margin-bottom:      -0.5rem;
+}

@@ -1,0 +1,113 @@
+/* DATA OPERATOR: MODEL HOMEPAGE */
+section.do-model-page__container{
+    /* z-index:                1000; */
+    display:                flex;
+    width:                  100%;
+    justify-content:        center;
+    line-height:            1.5;
+    height:                 10dvh;
+}
+
+.do-model-page__wrapper{
+    width:                  100%;
+    max-width:              720px;
+    margin:                 5vh 2.5vh 2.5vh;
+}
+
+
+
+/** Title block*/    
+.do-header__container{
+    display:                flex;
+    justify-content:        space-between;
+    align-items:            center;
+}
+    .do-header__container .button{
+        font-size:          5vh;
+        line-height:        0.5;   
+        margin-bottom:      1rem;
+        transform-origin:   100% 100%;
+        transition:         all 500ms;
+    }
+    .do-header__container .button:hover{
+        transform: scale(1.25);
+    }
+    .do-header__container .button a{
+        text-decoration: none;
+    }
+    
+.do-model-page__container h1{
+    margin-block-start:     0;
+    margin-block-end:       0;
+    line-height:            1;
+}
+.do-model-page__container .model-header{
+    font-size:              8vh;
+}
+.do-model-page__container .do-header{
+    font-size:              2.5vh;
+}
+
+/** Content block /*/
+.do-model-page__content h2{
+    text-transform:         lowercase;
+}
+.do-model-page__content strong{
+    font-weight:            600;
+}
+.do-model-page__content{
+    margin:                 3.5vh 0;    
+    /* font-size:  1.5vh; */
+}
+.do-model-page__content .note{
+    font-size:              small;
+    font-style:             italic;
+    text-align:             end;
+}
+
+
+/* Edition/version menu */
+ul.do_model-page__menu {
+    display:                grid;
+    grid-template-columns:  1fr 1fr 1fr;
+    grid-auto-flow:         column;     
+    grid-auto-columns:      1fr; 
+    gap:                    2vh;                  
+    list-style:             none;
+    margin:                 0;
+    padding:                0;
+    width:                  100%;
+}
+.do_model-page__menu a{
+    text-decoration:        none;
+}
+.do_model-page__menu li{
+    aspect-ratio:           1 / 1;
+    background:             #000;
+    color:                  #fff;
+    display:                flex;
+    padding:                1.5vh;
+    font-weight:            700;
+    font-size:              1.5vh;
+    text-transform:         lowercase;
+    transition:             all 500ms;
+}
+.do_model-page__menu li h3{
+    margin-block-start:     0;
+    margin-block-end:     0;
+}
+
+.do_model-page__menu li:hover.operator{
+    background:            var(--col-operator-highlight);
+}
+.do_model-page__menu li:hover.dfam{
+    background:            var(--col-dfam-highlight);
+}
+.do_model-page__menu li:hover.ambi{
+    background:
+        linear-gradient(rgb(168, 53, 188), transparent),
+        linear-gradient(to top left, rgb(209, 207, 45), transparent),
+        linear-gradient(to top right, rgb(10, 178, 184), transparent);
+    background-blend-mode: screen;
+}
+

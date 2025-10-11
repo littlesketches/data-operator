@@ -3,9 +3,9 @@
  */
 
 // Classes
-import { App }              from '$lib/_core/app/App.svelte';
-import { DataModel_OE }     from '$lib/module/data-operator/data/open-electricity/DataModel.svelte.js';
-import { DataSonification } from '$src/lib/module/data-operator/model/oe-10/operator/DataSonification.svelte.js';
+import { App }                      from '$lib/_core/app/App.svelte';
+import { DataSonification }         from '$src/lib/module/data-operator/model/oe-10/operator/DataSonification.svelte.js';
+import { DataModel_OE as DataModel} from '$lib/module/data-operator/data/open-electricity/DataModel.svelte.js';
 
 // Config
 import { appConfig }        from '$lib/_core/config/app-config';
@@ -47,21 +47,19 @@ const config = {
 
 // => Load function
 export async function load({ fetch, url }) {
-    // i. Init/get app 
+    // i. Init/get app and reference sonification for +layout.svelte
     const app = new App(appConfig, fetch)
+    let sonification
 
     // ii. Init models 
     if(app.module.data[modelName] === undefined && app.module['data-operator'][modelName] === undefined){
         // a. Init data model
-        const model  = app.module.data[modelName] = new DataModel_OE(app, fetch, scaleConfig)
+        const model  = app.module.data[modelName] = new DataModel(app, fetch, scaleConfig)
         await model.init()  // Load data (async) => must be initialised prior to sonification init
 
         // b. Init data sonification model
-        const sonification = app.module['data-operator'][modelName] = new DataSonification(app, model, config) 
+        sonification = app.module['data-operator'][modelName] = new DataSonification(app, model, config) 
     } 
-
-    // iii. Reference sonification for +layout.svelte
-    const sonification =  app.module['data-operator'][modelName] 
 
     // => Return 
     return { url, app, modelName, sonification, operatorConfig };

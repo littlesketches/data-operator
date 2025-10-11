@@ -71,14 +71,14 @@
 		"src/routes/model/cw-193/operator/+layout.js",
 		"src/routes/+layout.js"
 	],
-	"/model/ds-87": [
+	"/model/ds-86": [
 		"src/routes/+layout.js"
 	],
-	"/model/ds-87/operator": [
-		"src/routes/model/ds-87/operator/+page.js",
-		"src/routes/model/ds-87/operator/+layout.js",
+	"/model/ds-86/operator": [
+		"src/routes/model/ds-86/operator/+page.js",
+		"src/routes/model/ds-86/operator/+layout.js",
 		"src/routes/+layout.js",
-		"src/routes/model/ds-87/operator/+layout.js",
+		"src/routes/model/ds-86/operator/+layout.js",
 		"src/routes/+layout.js"
 	],
 	"/model/oe-10": [

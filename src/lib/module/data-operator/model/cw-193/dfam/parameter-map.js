@@ -3,6 +3,7 @@
  *   - Strudel code parameter template (with defaults)
  *   - Contains default and structure for Sonification 'param' reactive state => derived 'code'
  */
+import { randomItem, randomInteger } from "../../../core/js/utils"
 
 export const paramInit = {
     synth: {
@@ -48,9 +49,9 @@ export const paramInit = {
             level:      0               // calculated swing level
         },
         pitch: {       
-            pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap
-            pulse:              13,             // Euclidean pulse: default to all pitchs
-            rotation:           0,              // Euclidean rotation
+            pattern:            undefined,      // Set/updated by user selection (state) via updateParameterMap
+            pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
+            rotation:           randomInteger(16),          // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             transpose:          24,             // OSC 2 transpose
             scaleTranspose:     0,               // Transpose along the scale

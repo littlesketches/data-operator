@@ -1,0 +1,1 @@
+        <p>Data Operators are not tools for <i>serious</i> data analysis. They are <i>data instruments</i> that are designed to be engaging and fun to use. They take an unashamedly novel and playful approach to exploring and experiencing data. They do not intend to make light of the serious nature and context of the underlying data material.</p>

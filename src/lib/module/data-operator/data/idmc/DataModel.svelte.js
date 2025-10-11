@@ -1,6 +1,5 @@
-
 /**
- *  DATA MODEL CLASS EXTENDED FOR OPEN ELECTRICITY DATA
+ *  DATA MODEL CLASS EXTENDED FOR IDMC GLOBAL INTERNAL DISPLACEMENT DATASET
  *  - Custom data load/parse and transformation: model, schema
  *  - Uses global timing config
  *  - Data-specific proper and aggregation map
@@ -9,18 +8,22 @@
 
 // Libs and utils
 import * as d3              from 'd3'
+import { weightedBins }     from '../../core/js/utils'
+
 // Classes 
 import { DataModel }        from '$lib/module/data-operator/core/js/DataModel.svelte'
+
 // Config
+import { idmcTableUrls }    from './config/data-urls'
+import { iso3map }          from '../_shared-config/iso3-codes'
 import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config'
-import { dataPropMap, 
-    dataAggregationMap }    from './config/data-maps'
 
 // Private variable
 let scaleConfig
 
+
 // => DataModel
-export class DataModel_OE extends DataModel{
+export class DataModel_IDMC extends DataModel{
 
     ////////////////
     //// FIELDS ////
@@ -45,109 +48,155 @@ export class DataModel_OE extends DataModel{
 
     async #loadData(){
         // i. Load and parse CSV data 
-        const res = await this.fetch(this.app.config.data['open-electricity'].url);
 
-        if (!res.ok) throw new Error('Failed to fetch');
-        let responseData = await res.text();
-        const inputData  = d3.csvParse(responseData)
+        const inputData = {}
 
-        // ii. Cast number and date types
-        inputData.forEach( row => {
-            Object.entries(row).forEach(([key, value]) => {
-                if(!isNaN(+value)) row[key] = +value        // Parse numbers
-                if(key === 'date') row.date =  d3.timeParse("%d/%m/%Y %H:%M")(value)        // Parse date to day and time
+        // Object.entries(idmcTableUrls).forEach( async([tableName, url]) => {
+        for(const [tableName, url] of Object.entries(idmcTableUrls)){
+            const res = await this.fetch(url);
+
+            if (!res.ok) throw new Error('Failed to fetch');
+            let responseData = await res.text();
+
+            inputData[tableName]  = d3.tsvParse(responseData)
+
+            // ii. Cast number and date types
+            inputData[tableName].forEach( row => {
+                Object.entries(row).forEach(([key, value]) => {
+                    if(!isNaN(+value)) row[key] = +value        // Parse numbers
+                    if(key.slice(0,4).toLowerCase() === 'date') row.date =  d3.timeParse("%Y-%m-%d")(value)        // Parse date to day and time
+                })
             })
-        })
+
+        }
 
         // => Return input data
         return inputData
+
     }
   
-    #createDataScenes(inputData){
-
-        /**
-         *  CUSTOM DATA TRANSFORMATION AND SHAPING
-         *  - For https://openelectricity.org.au/ 30min interval grouper data
-         */
-
-        // 1. Group input data into days ('composition' blocks)
-        const daysMap = d3.group(inputData, d => d3.timeDay.floor(d.date));
-
-        // 2. Transform data for each full day "model"
-        const model = Array.from(daysMap, ([day, values]) => {
-            // a. Ensure data is for a full day
-            if (values.length !== 48) return null;      
-
-            // b. Init model props
-            const intervalData = {},
-                scale = {},
-                scaledData = {}          
-
-            // c .Interval types and config: custom defined for dataModel & input data schema
-            const timePerMeasure = 24 * 60  // Minutes in the day
-
-            const timingInterval = {
-                '1m':  timePerMeasure,                                     // "1m": Bar period   (whole day)
-                '2n':  timePerMeasure / timingConfig.beats.perBar * 2,     // "2n"  2 x Beat period to give 4 beats per bar
-                '4n':  timePerMeasure / timingConfig.beats.perBar,         // "4n" Beat period to give 4 beats per bar "4n"
-                '8n':  timePerMeasure / timingConfig.beats.perBar / 2,     // "8n" 2 x Bar period 
-                '16n': timePerMeasure / timingConfig.steps.perBar,         // "16n" Step period to give 16 steps "16n"
+    #extractSchema(inputData){
+        // i. Init schema obj
+        const schema = {
+            list: {
+                countryCodes:   [...new Set(inputData.idp_volumes.map(d => d.ISO3))].sort(),     // Scene index
+                availableYears: [...new Set(inputData.disaster_events.map(d => d.Year).concat(inputData.idp_volumes.map(d => d.Year)))].sort(),
+            }, 
+            map: {
+                countryMeta:    iso3map,    
+                series: {
+                    label: {
+                        annualConflict:     { label: "Conflict p.a."},
+                        annualDisaster:     { label: "Disaster p.a."},
+                        annualTotal:        { label: "Total p.a."},
+                        stockConflict:      { label: "Conflict IDPs"},
+                        stockDisaster:      { label: "Disaster IDPs"},
+                        stockTotal:         { label: "Total displaced "},
+                        disasterCount:      { label: "No. disasters"}, 
+                    }
+                }    
             }
+        }
 
-            // d. Create interval data and derived scales/scaled data
-            Object.entries(timingInterval).forEach( ([interval, mins]) => {
-                // i. Roll up daily data to the interval
-                const rollupData = d3.rollup(
-                    values, // (1). Data
-                    v => {  // (2). Aggregation method
-                        const result = {};
-                        for (const [origKey, d] of Object.entries(dataPropMap)) {
-                            const newKey = d.alias, isMW = origKey.slice(-2) === "MW"
-                            // i. For energy volume (MW) => convert to MWh
-                            if(isMW) {
-                                const sumMW = v.reduce((acc, d) => acc + d[origKey], 0);    // Sum MW per 1/2 hr
-                                result[newKey] = sumMW / (timingInterval[interval] / 60);   // convert MW → MWh in 90min
-                            // ii. Otherwise average
-                            } else {
-                                result[newKey] = d3.mean(v.map( d => d[origKey]))
-                            }
-                        }   
-                        // => Return rollup result
-                        return result;
-                    },
-                    d => {  // (3). Specify to roll up to 90mins: find which 'step index' each datums data belongs to
-                        const mins = d.date.getHours() * 60 + d.date.getMinutes();
-                        return Math.floor(mins / timingInterval[interval]); 
-                    }
-                );
+        // ii. Add country index
+        schema.list.countryIndex = schema.list.countryCodes.map((d, i) => i)
 
-                // ii. Add ratios and aggregation prop groups
-                rollupData.forEach(d => {
-                    // Add aggregation 
-                    for(let [newKey, obj] of Object.entries(dataAggregationMap)){
-                        d[newKey] = d3.sum(obj.series.map(e => d[e]))                  
-                    }
-                    // Add aggregation ratios
-                    d['ratio-renewable'] = d.renewable / d.totalExBattery
-                    d['ratio-fossil']    = d.fossil / d.totalExBattery
-                    d['ratio-solar']     = d.solar / d.totalExBattery
-                    d['ratio-coal']      = d.coal / d.totalExBattery
-                    d['ratio-gas']       = d.gas / d.totalExBattery
+        // => Return schema
+        return schema
+    }
 
-                    // Add ratios for all energy series
-                    for(let [origKey, obj] of Object.entries(dataPropMap)){
-                        const newKey = obj.alias, isMW = origKey.slice(-2) === "MW"
-                        if(isMW) {
-                            d[`ratio-${newKey}`] = d[newKey] / d.totalExBattery
-                        } 
+    #transformData(inputData){
+        // 1. Group input data into countries 
+        const modelData = this.schema.list.countryCodes.map(ISO3 => { 
+            const name = this.schema.map.countryMeta[ISO3]?.name, 
+                eventData = d3.group(inputData.disaster_events, d => d.ISO3).get(ISO3),
+                volumeData  = inputData.idp_volumes.filter(d => d.ISO3 === ISO3)
+
+            const data = volumeData ? volumeData.map( d => {
+                // i. Get year and disaster events
+                const year = d.Year,
+                    evData = eventData?.filter(d => d.Year === year)
+
+                // ii. Get and shape disaster event data
+                const disasterEvents = evData?.map(d=> {
+                    return {
+                        date:   d.date,
+                        volume:  d['Disaster Internal Displacements (Raw)'],
+                        hazard: {
+                            type:       d['Hazard Type'],
+                            subType:    d['Hazard Sub Type']
+                        }
                     }
                 })
 
-                // iii. Convert rollupData to array of intervalData
-                intervalData[interval] = Array.from(rollupData, ([step, props]) => ({ step, ...props }))
-// console.log(rollupData, intervalData)
-                // iv. Create scale for each property from their extent
-                scale[interval] = {}
+                // iii. => Return object with all data
+                return {
+                    year:   d.Year,
+                    stock: {
+                        conflict:   d['Conflict Stock Displacement'] ?? 0,
+                        disaster:   d['Disaster Stock Displacement (Raw)'] ?? 0
+                    },
+                    annual: {
+                        conflict:   d['Conflict Internal Displacements (Raw)'] ?? 0,
+                        disaster:   d['Disaster Stock Displacement (Raw)'] ?? 0
+                    },
+                    disasterEvents
+                }
+            }) : []
+
+            //=> Return 
+            return { ISO3, name, data }
+        })
+
+        // => Return data 
+        return modelData
+    }
+
+    #createDataScenes(modelData){
+        console.log({modelData, scaleConfig, timingConfig, schema: this.schema})
+        // i. Init sceneData array
+        const sceneData = []
+
+        // ii. Variables for timing and series
+        const dataPointsPerMeasure = this.schema.list.availableYears.length
+        const timingInterval = {    // Interval mapped to bins
+            '1m': 1,    '2n': 2,    '4n': 4,   '8n': 8,     '16n': 16,     
+        }
+
+        // 2. Transform data into scenes
+        const model = modelData.map( d => {
+            const ISO3 = d.ISO3
+            // i. Init model props
+            const intervalData = {},
+                scale = {},
+                scaledData = {}     
+
+            // ii. Get Reference IDP data: seriesData for all available years
+            const disasterEvents = this.schema.list.availableYears.map(year => d.data.filter(e => e.year === year)[0]?.disasterEvents),
+                disasterCount = disasterEvents.map(d => d ? d.length: 0)
+
+            const seriesData = {
+                annualConflict:     this.schema.list.availableYears.map(year => d.data.filter(e => e.year === year)[0]?.annual.conflict || 0),
+                annualDisaster:     this.schema.list.availableYears.map(year => d.data.filter(e => e.year === year)[0]?.annual.disaster || 0),
+                annualTotal:        this.schema.list.availableYears.map(year => d.data.filter(e => e.year === year)[0]?.annual.conflict + d.data.filter(e => e.year === year)[0]?.annual.disaster || 0),
+                stockConflict:      this.schema.list.availableYears.map(year => d.data.filter(e => e.year === year)[0]?.stock.conflict || 0),
+                stockDisaster:      this.schema.list.availableYears.map(year => d.data.filter(e => e.year === year)[0]?.stock.disaster || 0),
+                stockTotal:         this.schema.list.availableYears.map(year => d.data.filter(e => e.year === year)[0]?.stock.conflict + d.data.filter(e => e.year === year)[0]?.stock.disaster || 0),
+                disasterEvents,      
+                disasterCount
+            }
+
+            // iii. Transform data into timing intervals
+            Object.entries(timingInterval).forEach( ([interval, bins]) => {
+
+                // i. Interval data (weighted bins)
+                intervalData[interval] = {}
+                Object.entries(seriesData).forEach( ([seriesName, array]) => {
+                    intervalData[interval][seriesName] = weightedBins(array, bins)    
+                })
+
+                // ii. Create data scales and scaled data
+                scale[interval] = {}    
                 scaledData[interval] = {}
 
                 for( let [group, obj] of Object.entries(scaleConfig)){
@@ -163,42 +212,21 @@ export class DataModel_OE extends DataModel{
                                 scale[interval][group][paramName] = {}
                                 scaledData[interval][group][paramName] = {}
 
-                                // I. Create scales and scaled data
-                                for (let [key, d] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                    key = d.alias ?? key
+                                // I. Create scales 
+                                for (let [seriesName, d] of Object.entries(seriesData)) {
                                     // a. Add scale for key
-                                    scale[interval][group][paramName][key] =  d3.scaleLinear()
-                                                                                .domain(d3.extent(intervalData[interval], d => d[key]))
+                                    const dataScale = scale[interval][group][paramName][seriesName] =  d3.scaleLinear()
+                                                                                .domain(d3.extent(intervalData[interval][seriesName]))
                                                                                 .range([groupScale[paramName].min, groupScale[paramName].max])
-                                    // b. Add scale for ratio version 
-                                    if(intervalData[interval][0][`ratio-${key}`]){
-                                        scale[interval][group][paramName][`ratio-${key}`] =  d3.scaleLinear()
-                                                                .domain(d3.extent(intervalData[interval], d => d[`ratio-${key}`]))
-                                                                .range([groupScale[paramName].min, groupScale[paramName].max])
-                                    
-                                    }
-
-                                    // c. Create scaledData: for each data prop
-                                    scaledData[interval][group][paramName][key] = intervalData[interval].map( arr => arr[key])
-                                        .map(d => {
-                                           return {
-                                                value:          scale[interval][group][paramName][key](d),
-                                                quantized:      Math.round(scale[interval][group][paramName][key](d))
-                                            }
-                                        })
-                                    // d. Create scaledData: for ratio data prop
-                                    if(intervalData[interval][0][`ratio-${key}`]){
-                                        scaledData[interval][group][paramName][`ratio-${key}`] = intervalData[interval].map( arr => arr[`ratio-${key}`])
-                                            .map(d => {
-                                                return {
-                                                    value:          scale[interval][group][paramName][`ratio-${key}`](d),
-                                                    quantized:      Math.round(scale[interval][group][paramName][`ratio-${key}`](d))
-                                                }
-                                            })   
-                                    }
+                                    // b. Add scaled data
+                                    scaledData[interval][group][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
+                                        return {
+                                            value:          dataScale(d),
+                                            quantized:      Math.round(dataScale(d))
+                                        }
+                                    })
                                 }
                             }
-
                             break
 
                         case "C":
@@ -213,132 +241,46 @@ export class DataModel_OE extends DataModel{
                                     scale[interval][group][part][paramName] = {}
                                     scaledData[interval][group][part][paramName] = {}
 
-  
-                                    // I. Create scales and scaled data
-                                    for (let [key, d] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                        key = d.alias ?? key
+                                    // I. Create scales 
+                                    for (let [seriesName, d] of Object.entries(seriesData)) {
                                         // a. Add scale for key
-                                        scale[interval][group][part][paramName][key] =  d3.scaleLinear()
-                                                                                            .domain(d3.extent(intervalData[interval], d => d[key]))
+                                        const dataScale = scale[interval][group][part][paramName][seriesName] =  d3.scaleLinear()
+                                                                                            .domain(d3.extent(intervalData[interval][seriesName]))
                                                                                             .range([partScale[paramName].min, partScale[paramName].max])
-                                        
-                                        // b. Add scale for ratio version 
-                                        if(intervalData[interval][0][`ratio-${key}`]){
-                                            scale[interval][group][part][paramName][`ratio-${key}`] = d3.scaleLinear()
-                                                                                                        .domain(d3.extent(intervalData[interval], d => d[`ratio-${key}`]))
-                                                                                                        .range([partScale[paramName].min, partScale[paramName].max])
-                                        }
-
-
-                                        // c. Create scaledData: for each data prop
-                                        scaledData[interval][group][part][paramName][key] = intervalData[interval].map( arr => arr[key])
-                                            .map(d => {
+                                    
+                                        // b. Add scaled data
+                                        scaledData[interval][group][part][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
                                             return {
-                                                    value:          scale[interval][group][part][paramName][key](d),
-                                                    quantized:      Math.round(scale[interval][group][part][paramName][key](d))
-                                                }
-                                            })
-                                        // d. Create scaledData: for ratio data prop
-                                        if(intervalData[interval][0][`ratio-${key}`]){
-                                            scaledData[interval][group][part][paramName][`ratio-${key}`] = intervalData[interval].map( arr => arr[`ratio-${key}`])
-                                                .map(d => {
-                                                    return {
-                                                        value:          scale[interval][group][part][paramName][`ratio-${key}`](d),
-                                                        quantized:      Math.round(scale[interval][group][part][paramName][`ratio-${key}`](d))
-                                                    }
-                                                })   
-                                        }
-
+                                                value:          dataScale(d),
+                                                quantized:      Math.round(dataScale(d))
+                                            }
+                                        })
                                     }
-
-
-
-
-                                    // // II. Create scaledData 
-                                    // scaledData[interval][group][part][paramName] = intervalData[interval].map(d => {
-                                    //     const obj = {}
-                                    //     // a. Add scaled data for each data prop
-                                    //     for (let [key, e] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                    //         key = e.alias ?? key
-                                    //         obj[key] = {
-                                    //             value:          scale[interval][group][part][paramName][key](d[key]),
-                                    //             quantized:      Math.round(scale[interval][group][part][paramName][key](d[key]))
-                                    //         }
-
-                                    //         // b. Add scaled data for ratio version 
-                                    //         if(intervalData[interval][0][`ratio-${key}`]){
-                                    //             obj[`ratio-${key}`] = {
-                                    //                 value:          scale[interval][group][part][paramName][`ratio-${key}`](d[`ratio-${key}`]),
-                                    //                 quantized:      Math.round(scale[interval][group][part][paramName][`ratio-${key}`](d[`ratio-${key}`]))
-                                    //             }
-                                    //         }
-                                    //     }
-
-                                    //     // => Return obj
-                                    //     return obj;
-                                    // })
                                 }
                             }
                             break
                     }
-                }     
+                }
+
             })
 
-            // => Return
-            return { day, intervalData, scale, scaledData}
-        }).filter(d => d !== null);
 
-        // => Return model object
-        return model.reverse()
-    }
-
-    #extractSchema(inputData, modelData){
-        // Init schema obj
-        const schema = {
-            list: {
-                dayIndex:   [...modelData.keys()],  
-                series:     {}
-            }, 
-            map: {
-                dayIndex:       Object.fromEntries(modelData.map((obj, i) => [i, obj.day])),
-                series:     {
-                    electricity:    Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => d[0] !== 'price-per-MWh' )),
-                    renewable:      Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.renewable.series.includes(d[0]) )),
-                    solar:          Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.solar.series.includes(d[0]) )),
-                    fossil:         Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.fossil.series.includes(d[0]) )),
-                    coal:           Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => dataAggregationMap.coal.series.includes(d[0]) )),
-                    other:          {
-                        ...Object.fromEntries(Object.entries(dataPropMap).map( ([origName, d]) => [d.alias, {label: d.label, origName }]).filter( d => d[0] === 'price-per-MWh' )),
-                        'ratio-renewable':  {label: 'renew. %'},
-                        'ratio-fossil':     {label: 'fossil %' },
-                        'ratio-solar':      {label: 'solar %'},
-                        'ratio-coal':       {label: 'coal %'},
-                        'ratio-gas':        {label: 'gas %'},
-                    }  // Price and ratio
-                }
+            // => Return model object 
+            return  {
+                meta:        this.schema.map.countryMeta[ISO3],
+                intervalData,
+                scale,
+                scaledData,
             }
-        }
 
-        // i. Add series lists        
-        Object.entries(schema.map.series).forEach( ([group, map]) => {         
-            // Add lists
-            schema.list.series[group] = Object.keys(map)
-            // Add electricity ratios
-            if(group === 'electricity'){
-                Object.entries(map).forEach(([key, d]) =>  schema.map.series.other[`ratio-${key}`] = {label: `${d.label} %`})
-            }
         })
 
-        // ii Add series map 'all
-        schema.map.series.all = {
-            ...schema.map.series.electricity,
-            ...schema.map.series.other,
-            ...dataAggregationMap
-        }
 
-        // => Return schema
-        return schema
+        // => Return model object
+        return model
+
     }
+
 
     //////////////////////////
     ////  PUBLIC METHODS  ////
@@ -348,14 +290,21 @@ export class DataModel_OE extends DataModel{
         // i. Get input data 
         this.input = await this.#loadData()
 
-        // ii. Transform data for sonification
-        this.scene = this.#createDataScenes(this.input)
+        // ii. Extract schema for UI and visuals
+        this.schema = this.#extractSchema(this.input)
 
-        // iii. Extract schema for UI and visuals
-        this.schema = this.#extractSchema(this.input, this.scene)
+        // iii. Transform data for sonification
+        this.model = this.#transformData(this.input)
+
+        // ii. Transform data for sonification
+        this.scene = this.#createDataScenes(this.model)
     };
 
     getSceneLabel(sceneIndex){
-        return d3.timeFormat("%d-%m-%y")(this.scene[sceneIndex].day)
+        // Get country name as label
+        const countryCode =  this.schema.list.countryCodes[sceneIndex],
+            countryName = this.schema.map.countryMeta[countryCode]?.name
+        // => Return 
+        return countryName
     }
 };

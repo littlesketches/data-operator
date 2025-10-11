@@ -7,7 +7,8 @@
 // Libs and utils
 import * as d3                  from 'd3'
 import { getPattern }           from 'euclidean-rhythms';
-import { cycleFromValue, 
+import { randomItem,
+    cycleFromValue, 
     rotateArray }               from '$lib/module/data-operator/core/js/utils';
 // Classes
 import { Sonification }         from '$lib/module/data-operator/core/js/Sonification.svelte';
@@ -250,8 +251,8 @@ export class DataSonification extends Sonification{
          */
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern    = this.schema.group.A.pitch.series[0]
-            this.state.selection.group.B.velocityPattern = this.schema.group.B.velocity.series[0]
+            this.state.selection.group.A.pitchPattern    = randomItem(this.schema.group.A.pitch.series)
+            this.state.selection.group.B.velocityPattern = randomItem(this.schema.group.B.velocity.series)
 
             // ii. Set euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
             this.state.selection.group.A.euclideanArray = rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)

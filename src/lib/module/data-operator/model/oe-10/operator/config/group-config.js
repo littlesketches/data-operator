@@ -5,17 +5,12 @@
 
 import { groupPartPresets } from "./part-config"
 
-const seriesA =  [  
-    'renewable',        'solar',        'wind',     
-    'ratio-renewable',  'ratio-solar',  'ratio-wind',
-    'hydro',            'total',        'price-per-MWh',                
+const series  =  [  
+    'renewable',    'fossil',   'total', 
+    'solar',        'wind',     'hydro', 
+    'coal',         'gas',      'price-per-MWh',                
 ]
 
-const seriesB = [  
-    'fossil',       'coal',         'gas', 
-    'ratio-fossil', 'ratio-coal',   'ratio-gas', 
-    'coal-brown',   'total',        'price-per-MWh'
-]
 
 export const groupConfig = {
     master: { 
@@ -28,7 +23,7 @@ export const groupConfig = {
         type:       'pitch',
         pitch: {
             interval:   '16n',          // This may be the default for all, i.e. 16 step sequencer
-            series:     seriesA
+            series
         }, 
         velocity: {
             interval:   '16n',          // This may be the default for all, i.e. 16 step sequencer
@@ -40,7 +35,7 @@ export const groupConfig = {
         type:       'pitch',
         pitch: {
             interval:   '16n',  
-            series:     seriesB
+            series
         }
     },
     C: {

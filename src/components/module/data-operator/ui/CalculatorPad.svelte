@@ -81,7 +81,7 @@
                 sonification.handle.selectPattern(index, groupSelect, activatePart ?? part)
             } 
 
-            // X. Numkey & navkey handlers
+            // X. Numkey & navkey handlers: replicated in/from KeyboardUI
             function numkeyAction(mode, numkey, keyGroup, direction){
                 switch(mode){
                     case 'fx':      // Numkey activates punch-in FX for 0-9, for selected group
@@ -220,7 +220,6 @@
                 }
             }
 
-
             function navkeyAction(mode, direction, fxIndex){
                 switch(mode){
                     case 'fx':         // Punch FX:                                                              
@@ -246,7 +245,7 @@
                         }
                         break
                     case 'select':    // Cycle scene data
-                        sonification.handle.cycleScene(-direction)      
+                        sonification.handle.cycleScene(direction)      
                         break
                     case 'shift':   // Swing adjust: group level
                         switch(group){

@@ -7,7 +7,8 @@
 // Libs and utils
 import * as d3                  from 'd3'
 import { getPattern }           from 'euclidean-rhythms';
-import { cycleFromValue, 
+import { randomItem,
+    cycleFromValue, 
     rotateArray }               from '$lib/module/data-operator/core/js/utils';
 // Classes
 import { Sonification }         from '$lib/module/data-operator/core/js/Sonification.svelte';
@@ -250,15 +251,14 @@ export class DataSonification extends Sonification{
          */
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern    = this.schema.group.A.pitch.series[0]
-            this.state.selection.group.B.velocityPattern = this.schema.group.B.velocity.series[0]
+            this.state.selection.group.A.pitchPattern    = randomItem(this.schema.group.A.pitch.series)
+            this.state.selection.group.B.velocityPattern = randomItem(this.schema.group.B.velocity.series)
 
             // ii. Set euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
             this.state.selection.group.A.euclideanArray = rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
             this.state.selection.group.C.part["1"].euclideanArray = rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)
             this.state.selection.group.C.part["2"].euclideanArray = rotateArray(getPattern(this.param.C.part["2"].sound.pulse, this.param.C.part["2"].sound.length), this.param.C.part["2"].sound.rotation)
         }
-
 
         /**
          *  II. Set of manual update methods to turns data selections into 'param' updates => (reactive) code   
@@ -328,10 +328,9 @@ export class DataSonification extends Sonification{
 
         const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
         this.param.C.part["3"].sound.length = group.C["3"].array.length
-        this.param.C.part["3"].sound.sample = c3.name
-        this.param.C.part["3"].sound.modifier = c3.modifier
+        this.param.C.part["3"].sound.code = c3.code
         this.param.C.part["3"].gain = c3.gain
-        console.log('--UPDATE PARAM MAP')
+
     };
 
 }

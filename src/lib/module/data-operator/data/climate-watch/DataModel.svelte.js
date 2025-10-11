@@ -8,19 +8,23 @@
  */
 
 // Libs and utils
-import * as d3              from 'd3'
+import * as d3                  from 'd3'
+import { weightedBins }         from '../../core/js/utils'
+
 // Classes 
-import { DataModel }        from '$lib/module/data-operator/core/js/DataModel.svelte'
+import { DataModel }            from '$lib/module/data-operator/core/js/DataModel.svelte'
+
 // Config
-import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config'
+import { timingConfig }         from '$lib/module/data-operator/core/config/global/timing-config'
 import { rootPath, 
     staticDataStructure, 
     loader }                    from "./config/static-data"
+import { iso3map }              from '../_shared-config/iso3-codes'
 import { adaptationDataMeta }   from "./config/data-meta-info"
-import { unfcccCountryMap }     from '../../model/cw-193/operator/config/unfccc-country-categorisation'
 
 // Private variable
 let scaleConfig
+
 
 // => DataModel
 export class DataModel_CW extends DataModel{
@@ -106,7 +110,7 @@ export class DataModel_CW extends DataModel{
 
             }, 
             map: {
-                countryMeta:    unfcccCountryMap        
+                countryMeta:    iso3map        
             }
         }
 
@@ -169,7 +173,7 @@ export class DataModel_CW extends DataModel{
                 landSector      = modelData.ghg.raw.filter( d => d.Country === countryCode && d.Sector === "Land-Use Change and Forestry")[0]
 
             // c. Store population
-            modelData.population.byCountry[countryCode] = modelData.population.raw.filter( d => d['Country Code'] === countryCode)[0]   
+            modelData.population.byCountry[countryCode] = modelData.population.raw.filter( d => d['Country Code'] === countryCode)[0]
             modelData.gdp.byCountry[countryCode] = modelData.gdp.raw.filter( d => d['Country Code'] === countryCode)[0]   
 
             // d. Add 'gross' emissions and 'sinks'
@@ -202,10 +206,10 @@ export class DataModel_CW extends DataModel{
                 grossAnnual[year]       = sourceAnnual[year] + sinkAnnual[year]          
 
                 // c. Per capita calcs (all years) in tonnes per person.year
-                netPerCapita[year]      = netAnnual[year]    / population * 1000000
-                sourcePerCapita[year]   = sourceAnnual[year] / population * 1000000
-                sinkPerCapita[year]     = sinkAnnual[year]   / population * 1000000
-                grossPerCapita[year]    = grossAnnual[year]  / population * 1000000
+                netPerCapita[year]      = netAnnual[year]    / (isNaN(population)? 1 : population)  * 1000000
+                sourcePerCapita[year]   = sourceAnnual[year] / (isNaN(population)? 1 : population)  * 1000000
+                sinkPerCapita[year]     = sinkAnnual[year]   / (isNaN(population)? 1 : population)  * 1000000
+                grossPerCapita[year]    = grossAnnual[year]  / (isNaN(population)? 1 : population)  * 1000000
 
                 // Init cumulative for "year zero at zero"
                 if(i === 0){
@@ -391,35 +395,8 @@ export class DataModel_CW extends DataModel{
             }
         })
 
-
         // => Return 
         return model
-
-        // Helper > Fractional weighted bins
-        function weightedBins(data, numBins) {
-            const n = data.length;
-            const binSize = n / numBins;
-            const result = [];
-
-            for (let b = 0; b < numBins; b++) {
-                const start = b * binSize;
-                const end = (b + 1) * binSize;
-                let sum = 0, weight = 0;
-
-                for (let i = Math.floor(start); i < Math.ceil(end); i++) {
-                // compute overlap of sample i with [start, end)
-                const left = Math.max(i, start);
-                const right = Math.min(i + 1, end);
-                const w = right - left;
-                sum += data[i] * w;
-                weight += w;
-                }
-                result.push(sum / weight);
-            }
-
-        return result;
-        }
-
     }
 
 
@@ -431,7 +408,6 @@ export class DataModel_CW extends DataModel{
         // i. Get input data 
         this.input =  await this.#loadData()
         
-
         // ii. Extract schema for UI and visuals
         this.schema = this.#extractSchema(this.input)
 
@@ -445,9 +421,11 @@ export class DataModel_CW extends DataModel{
     };
 
     getSceneLabel(sceneIndex){
+
         // Get country name as label
         const countryCode =  this.schema.list.countryCodes[sceneIndex],
-            countryName = this.schema.map.countryMeta[countryCode].name
+            countryName = this.schema.map.countryMeta[countryCode]?.name
+
         // => Return 
         return countryName
     }

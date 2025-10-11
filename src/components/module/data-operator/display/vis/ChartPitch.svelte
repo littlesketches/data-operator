@@ -114,7 +114,7 @@
             {#each seriesData[scaleType] as d, i}     
             {@const cycleIndex = strudel.state.time.cycle - 1}
             {@const divAdd = cycleIndex % clockDivider * config.steps}
-
+            {#if pulseArray}                
             <g class = 'marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(d)})">
                 <path class = 'marker' 
                     class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length) * clockDivider) && strudel.state.transport === 'playing'} 
@@ -122,6 +122,7 @@
                     d = {config.symbol[group]()}
                 />
             </g>
+            {/if}
             {/each}
         </g>
     </g> 

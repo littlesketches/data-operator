@@ -145,7 +145,7 @@ export class DataModel_OE extends DataModel{
 
                 // iii. Convert rollupData to array of intervalData
                 intervalData[interval] = Array.from(rollupData, ([step, props]) => ({ step, ...props }))
-// console.log(rollupData, intervalData)
+
                 // iv. Create scale for each property from their extent
                 scale[interval] = {}
                 scaledData[interval] = {}
@@ -250,33 +250,6 @@ export class DataModel_OE extends DataModel{
                                         }
 
                                     }
-
-
-
-
-                                    // // II. Create scaledData 
-                                    // scaledData[interval][group][part][paramName] = intervalData[interval].map(d => {
-                                    //     const obj = {}
-                                    //     // a. Add scaled data for each data prop
-                                    //     for (let [key, e] of Object.entries({...dataPropMap, ...dataAggregationMap})) {
-                                    //         key = e.alias ?? key
-                                    //         obj[key] = {
-                                    //             value:          scale[interval][group][part][paramName][key](d[key]),
-                                    //             quantized:      Math.round(scale[interval][group][part][paramName][key](d[key]))
-                                    //         }
-
-                                    //         // b. Add scaled data for ratio version 
-                                    //         if(intervalData[interval][0][`ratio-${key}`]){
-                                    //             obj[`ratio-${key}`] = {
-                                    //                 value:          scale[interval][group][part][paramName][`ratio-${key}`](d[`ratio-${key}`]),
-                                    //                 quantized:      Math.round(scale[interval][group][part][paramName][`ratio-${key}`](d[`ratio-${key}`]))
-                                    //             }
-                                    //         }
-                                    //     }
-
-                                    //     // => Return obj
-                                    //     return obj;
-                                    // })
                                 }
                             }
                             break
@@ -330,7 +303,7 @@ export class DataModel_OE extends DataModel{
         })
 
         // ii Add series map 'all
-        schema.map.series.all = {
+        schema.map.series.label = {
             ...schema.map.series.electricity,
             ...schema.map.series.other,
             ...dataAggregationMap

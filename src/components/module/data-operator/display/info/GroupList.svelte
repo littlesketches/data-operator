@@ -20,7 +20,7 @@
             sonification.handle.selectGroupPart(group, part)
        }
     }
-
+console.log(dataModel.schema.map?.series)
 </script>
 
 
@@ -65,7 +65,7 @@
         </div>
         {/if}
         <div class = 'group-label group'>
-            { dataModel.schema.map?.series?.all[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? d.label}  
+            { dataModel.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? d.label}  
         </div>
         {/if}
     </div>

@@ -61,7 +61,7 @@
     }
 
     .title__container{
-        margin:                 0 var(--margin-x2) ;
+        margin-right:           var(--margin-x2) ;
         display:                flex;
         justify-content:        end;
         align-items:            end;
@@ -87,8 +87,8 @@
         margin-bottom:          1.25vh;
     }
 
-    .button__container{
-        aspect-ratio:           1 / 1;
+    .mobile .button__container{
+        /* aspect-ratio:           1 / 1; */
         display:                flex;
         align-items:            end;
         justify-content:        center;

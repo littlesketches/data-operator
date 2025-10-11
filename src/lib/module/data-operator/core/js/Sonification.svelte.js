@@ -6,7 +6,8 @@
 // Libs and utils
 import * as d3              from 'd3'
 import { getPattern}        from 'euclidean-rhythms';
-import { cycleFromValue, 
+import {  
+    cycleFromValue, 
     rotateArray, 
     legatoStruct }          from './utils';
 
@@ -74,7 +75,7 @@ export class Sonification{
                 numKeyAction:   undefined,   
                 navKeyAction:   undefined,
                 heldKeys:       new Set(),              // Tracks all held keyboard keys / screen buttons
-                sceneIndex:   0,                        // Selector for they sceneIndex of the modelData
+                sceneIndex:      0,                        // Selector for they sceneIndex of the modelData
                 scaleLock:      true,                   // Locks pitch to  scale ('quantized') or uses raw value ('microtonic')
                 group: {
                     active:     'master',               // Active 'mixer' track group
@@ -158,7 +159,6 @@ export class Sonification{
         }
     }
 
-
     addHandlers(strudel, editorUI){
         // Bind this to variable for use when methods are bound touch button-bound keys
         const sonification = this   
@@ -191,7 +191,6 @@ export class Sonification{
                     .map((line) => line.replace(/^ {0,8}/, "")) // remove up to 8 leading spaces from each line
                     .join("\n");
 
-
                 // ii. Option to export to text file: naming to be added 
                 if(toFile){
                     const blob = new Blob([code], { type: "text/plain" });
@@ -200,7 +199,6 @@ export class Sonification{
                     a.href = url;
                     a.download = "code.txt";
                     a.click();
-
                     URL.revokeObjectURL(url);
                 }
                 
@@ -357,8 +355,10 @@ export class Sonification{
                     case 'pitch':
                     case 'velocity':
                     default:
-                        this.state.selection.group[group][`${type}Pattern`] = this.schema.group[group][type].series[index]                        
-                        sonification.state.userMessage.text = `${group} > "${this.state.selection.group[group][`${type}Pattern`]}"` //  Create user message
+                        this.state.selection.group[group][`${type}Pattern`] = this.schema.group[group][type].series[index]             
+                        const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? param.label
+
+                        sonification.state.userMessage.text = `${group} > ${label}` //  Create user message
                         break
                 }
                 // iii. Select part
@@ -374,6 +374,7 @@ export class Sonification{
                 // i. Update pattern selection based on type: directionIndex doubles as direction (sign) and index if a part
                 const type = this.schema.group[group].type
                 const partId = Math.abs(directionIndex)
+
                 switch(type){
                     case 'pattern': // Cycle pattern part (index), where sign indicates direction)  
                         this.state.selection.group[group].part[partId].series = cycleFromValue(this.schema.group[group].part[partId].series, this.state.selection.group[group].part[partId].series , Math.sign(directionIndex) )
@@ -383,15 +384,15 @@ export class Sonification{
                             const param = this.schema.pattern[group][partId].sound[this.state.selection.group[group].part[partId].series]
                             this.param[group].part[partId].sound.code     = param.code
                             this.param[group].part[partId].gain   = param.gain
-
-                            sonification.state.userMessage.text = `${group}.${part} > ${param.label }`
+                            sonification.state.userMessage.text = `${group}.${part} > ${param.label}`
                         }
                         break
                     case 'pitch':
                     case 'velocity':
                     default: // Cycle the group data
                         this.state.selection.group[group][`${type}Pattern`] = cycleFromValue(this.schema.group[group][type].series, this.state.selection.group[group][`${type}Pattern`] , directionIndex ) 
-                        sonification.state.userMessage.text = `${group} > "${this.state.selection.group[group][`${type}Pattern`]}"`
+                        const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? param.label
+                        sonification.state.userMessage.text = `${group} > ${label}`
                 }
                 /// ii. Handle user message
                 sonification.handle.userMessage()
@@ -404,18 +405,17 @@ export class Sonification{
                 this.handle.update()
             },
             cycleScene: (dataChange) => {
-console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
                 // i. Update sceneIndex
                 this.state.selection.sceneIndex =  cycleFromValue(this.schema.sceneIndex, this.state.selection.sceneIndex , dataChange)       
                 /// ii. Handle user message
-                sonification.state.userMessage.text = `Data loaded for ${sonification.data.getSceneLabel(this.state.selection.sceneIndex)}`
+                sonification.state.userMessage.text = `> ${sonification.data.getSceneLabel(this.state.selection.sceneIndex)}`
                 sonification.handle.userMessage()
                 // => Update
                 this.handle.update()
             },
             // Group selection and mixer levels
             selectGroupPart: (group, part, showMessage = true) => {
-                // Select group and part
+                // i. Select group and part
                 const type = this.schema.group[group].type
                 this.state.selection.group.active = group   
 
@@ -639,7 +639,7 @@ console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
                 if(update) this.updateREPL(strudel.state.transport === "playing")       
             },
             toggleLegato(group){
-                // 1. Toggle euclidean legato for pitch groups
+                // i. Toggle euclidean legato for pitch groups
                 const groupType = sonification.schema.group[group].type
                 switch(groupType){        
                     case 'pitch':
@@ -647,7 +647,7 @@ console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
                         break
                 }
 
-                // 2. Handle user message
+                // ii. Handle user message
                 sonification.state.userMessage.text = `Group ${group} legato notes ${sonification.param[group].pitch.legato ? 'on' : 'off'}`
                 sonification.handle.userMessage()
 
@@ -675,41 +675,42 @@ console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
                 sonification.state.sequencer.ui.group  = undefined
             },
             updateSequencePulse(array, type ='pitch'){
-                // 1. Get active group and part
+                // i. Get active group and part
                 const group = sonification.state.sequencer.ui.group 
 
-                // 2. Update pulse rhythm to array
+                // ii. Update pulse rhythm to array
                 sonification.state.sequencer[group].array = array 
                 sonification.param[group][type].struct = array.map(n => n && 'x' || '-').join(' ')   
                 sonification.param[group][type].structLegato = legatoStruct(array)
 
-                // 3. Handle user message
+                // iii. Handle user message
                 sonification.state.userMessage.text = `${group}> pulse seq. updated`
                 sonification.handle.userMessage()
+
                 // => Update strudel code
                 this.updateREPL(strudel.state.transport === "playing")     
             },
             // Scale and transposition
             transposePattern: (degree, group) => {
-                // 1. Check for pitch group
+                // i. Check for pitch group
                 if(this.param[group]?.pitch?.scaleTranspose === undefined) return
 
-                // 2. Update scaleTranspose
+                // ii. Update scaleTranspose
                 this.param[group].pitch.scaleTranspose = degree
 
                 // => Update REPL
                 sonification.handle.updateREPL(strudel.state.transport === "playing")
             }, 
             transposePatternDegree: (direction, group) => {
-                // 1. Check for pitch group
+                // i. Check for pitch group
                 if(this.param[group]?.pitch?.scaleTranspose === undefined) return
 
-                // 2. Update scaleTranspose
+                // ii. Update scaleTranspose
                 const minDegree = 0, maxDegree = 14
                 const newDegree = Math.min(Math.max(this.param[group].pitch.scaleTranspose + direction, minDegree), maxDegree)
                 this.param[group].pitch.scaleTranspose = newDegree
 
-                // 3. Handle user message
+                // iii. Handle user message
                 sonification.state.userMessage.text = `Group ${group} transposed +${newDegree} deg.`
                 sonification.handle.userMessage()
 
@@ -717,11 +718,11 @@ console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
                 sonification.handle.updateREPL(strudel.state.transport === "playing")
             }, 
             cycleScaleRootPitch(direction){
-                const rootPitches = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] // Major key root pitchs
-                // 1. Update param
+                const rootPitches = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] // Major key root notes
+                // i. Update param
                 sonification.param.global.scale.root = cycleFromValue(rootPitches,  sonification.param.global.scale.root, direction)                                          
 
-                // 2. Handle user message
+                // ii. Handle user message
                 sonification.state.userMessage.text = `Scale: ${sonification.param.global.scale.root}:${sonification.param.global.scale.type}`
                 sonification.handle.userMessage()
 
@@ -729,36 +730,27 @@ console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
                 this.updateREPL(strudel.state.transport === "playing")
             },
             cycleScaleType(direction){
-                // 1. Update param
+                // i. Update param
                 sonification.param.global.scale.type= cycleFromValue(Object.keys(musicalScales),  sonification.param.global.scale.type, direction)                                          
 
-                // 2. Handle user message
+                // ii. Handle user message
                 sonification.state.userMessage.text = `Scale: ${sonification.param.global.scale.root}:${sonification.param.global.scale.type}`
                 sonification.handle.userMessage()
 
                 // => Update REPL
                 this.updateREPL(strudel.state.transport === "playing")
             },
-            selectScaleType(index){
-                // Update param
-                sonification.param.global.scale.type = Object.keys(musicalScales)[index]
-
-                // => Update REPL
-                this.updateREPL(strudel.state.transport === "playing")
-            },
             // Punch-in FX}
             punchInFX: function(group, name, setOn){
-                // 1. Return if transport is not playing, or if setOn is false and FX is already off
+                // i. Return if transport is not playing, or if setOn is false and FX is already off
                 if(strudel.state.transport !== 'playing' || ( setOn !== undefined && !setOn && !sonification.param[group].fx[name]) ) return
 
-                // 2. Toggle if 'setOn' is undefined, otherwise set FX to setOn boolean
+                // ii. Toggle if 'setOn' is undefined, otherwise set FX to setOn boolean
                 sonification.param[group].fx[name] = setOn
 
-                // 3. Handle user message
+                // iii. Handle user message
                 const activeFX =  Object.keys(sonification.param[group].fx).filter(k => sonification.param[group].fx[k]) 
-                sonification.state.userMessage.text = activeFX.length > 0 ? 
-                        group === 'master' ? `Master FX  x${activeFX.length}!!` : `Group ${group} FX x${activeFX.length}!!`
-                            : ''
+                sonification.state.userMessage.text = activeFX.length > 0 ?  group === 'master' ? `Master FX  x${activeFX.length}!!` : `Group ${group} FX x${activeFX.length}!!` : ''
                 sonification.handle.userMessage()
 
                 // => Update strudel code
@@ -777,6 +769,9 @@ console.log(this.schema.sceneIndex, this.state.selection.sceneIndex )
             userMessage(){
                 clearTimeout( sonification.state.userMessage.timeoutId )
                 sonification.state.userMessage.timeoutId = setTimeout( () => sonification.state.userMessage.text = null, sonification.userMessageTimeout)
+            },
+            closeDisplayOverlay(){
+                sonification.state.userMessage.overlay.isShown = false
             }
         }
     };

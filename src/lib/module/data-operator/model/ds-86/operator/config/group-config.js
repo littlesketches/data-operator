@@ -5,8 +5,9 @@
 
 import { groupPartPresets } from "./part-config"
 const series = [  
-    'netGhg_perCapita', 'sourceGhg_perCapita',  'sinkGhg_perCapita', 
-    'netGhg',           'sourceGhg',            'sinkGhg', 
+    'stockTotal',   'stockConflict',    'stockDisaster', 
+    'annualTotal',  'annualConflict',   'annualDisaster',  
+    'disasterCount',   'stockConflict',    'stockDisaster', 
 ]
 
 export const groupConfig = {
@@ -32,7 +33,7 @@ export const groupConfig = {
         type:       'pitch',
         pitch: {
             interval:       '16n',  
-            series: [...series].reverse()
+            series
         }
     },
     C: {

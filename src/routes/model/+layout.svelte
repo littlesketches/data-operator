@@ -25,7 +25,7 @@
             canvas.removeEventListener('touchmove', prevent);
         };
     });
-console.log("FROM MODEL ROUTE LAYOUT")
+
 </script>
 
 

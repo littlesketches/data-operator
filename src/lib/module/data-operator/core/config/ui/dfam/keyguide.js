@@ -5,6 +5,56 @@
 import { punchFX } from "./fx-config"
 
 export const keyguide = {
+    noMode:{
+        1: {
+            master: 'Cycle<br>BEATS<br>(C-1)',
+            group:  'Select<br>#1'
+        },
+        2: {
+            master: 'Cycle<br>PERC.<br>(C-2)',
+            group:  'Select<br>#2'
+        },
+        3: {
+            master: 'Cycle<br>CHORDS<br>(C-3)',
+            group:  'Select<br>#3'
+        },
+        4: {
+            master: 'Cycle<br>BASS (B)<br>back',
+            group:  'Select<br>#4'
+        },
+        5: {
+            master: 'Cycle<br>BASS (B)<br>forward',
+            group:  'Select<br>#5'
+        },
+        6: {
+            master: '<br>Scale<br>root<br>+',
+            group:  'Select<br>#6'
+        },
+        7: {
+            master: 'Cycle<br>LEAD (A)<br>back',
+            group:  'Select<br>#7'
+        },
+        8: {
+            master: 'Cycle<br>LEAD (A)<br>forward',
+            group:  'Select<br>#8'
+        },
+        9: {
+            master: '<br>Scale<br>type<br>+',
+            group:  'Select<br>#9'
+        },
+        0: {
+            master: 'Select<br>MIX',
+            group:  'Select<br>MIX'
+        },
+        plus: {
+            master: 'Increase<br>volume',
+            group:  '<span class = "group>Increase<br>volume</span'
+        },
+        minus: {
+            master: 'Reduce<br>volume',
+            group:  '<span class = "group>Reduce<br>volume</span'
+        },
+    },
     select: {
         1: {
             master: 'Select<br>BEATS<br>(C-1)',

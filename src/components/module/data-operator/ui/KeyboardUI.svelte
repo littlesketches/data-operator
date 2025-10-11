@@ -107,8 +107,13 @@
                         //// KEYBOARD ONLY SHORTCUTS
                         case '[': case '{': case 'PageUp'  : sonification.handle.cycleGroup(-1); break
                         case ']': case '}': case 'PageDown': sonification.handle.cycleGroup(1);  break
-                        case "p":       sonification.handle.exportCode(); break
-                        case 'Escape':  sonification.handle.closePulseSequencer()
+                        case "p":   sonification.handle.exportCode(); break
+                        case "k":   sonification.state.selection.activeMode = 'def'
+                        case 'Escape':  
+                            sonification.handle.closePulseSequencer()
+                            sonification.handle.closeDisplayOverlay()
+                            break
+
                     }
 
                     // 3. Activate mode and pattern selections
@@ -128,7 +133,7 @@
                     updateActionState(ev, sonification, shift, group, part)
                     break
 
-                    // X. Numkey & navkey handlers
+                    // X. Numkey & navkey handlers: replicated in/from CalculatorPad component
                     function numkeyAction(mode, numkey, keyGroup, direction){
                         switch(mode){
                             case 'fx':      // Numkey activates punch-in FX for 0-9, for selected group
@@ -292,8 +297,7 @@
                                 }
                                 break
                             case 'select':    // Cycle scene data
-console.log(direction)
-                                sonification.handle.cycleScene(-direction)      
+                                sonification.handle.cycleScene(direction)      
                                 break
                             case 'shift':   // Swing adjust: group level
                                 switch(group){
@@ -401,6 +405,8 @@ console.log(direction)
                 case "\\":  case ",":  case "<":  case "|":   
                     deactivateMode = 'select' 
                     break
+                case "k":  deactivateMode = 'def'
+
 
                 //// NAV KEYS +/- nav keys  
                 case "+": case "=": case "Backspace": case "ArrowUp":     // "UP" (+)+ or = 

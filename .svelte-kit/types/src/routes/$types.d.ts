@@ -12,7 +12,7 @@ type EnsureDefined<T> = T extends null | undefined ? {} : T;
 type OptionalUnion<U extends Record<string, any>, A extends keyof U = U extends U ? keyof U : never> = U extends unknown ? { [P in Exclude<A, keyof U>]?: never } & U : never;
 export type Snapshot<T = any> = Kit.Snapshot<T>;
 type PageParentData = EnsureDefined<LayoutData>;
-type LayoutRouteId = RouteId | "/" | "/_data/open-electricity" | "/docs" | "/docs/model/oe-10" | "/docs/model/oe-dfam" | "/docs/operator-design" | "/docs/quick-start" | "/docs/sonification" | "/docs/sonification/oe-10" | "/docs/sonification/oe-10-ambi" | "/docs/sonification/oe-10-dfam" | "/docs/user-manual" | "/model" | "/model/cw-193" | "/model/cw-193/ambi" | "/model/cw-193/dfam" | "/model/cw-193/operator" | "/model/ds-87" | "/model/ds-87/operator" | "/model/oe-10" | "/model/oe-10/ambi" | "/model/oe-10/dfam" | "/model/oe-10/operator" | null
+type LayoutRouteId = RouteId | "/" | "/_data/open-electricity" | "/docs" | "/docs/model/oe-10" | "/docs/model/oe-dfam" | "/docs/operator-design" | "/docs/quick-start" | "/docs/sonification" | "/docs/sonification/oe-10" | "/docs/sonification/oe-10-ambi" | "/docs/sonification/oe-10-dfam" | "/docs/user-manual" | "/model" | "/model/cw-193" | "/model/cw-193/ambi" | "/model/cw-193/dfam" | "/model/cw-193/operator" | "/model/ds-86" | "/model/ds-86/operator" | "/model/oe-10" | "/model/oe-10/ambi" | "/model/oe-10/dfam" | "/model/oe-10/operator" | null
 type LayoutParams = RouteParams & {  }
 type LayoutParentData = EnsureDefined<{}>;
 
