@@ -25,8 +25,11 @@ export const scaleConfig = {
             min: 0,     max:  5       // scale degree: 1 octave pentatonic
         },
         noise: { 
-            min: 0.1,   max:  1       // Mapped to noise component of the bass sytnh
-        }
+            min: 0.1,   max:  0.35       // Mapped to noise component of the bass sytnh
+        }, 
+        velocity: { 
+            min: 0.5,   max: 1        //  Velocity used for C2
+        },
     },
     C: {
         1: {
@@ -36,7 +39,7 @@ export const scaleConfig = {
         }, 
         2: {
             velocity: {
-                min: 0.85,      max: 1 
+                min: 0.25,      max: 0.5
             }
         }, 
         3: {

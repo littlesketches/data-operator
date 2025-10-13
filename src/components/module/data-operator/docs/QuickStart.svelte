@@ -10,11 +10,14 @@
 <!-- HTML MARKUP-->
 <article class:isSideGuide={isSideGuide} in:fade>
     <div class = 'content-wrapper' >
-        <h1 class = 'header'>Data Operator</h1>
-        <p class = 'subtitle'>Quick start guide</p>
+        <section class = 'subtitle-block'>
+            <div>データオペレーター</div>
+            <div>Data Operator</div>
+        </section>
+        <h1 class = 'header'>// Quick start guide</h1>
 
         <section>
-            <p>Let's get started with the <i>Data Operator</i>:<span class = 'sideguide-hide'> the data instrument that invites you to play with data in ways you never even thought you needed (...but in a good way!). There are a <a href ="" target= "_blank">growing collection</a> of Data Operators models that all explore different data topics and produce different sounds, but they all start with play!</span>
+            <p>Let's get started with the <i>Data Operator</i>:<span class = 'sideguide-hide'> the data instrument that invites you to play with data in ways you never even thought you needed (...but in a good way!). There is a growing collection of Data Operators models that all explore different data topics and produce different sounds, but they all start with play!</span>
             </p>
 
             <ol>
@@ -37,24 +40,26 @@
                     </p>
                 </li>
             </ol>
+        </section>
 
-            <section class = 'aside'>
-                <hr>
-                <h3>An aside: device controls</h3>
+        <section class = 'aside'>
+            <hr>
+            <h3>An aside: device controls</h3>
 
-                <p>Before we go on, its worth mentioning the different ways you can use the buttons on the <i>Data Operator</i>. If you're on a mobile device, you don't get much choice, what you see on your little screen is what you get. If however, you're on a device with a keyboard attached, you'll be able to use various keys to control/mirror the buttons on the <i>Data Operator</i>. You'll notice that on a full sized keyboard, the <i>Data Operator</i> layout resembles the numpad section: they controls are basically mapped 1:1, with the <span class = 'keyboard'>Shift</span> key equivalent to <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the adjacent <span class = 'keyboard'>&rarr;</span> key being <span class = 'key'>&times;</span>.
-                </p>
-                <p>On any keyboard (including laptops), both the row of number and -/+ keys and pad formed around keys <span class = 'keyboard'>q</span> to  <span class = 'keyboard'>r</span>, <span class = 'keyboard'>a</span> to <span class = 'keyboard'>f</span>, and <span class = 'keyboard'>z</span> to <span class = 'keyboard'>c</span> + <span class = 'keyboard'>alt/option</span> can be used in place of the number pad.</p>
+            <p>Before we go on, its worth mentioning the different ways you can use the buttons on the <i>Data Operator</i>. If you're on a mobile device, you don't get much choice, what you see on your little screen is what you get. If however, you're on a device with a keyboard attached, you'll be able to use various keys to control/mirror the buttons on the <i>Data Operator</i>. You'll notice that on a full sized keyboard, the <i>Data Operator</i> layout resembles the numpad section: they controls are basically mapped 1:1, with the <span class = 'keyboard'>Shift</span> key equivalent to <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the adjacent <span class = 'keyboard'>&rarr;</span> key being <span class = 'key'>&times;</span>.
+            </p>
+            <p>On any keyboard (including laptops), both the row of number and -/+ keys and pad formed around keys <span class = 'keyboard'>q</span> to  <span class = 'keyboard'>r</span>, <span class = 'keyboard'>a</span> to <span class = 'keyboard'>f</span>, and <span class = 'keyboard'>z</span> to <span class = 'keyboard'>c</span> + <span class = 'keyboard'>alt/option</span> can be used in place of the number pad.</p>
 
-                <p>For the mode buttons (that we're just about to get to) the <span class = 'keyboard'>Return</span> key is always <span class = 'key'><span class="material-symbols-outlined">function</span></span>, while <span class = 'keyboard'>.</span>  is <span class = 'key'>&sdot;</span>  and <span class = 'keyboard'>,</span>  is <span class = 'key'>&times;</span>. It's confusing at first, but with a bit button mashing and practice, you'll soon figure it out!
-                </p>
-                <p>A full list of shortcut keys is available in the <a href ='/docs/user-manual' target = '_blank'>user manual</a>. With that out of the way, let's move on...</p>
-                <hr>
-            </section>
+            <p>For the mode buttons (that we're just about to get to) the <span class = 'keyboard'>Return</span> key is always <span class = 'key'><span class="material-symbols-outlined">function</span></span>, while <span class = 'keyboard'>.</span>  is <span class = 'key'>&sdot;</span>  and <span class = 'keyboard'>,</span>  is <span class = 'key'>&times;</span>. It's confusing at first, but with a bit button mashing and practice, you'll soon figure it out!
+            </p>
+            <p>A full list of shortcut keys is available in the <a href ='/docs/user-manual' target = '_blank'>user manual</a>. With that out of the way, let's move on...</p>
+            <hr>
+        </section>
 
+        <section>
             <ol start="4">
                 <li>
-                    <p><strong>Hold down each of the four "mode" buttons, one at a time, and see what happens</strong>: these mode buttons are distinguished by an inner circle around their label and wrap around bottom and lower right of the number pad. Notice that when you hold them down, labels telling you what the other buttons do will appear. This is how we get deeper into the features and controls in the Data Operator. The details can be found in the <a href ='/docs/user-manual' target = '_blank'>user manual</a> but very quickly:</p>
+                    <p><strong>Hold down each of the four (performance) "mode" buttons, one at a time, and see what happens</strong>: these mode buttons are distinguished by an inner circle around their label and wrap around bottom and lower right of the number pad. Notice that when you hold them down, labels telling you what the other buttons do will appear. This is how we get deeper into the features and controls in the Data Operator. The details can be found in the <a href ='/docs/user-manual' target = '_blank'>user manual</a> but very quickly:</p>
                     <ul>
                         <li><span class = 'key'>&times;</span> is the [Select] mode: this lets you select the tracks and configure the musical scale (which applies to all pitched tracks, to keep things in harmony).</li>
                         <li><span class = 'key'>&sdot;</span> is the [Modify] mode: this lets you mute tracks and provides access to control 'rhythms', either via track sequencers or euclidean rhythm controls </li>
@@ -72,81 +77,45 @@
                     </p>
                 </li>
             </ol>
+        </section>
 
-                <div class = 'epigraph'>
-                    <blockquote>
-                        <h3>Be an explorer</h3>
-                        <p>Here's a few things you'll find the <i>Data Operator</i> can do but we'll leave it to you to figure out how:</p>
-                        <ul>
-                            <li>Change up the <i>scene</i>! Great for varying the melody and comparing data trends.</li>
-                            <li>Find your groove by controlling tempo and swing.</li>
-                            <li>Scale it your way: set the vibe by choosing a musical scale to match the data context.</li>
-                            <li>Solo data to bring it to put the spotlight on it.</li>
-                            <li>Change up the beats to transform the flavour of your data jam.</li>
-                            <li>Use the euclidean rhythm tools or the pulse sequencer to create unique melodic rhythms.</li>
-                            <li>And don't forget to add spice with <span class = 'key'><span class="material-symbols-outlined">function</span></span>!!</li>
-                        </ul>
-            
-                    </blockquote>
-                </div>
-
+        <section>
             <p>That's all you need to gets started!<label for="sn-005" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-005" class="margin-toggle"/><span class="sidenote">Obviously there's more to explore inside each mode. All is revealed in the <a href ='/docs/user-manual' target = '_blank'>user manual</a>.</span> But just to end this quick start guide: what might have noticed is that is the you'll need two fingers to access a the mode &mdash; one to hold the mode button, and another to active an 'action' &mdash; to really get the most out of the Data Operator. <strong>The Data Operator wants to you to play with it. And it wants to reward you for learning <i>how</i> to play it.</strong>
             </p>
         </section>
 
-
+        <section>
+            <h3>Epilogue: Be an explorer</h3>
+            <p>Here's a few fun things you'll find the <i>Data Operator</i> can do that we'll leave it to you to figure out how:
+            </p>
+            <ul>
+                <li>Change up the <i>scene</i>! Great for varying the melody and comparing data trends.</li>
+                <li>Find your groove by controlling tempo and swing.</li>
+                <li>Scale it your way: set the vibe by choosing a musical scale to match the data context.</li>
+                <li>Solo data to bring it to put the spotlight on it.</li>
+                <li>Change up the beats to transform the flavour of your data jam.</li>
+                <li>Use the euclidean rhythm tools or the pulse sequencer to create unique melodic rhythms.</li>
+                <li>And don't forget to add spice with <span class = 'key'><span class="material-symbols-outlined">function</span></span>!!</li>
+            </ul>
+        </section>
     </div>
 </article>
 
 
 <!-- STYLES-->
 <style>
-    /* Import ET Book styles
-    adapted from https://github.com/edwardtufte/et-book/blob/gh-pages/et-book.css */
-
-    /* @font-face {
-        font-family: "et-book";
-        src: url("/css/module/data-operator/docs/et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot");
-        src: url("/css/module/data-operator/docs/et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot?#iefix") 
-            format("embedded-opentype"), url("/css/module/data-operator/docs/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff") 
-            format("woff"), url("/css/module/data-operator/docs/et-book/et-book-roman-line-figures/et-book-roman-line-figures.ttf") 
-            format("truetype"), url("/css/module/data-operator/docs/et-book/et-book-roman-line-figures/et-book-roman-line-figures.svg#etbookromanosf") format("svg");
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
+    .subtitle-block{
+        font-size:          x-small;
+        display:            flex;
+        text-transform:     uppercase;
+        margin-top:         3.5rem;
+        padding:            0.5rem;
+    }
+    .subtitle-block div{
+        padding-right:      0.5rem;
     }
 
-    @font-face {
-        font-family: "et-book";
-        src: url("/css/module/data-operator/docs/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.eot");
-        src: url("/css/module/data-operator/docs/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.eot?#iefix") format("embedded-opentype"), url("/css/module/data-operator/docs/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff") format("woff"), url("et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.ttf") format("truetype"), url("et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.svg#etbookromanosf") format("svg");
-        font-weight: normal;
-        font-style: italic;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "et-book";
-        src: url("/css/module/data-operator/docs/et-book/et-book-bold-line-figures/et-book-bold-line-figures.eot");
-        src: url("/css/module/data-operator/docs/et-book/et-book-bold-line-figures/et-book-bold-line-figures.eot?#iefix") format("embedded-opentype"), url("/css/module/data-operator/docs/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff") format("woff"), url("et-book/et-book-bold-line-figures/et-book-bold-line-figures.ttf") format("truetype"), url("et-book/et-book-bold-line-figures/et-book-bold-line-figures.svg#etbookromanosf") format("svg");
-        font-weight: bold;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: "et-book-roman-old-style";
-        src: url("/css/module/data-operator/docs/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.eot");
-        src: url("/css/module/data-operator/docs/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.eot?#iefix") format("embedded-opentype"), url("/css/module/data-operator/docs/et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.woff") format("woff"), url("et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.ttf") format("truetype"), url("et-book/et-book-roman-old-style-figures/et-book-roman-old-style-figures.svg#etbookromanosf") format("svg");
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-    } */
-
-    article{
-        font-family: "et-book";
-    }
-    section.aside{
-
+    h1{
+        margin-block-start: 0;
     }
 </style>

@@ -3,141 +3,35 @@
  *   - Strudel sound (drum kit) patterns with manually defined event arrays use with visuals
  *   - "vis" arrays are in a format matched to the VisPattern chart component = > used for synced charts and visuals
  */
-
+import { beatConfig as beat } from "../../../_shared/beat-config"
+import { percConfig as perc } from "../../../_shared/perc-config"
 
 export const groupPartPresets =  {
     1: { // Part 1. Percussion patters: "membrane" layer
         sound: {
-            0:  {
-                pattern: '<bd - - -  bd - - -  bd - - -  bd - - - >*16',
-                vis: [
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                ]
-            },
-            1:  {
-                pattern: 'bd [bd,sd] bd [bd,sd]',
-                vis: [
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd', 'sd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd', 'sd'], ['-'], ['-'], ['-'],
-                ]
-            },
-            2:  {
-                pattern: '<[bd, ht] - - mt  [bd,sd] lt - -  [bd, mt] ht mt lt  [bd, sd, mt] - lt ->*16',
-                vis: [
-                    ['bd', 'ht'], ['-'], ['-'], ['mt'],
-                    ['bd', 'sd'], ['lt'], ['-'], ['-'],
-                    ['bd', 'mt'], ['ht'], ['mt'], ['lt'],
-                    ['bd', 'sd', 'mt'], ['-'], ['lt'], ['-'],
-                ]
-            },
-            3: {
-                pattern: '<bd bd - -  bd - bd -  - bd - -  bd - - ->*16',
-                vis: [
-                    ['bd'], ['bd'], ['-'],  ['-'],
-                    ['bd'], ['-'],  ['bd'], ['-'],
-                    ['-'],  ['bd'], ['-'],  ['-'],
-                    ['bd'], ['-'],  ['-'],  ['-'],
-                ]
-            }
+            // A. On the beat:
+            0:  beat.four_on_the_floor,
+            1:  beat.back_beat,
+            2:  beat.electro_1a,
+            3:  beat.hip_hop_1,
+            4:  beat.hip_hop_3,
+            5:  beat.amen_break_1,
+            6:  beat.groove_b,
+            7:  beat.gahu,
+            8:  beat.soukous,          
         }
     },
     2: { // Part 2. Percussion patterns: "metal and misc" layer
         sound: {
-            0:  {
-                pattern: '<- - - -  - - - -  - - - -  - - - ->*16',
-                vis:    [
-                    ['-'], ['-'], ['-'], ['-'],
-                    ['-'], ['-'], ['-'], ['-'],
-                    ['-'], ['-'], ['-'], ['-'],
-                    ['-'], ['-'], ['-'], ['-']
-                ]  
-            },
-            1:  {
-                pattern: '<- - oh -  - - oh -  - - oh -  - - oh ->*16',
-                vis:    [
-                    ['-'], ['-'], ['oh'], ['-'],
-                    ['-'], ['-'], ['oh'], ['-'],
-                    ['-'], ['-'], ['oh'], ['-'],
-                    ['-'], ['-'], ['oh'], ['-']
-                ]  
-            },
-            2:  {
-                pattern: '<rim rim oh -  - - oh -  - - oh -  - - oh ->*16',
-                vis:    [
-                    ['rim'], ['rim'], ['oh'], ['-'],
-                    ['-'], ['-'], ['oh'], ['-'],
-                    ['-'], ['-'], ['oh'], ['-'],
-                    ['-'], ['-'], ['oh'], ['-']
-                ]  
-            },
-            3:  {
-                pattern: '<rim rim oh -   - - [oh, rim] -   - rim [oh,rim] rim  - rim oh ->*16',
-                vis:    [
-                    ['rim'], ['rim'], ['oh'], ['-'],
-                    ['-'],  ['-'],  ['oh', 'rim'], ['-'],
-                    ['-'],  ['rim'], ['oh', 'rim'], ['rim'],
-                    ['-'], ['rim'],  ['oh'], ['-']
-                ]  
-            },
-            4:  {
-                pattern: '<rim rim oh -   cp - [oh, rim] -   - rim [oh,rim] rim  cp rim oh ->*16',
-                vis:    [
-                    ['rim'], ['rim'],   ['oh'],         ['-'],
-                    ['cp'],  ['-'],     ['oh', 'rim'],  ['-'],
-                    ['-'],   ['rim'],   ['oh', 'rim'],  ['rim'],
-                    ['cp'],  ['rim'],   ['oh'],          ['-']
-                ]  
-            },
-            5:  {
-                pattern: '<[rim, rd, cr] rim [oh, rd]  -   rd - [oh, rim, rd] -   rd rim [oh,rim, rd] rim  rd rim [oh, rd] ->*16',
-                vis:    [
-                    ['rim', 'rd', 'cr'], ['rim'],   ['oh', 'rd'],        ['-'],
-                    ['rd'],              ['-'],     ['oh', 'rim', 'rd'], ['-'],
-                    ['rd'],              ['rim'],   ['oh', 'rim', 'rd'], ['rim'],
-                    ['rd'],              ['rim'],   ['oh', 'rd'],        ['-']
-                ]  
-            },
-            6:  {
-                pattern: '<hh - - -   hh - - -  hh - - -  hh - - ->*16',
-                vis:    [
-                    ['hh'], ['-'], ['-'], ['-'],
-                    ['hh'], ['-'], ['-'], ['-'],
-                    ['hh'], ['-'], ['-'], ['-'],
-                    ['hh'], ['-'], ['-'], ['-']
-                ]  
-            },
-            7:  {
-                pattern: '<hh - oh -   hh - oh -  hh - oh -  hh - oh ->*16',
-                vis:    [
-                    ['hh'], ['-'], ['oh'], ['-'],
-                    ['hh'], ['-'], ['oh'], ['-'],
-                    ['hh'], ['-'], ['oh'], ['-'],
-                    ['hh'], ['-'], ['oh'], ['-']
-                ]  
-            },
-            8:  {
-                pattern: '<hh - oh -   [cp, hh] - oh -  hh - oh -  [cp, hh] - oh ->*16',
-                vis:    [
-                    ['hh'], ['-'], ['oh'], ['-'],
-                    ['cp', 'hh'], ['-'], ['oh'], ['-'],
-                    ['hh'], ['-'], ['oh'], ['-'],
-                    ['cp', 'hh'], ['-'], ['oh'], ['-']
-                ]  
-            },
-            9:  {
-                pattern: '<hh rim oh rim   [cp, hh] - oh -  hh - oh -  [cp, hh] rim oh ->*16',
-                vis:    [
-                    ['hh'],       ['rim'], ['oh'], ['-'],
-                    ['cp', 'hh'], ['rim'], ['oh'], ['-'],
-                    ['hh'],       ['-'],   ['oh'], ['-'],
-                    ['cp', 'hh'], ['rim'], ['oh'], ['-']
-                ]  
-            }
+            0:  perc.hats_closed_8,
+            1:  perc.hats_closed_16,
+            2:  perc.hats_open_7_3_11_15,
+            3:  perc.unknown_drummer,
+            4:  perc.siberian_nights,
+            5:  perc.brit_house,
+            6:  perc.deeper_house,
+            7:  perc.slow_deep_house,
+            8:  perc.groove_b,
         }
 
     },
@@ -152,29 +46,30 @@ export const groupPartPresets =  {
             0: {
                 label:      'Supersaw synth',
                 gain:       0.6,
-                code:      `.s("supersaw").lpf(2500).lpq(8).lpenv(3).adsr("0.5:0.1:0.8:1").clip(0.85)`,
+                code:      `.s("supersaw").lpf(2500).lpq(8).lpenv(3)`,
+                ampEnv:     `0.5:0.1:0.8:1`
             },
-            1: {
+            2: {
                 label:      'Vibraphone',
                 code:      `.s("vibraphone")`,
                 gain:       0.65,
             },
-            2: {
+            3: {
                 label:      'Piano',
                 code:      `.s("piano")`,
                 gain:       3,
             },
-            3: {
+            4: {
                 label:      'Harp',
                 code:      `.s("folkharp")`,
                 gain:       2,
             },
-            4: {
+            5: {
                 label:      'Wine glass',
                 code:      `.s("wineglass")`,
                 gain:       2,
             },
-            5: {
+            6: {
                 label:      'Pipe organ',
                 code:      `.s("pipeorgan_loud_pedal")`,
                 gain:       0.6,

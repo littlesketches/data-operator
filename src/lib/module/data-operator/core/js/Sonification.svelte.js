@@ -341,12 +341,14 @@ export class Sonification{
                 switch(type){
                     case 'pattern': 
                         if(!this.schema.group[group].part[part].series.includes(index)) return
-                        this.state.selection.group[group].part[part].series = this.schema.group[group].part[part].series[index]
-                        sonification.state.userMessage.text = `New pattern on ${group}.${part}`                 //  Create user message
+                        const patternIndex = this.state.selection.group[group].part[part].series = this.schema.group[group].part[part].series[index]
+                        const pattenLabel = sonification.schema.pattern[group][part]?.sound[patternIndex].label ?? `#${patternIndex}`
+
+                        sonification.state.userMessage.text = `${group}.${part} > ${pattenLabel}`               //  Create user message
                         if(this.param[group].part[part].sound.sample){ // UPdate sound params
                             const param = this.schema.pattern[group][part].sound[this.state.selection.group[group].part[part].series]
                             this.param[group].part[part].sound.sample     = param.name
-                            this.param[group].part[part].sound.modifier   = param.modifier
+                            this.param[group].part[part].sound.modifier   = param.modifiezr
                             this.param[group].part[part].gain   = param.gain
                             sonification.state.userMessage.text = `${group}.${part} > ${param.label }`
                         }
@@ -377,13 +379,16 @@ export class Sonification{
 
                 switch(type){
                     case 'pattern': // Cycle pattern part (index), where sign indicates direction)  
-                        this.state.selection.group[group].part[partId].series = cycleFromValue(this.schema.group[group].part[partId].series, this.state.selection.group[group].part[partId].series , Math.sign(directionIndex) )
-                        sonification.state.userMessage.text = `${group}.${part} > Pattern change to #${this.state.selection.group[group].part[partId].series }`
+                        const patternIndex = this.state.selection.group[group].part[partId].series = cycleFromValue(this.schema.group[group].part[partId].series, this.state.selection.group[group].part[partId].series , Math.sign(directionIndex) )
+                        const pattenLabel = sonification.schema.pattern[group][part]?.sound[patternIndex].label ?? `#${patternIndex}`
+
+                        sonification.state.userMessage.text = `${group}.${part} > ${pattenLabel}`
 
                         if(this.param[group].part[partId].sound.code){ // UPdate sound params
                             const param = this.schema.pattern[group][partId].sound[this.state.selection.group[group].part[partId].series]
                             this.param[group].part[partId].sound.code     = param.code
                             this.param[group].part[partId].gain   = param.gain
+
                             sonification.state.userMessage.text = `${group}.${part} > ${param.label}`
                         }
                         break
@@ -391,7 +396,7 @@ export class Sonification{
                     case 'velocity':
                     default: // Cycle the group data
                         this.state.selection.group[group][`${type}Pattern`] = cycleFromValue(this.schema.group[group][type].series, this.state.selection.group[group][`${type}Pattern`] , directionIndex ) 
-                        const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? param.label
+                        const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? this.param.label
                         sonification.state.userMessage.text = `${group} > ${label}`
                 }
                 /// ii. Handle user message

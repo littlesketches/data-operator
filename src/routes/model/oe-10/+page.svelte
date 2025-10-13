@@ -10,7 +10,7 @@
                 <div class = 'button'><a href = '/'>&larr;</a></div>
                 <h1 class = 'do-header'>データオペレーター</h1>
             </div>
-            <h1 class = 'model-header'>OE-10</h1>
+            <h1 class = 'model-header'>// OE-10</h1>
         </div>
 
         <div class = 'do-model-page__content'>
@@ -20,23 +20,48 @@
         <ul class = 'do_model-page__menu'>
             <a href = "/model/oe-10/operator">
                 <li class = 'operator'>
-                    <h3 class = 'menu-title'>Operator</h3> 
+                    <div class = 'wrapper'>
+                        <div>
+                            <h2>OE-10</h2>
+                            <h3 class = 'menu-title'>/ Operator</h3> 
+                        </div>
+                        <div class = 'arrow'>
+                            &rarr;
+                        </div>
+                    </div>
                 </li>
             </a>
             <a href = "/model/oe-10/dfam">
                 <li class ='dfam'>
-                    <h3 class = 'menu-title'>Data From Another Mother</h3> 
+                    <div class = 'wrapper'>
+                        <div>
+                            <h2>OE-10</h2>
+                            <h3 class = 'menu-title'>/ Data From Another Mother</h3> 
+                        </div>
+                        <div class = 'arrow'>
+                            &rarr;
+                        </div>
+                    </div>
                 </li>
             </a> 
             <a href = "/model/oe-10/ambi">
                 <li class = 'ambi'>
-                    <h3 class = 'menu-title'>Ambient</h3> 
+                    <div class = 'wrapper'>
+                        <div>
+                            <h2>OE-10</h2>
+                            <h3 class = 'menu-title'>/ Ambient</h3> 
+                        </div>
+                        <div class = 'arrow'>
+                            &rarr;
+                        </div>
+                    </div>
+                   
                 </li>
             </a>
         </ul>
 
         <div class = 'do-model-page__content'>
-            <h2>Data bits</h2>
+            <h2>_Data bits</h2>
             <p><strong><a href = 'https://openelectricity.org.au/' target = "_blank">Open Electricity</a></strong> is an wonderful resource and <i>platform for tracking Australia's electricity transition</i>. The OE-10 uses data published via the <a href = 'https://explore.openelectricity.org.au/energy/nem/' target = "_blank"> NEM tracker</a> and focuses on a curated set of ten data series that track generation sources and electricity market price. Open Electricity do very important work that provides insights into a very serious, complex issue. Please visit their <a href = 'https://openelectricity.org.au/' target = "_blank">website</a> to find out more.</p>
 
              <OperatorDataDisclaimer/>

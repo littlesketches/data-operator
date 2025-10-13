@@ -17,7 +17,7 @@ export const scaleConfig = {
             min: 400,   max: 1400     // Cutoff frequency's modulating sine wave range of the LPF
         },
         lpq: {  
-            min: 2,     max: 10       // LPFs resonance range for a  modulating sine wave 
+            min: 1,     max: 2       // LPFs resonance range for a  modulating sine wave 
         }
     },
     B: {
@@ -25,7 +25,7 @@ export const scaleConfig = {
             min: 0,     max:  5       // scale degree: 1 octave pentatonic
         },
         noise: { 
-            min: 0.1,   max:  1       // Mapped to noise component of the bass sytnh
+            min: 0.25,   max:  0.75       // Mapped to noise component of the bass sytnh
         }
     },
     C: {

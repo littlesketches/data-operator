@@ -67,7 +67,7 @@ canvas#test-canvas{
     --col-dark:             hsl(0,0%,0%);
     --col-light:            #fff;
     --col-highlight:        #f15a22;
-    --col-highlight-alt:    rgb(35, 230, 248);
+    --col-highlight-alt:       #22baf1;
 
     --screen-bg:            #000;
     --pixel-0:              hsl(0, 0%, 100%);

@@ -14,8 +14,6 @@ section.do-model-page__container{
     margin:                 5vh 2.5vh 2.5vh;
 }
 
-
-
 /** Title block*/    
 .do-header__container{
     display:                flex;
@@ -57,7 +55,6 @@ section.do-model-page__container{
 }
 .do-model-page__content{
     margin:                 3.5vh 0;    
-    /* font-size:  1.5vh; */
 }
 .do-model-page__content .note{
     font-size:              small;
@@ -80,21 +77,43 @@ ul.do_model-page__menu {
 }
 .do_model-page__menu a{
     text-decoration:        none;
+    aspect-ratio:           1 / 1;
 }
 .do_model-page__menu li{
-    aspect-ratio:           1 / 1;
     background:             #000;
     color:                  #fff;
-    display:                flex;
-    padding:                1.5vh;
+    height:                 100%;
+
     font-weight:            700;
-    font-size:              1.5vh;
-    text-transform:         lowercase;
     transition:             all 500ms;
 }
+.do_model-page__menu li .wrapper{
+    padding:                2vh;
+    display:                flex;
+    flex-direction:         column;
+    justify-content:        space-between;
+    height:                 calc(100% - 4vh);
+}
+
+.do_model-page__menu li h2,
 .do_model-page__menu li h3{
     margin-block-start:     0;
-    margin-block-end:     0;
+    margin-block-end:       0;
+    line-height:            1.15;
+
+}
+.do_model-page__menu li h2{
+    font-size:           small;
+    margin-block-end:       0.5rem;
+}
+.do_model-page__menu li h3{
+    font-size:              3.5dvh;
+    text-transform:         lowercase;   
+}
+.do_model-page__menu li .arrow{
+    font-size:            5vh; 
+    line-height:            1;
+    text-align:             end;
 }
 
 .do_model-page__menu li:hover.operator{

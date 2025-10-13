@@ -1,5 +1,7 @@
 <!-- DATA VIS FOR RHYTHM-CHORD PATTERNS -->
 <script>
+    import { e } from '@strudel/core';
+
     // Libs and utils
     import * as d3              from 'd3'
     import {getPattern}         from 'euclidean-rhythms';
@@ -103,9 +105,15 @@
     })
     
     // iii. Construct harmony array
-
     let chordSeries = $derived(sonification.state.selection.group.A.pitchPattern)
     let chordData = $derived(data.scaledData[groupPartPresets["3"].interval]?.C["3"].chord[chordSeries].map(d => d.quantized)  ) 
+
+    const toADSR = str => {
+        if(!str) return { A: 0, D: 1, S: 0, R: 0 }
+        const [A, D, S, R] = str.split(':').map(Number)
+        return { A, D, S, R }
+    }
+    const chordEnv =  $derived(toADSR(sonification.param[group].part["3"].sound.ampEnv))
 
     // iii. Add chart scale        
     let scale = $derived.by(() => {
@@ -188,11 +196,21 @@
             {@const width = scale.chord.x(1) - scale.chord.x(0)}
             {@const cycleIndex = strudel.state.time.cycle - 1}
             {@const divAdd = cycleIndex % clockDivider["3"] * config.steps}
+            {#if chordEnv}
+            {@const dur = chordEnv.A +chordEnv.D +chordEnv.R}
+            {@const path = `M0, 0 L${width * chordEnv.A /dur}, ${-height} L${width * (chordEnv.A + chordEnv.D) /dur}, ${-height * chordEnv.S} L${width}, 0 
+                            L${width * (chordEnv.A + chordEnv.D) /dur}, ${height * chordEnv.S} L${width * chordEnv.A /dur}, ${height} z`}
+            <g transform =  'translate({scale.chord.x(i)}, {scale.chord.y(d) + height})' >
+                <path  class = 'chord-marker'class:active={( Math.floor(cycleIndex /clockDivider["3"])%  length.part3 ) === i  && strudel.state.transport === 'playing'}  
+                    d = {path}/>
+            </g>
+            {:else}
             <rect class = 'chord-marker' 
                 class:active={( Math.floor(cycleIndex /clockDivider["3"])%  length.part3 ) === i  && strudel.state.transport === 'playing'} 
                 x = {scale.chord.x(i)} y = {scale.chord.y(d) + height}  
                 width = {width} height = {height} rx = {height * 0.5}
             />
+            {/if}
         {/each}
         </g>
     </g> 

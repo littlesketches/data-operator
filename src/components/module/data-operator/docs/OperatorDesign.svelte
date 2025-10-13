@@ -11,8 +11,11 @@
 <article class:isSideGuide={isSideGuide} in:fade>
     <div class = 'content-wrapper'>
 
-        <h1>Data Operator</h1>
-        <p class = 'subtitle'>Design + technical notes</p>
+        <section class = 'subtitle-block'>
+            <div>データオペレーター</div>
+            <div>Data Operator</div>
+        </section>
+        <h1 class = 'header'>// Operator design</h1>
 
         <section>
             <p>Here you will find some extra ramblings and documentation about the design and technical implementation of the Data Operator, and features that made it into the interface. On first glance, the topics in these notes may seem loosely connected, however they tended to introduce compromises on one another, that shaped the final design of the Data Operator. 
@@ -60,65 +63,18 @@
 
 <!-- STYLES-->
 <style>
-    p, li{
-        line-height: 1.75;
+    .subtitle-block{
+        font-size:          x-small;
+        display:            flex;
+        text-transform:     uppercase;
+        margin-top:         3.5rem;
+        padding:            0.5rem;
     }
-    /* Navigation */
-    nav{
-        padding:            0.5rem 1rem;
-
-    }
-    nav a:visited,
-    nav div,
-    nav a {
-        /* color:           #fff; */
-        text-decoration:    none;
+    .subtitle-block div{
+        padding-right:      0.5rem;
     }
 
-
-    /* Keyboard key style */
-    span.key{
-        display:            inline-block;
-        border-top:         solid 2px;
-        border-left:        solid 2px;
-        border-right:       solid 0.25px;
-        border-bottom:      solid 0.25px;
-        border-radius:      0.25rem;
-        padding:            0.1rem 0.5rem;
-        margin:             0rem 0;
-        min-width:          1rem;
-        text-align:         center;  
-        font-size:          1rem;
+    h1{
+        margin-block-start: 0;
     }
-    span.key span{
-        font-size:          1rem;
-    }
-    /* In text 'button' style */
-    span.text-button{
-        display:            inline-block;
-        border-top:         solid 2px;
-        border-left:        solid 2px;
-        border-right:       solid 0.25px;
-        border-bottom:      solid 0.25px;
-        border-radius:      1rem;
-        padding:            0rem 0.5rem;
-        margin:             0rem 0;
-        min-width:          1rem;
-        text-align:         center;   
-    }
-
-    /* Slide container */
-    .slide-button{
-        text-decoration:    underline dotted;
-        cursor:             pointer;
-    }
-    .slide-button:hover{
-        width: 100%;
-    }
-
-
-    /* Overrides */
-    li{
-        margin-bottom: 1rem;
-    } 
 </style>

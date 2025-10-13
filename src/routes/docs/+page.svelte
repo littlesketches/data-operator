@@ -21,12 +21,16 @@
 <!-- HTML MARKUP-->
 <article in:fade>
     <div class = 'content-wrapper'>
-        <h1>Hello Data Operator</h1>
+
+        <section class = 'subtitle-block'>
+            <div>データオペレーター</div>
+            <div>Data Operator</div>
+        </section>
+        <h1>// About</h1>
 
         <section>
-            <h2>What is it?</h2>
-                    
-            <p>A Data Operator is a <i>data instrument</i> that produces musical sounds from data!<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">You could call this is an interactive <i>data sonification</i>... with an novel interface and musically orientated features.</span> Just like a <i>musical</i> instrument, the Data Operator wants to be played with. And anyone can play! You can start by mashing buttons to experience how the Data Operator reacts. Or be curious and learn how the instrument works by exploring data sonifications and adding musical spices to the sounds it produces. 
+            <h2>What is it?</h2>                    
+            <p>A Data Operator is a <i>data instrument</i>. It produces musical sounds from data!<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">You could call this is an interactive <i>data sonification</i>... with an novel interface and musically orientated features.</span> Just like a <i>musical</i> instrument, the Data Operator wants to be played with. And anyone can play! You can start by mashing buttons to experience how the Data Operator reacts. Or be curious and learn how the instrument works by exploring data sonifications and adding musical spices to the sounds it produces. 
             </p>
             <p>Data Operators are a quirky breed of data tools that invites curiosity and promotes expression and creativity. Play each Data Operator the way <i>you</i> want to. Lose yourself in the beats and make your heart smile.
             </p>
@@ -80,7 +84,6 @@
         <section>
             <h2>Inspiration and acknowledgements</h2>
 
-
         </section>
 
         <section>
@@ -105,6 +108,21 @@
 
 <!-- STYLES-->
 <style>
+    .subtitle-block{
+        font-size:          x-small;
+        display:            flex;
+        text-transform:     uppercase;
+        margin-top:         3.5rem;
+        padding:            0.5rem;
+    }
+    .subtitle-block div{
+        padding-right:      0.5rem;
+    }
+
+    h1{
+        margin-block-start: 0;
+    }
+
     /* Slide container */
     .slide-button{
         text-decoration:    underline dotted;

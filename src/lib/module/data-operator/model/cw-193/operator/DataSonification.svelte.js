@@ -81,28 +81,28 @@ export class DataSonification extends Sonification{
                 .color("${this.param.visual.color.A}")
             ,
             // Group B. "Moog-ish bass" 
-            stack(  
-                n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
-                    .layer(
-                        x=>x.s("sawtooth").vib(4),
-                        x=>x.s("square").add(note(-12))
-                    )
-                    .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
-                    .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
-                    .scaleTranspose(${this.param.B.pitch.scaleTranspose})
-                    .adsr("0.0:0.1:0.8:0.5")         
-                ,
-                n("${this.param.B.pitch.pattern}")      
-                    .velocity("${this.param.synth.ModelD.noise.velocity}")
-                    .s("white") 
-                    .adsr("0.01:1:0:0")   
+            n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
+            .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
+            .scaleTranspose(${this.param.B.pitch.scaleTranspose})
+            .layer(
+                x=>x.s("sawtooth").vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),
+                x=>x.s("triangle").velocity("${this.param.synth.ModelD.mix.osc2}"),
+                x=>x.s("triangle").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}") ,
+                x=>x.s("pink").velocity("${this.param.synth.ModelD.mix.noise}")
             )
+            .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
+            .adsr("${this.param.synth.ModelD.ampEnv.a}:${this.param.synth.ModelD.ampEnv.d}:${this.param.synth.ModelD.ampEnv.s}:${this.param.synth.ModelD.ampEnv.r}")    // Amp envelope (ADSR)
             ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
                 : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
             .slow(${this.param.B.pitch.clockDivider})    
             .ftype("ladder")
-            .lpf(440)
-            .lpenv(3)
+            .lpf(${this.param.synth.ModelD.filter.cutoff})         // LPF cutoff 
+            .lpq(${this.param.synth.ModelD.filter.Q})              // LPF resonance
+            .lpenv(${this.param.synth.ModelD.filter.env.depth})    // filter env: modulation depth
+            .lpa(${this.param.synth.ModelD.filter.env.A})          // filter env attack
+            .lpd(${this.param.synth.ModelD.filter.env.D})          // filter env decay
+            .lps(${this.param.synth.ModelD.filter.env.S})          // filter env sustain
+
             .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
             ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
             ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
@@ -259,7 +259,7 @@ export class DataSonification extends Sonification{
         // i. Pitch: constructed from selected data => update params
         group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => { return d[scaleLock]})
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
-
+ 
         // ii. Velocity: constructed from selected data => update params
         group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => { return d.value})
         this.param.A.velocity.pattern  = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
@@ -272,7 +272,7 @@ export class DataSonification extends Sonification{
         // iii. Filter resonance:  constructed from selected data => update params: set for change on 2n
         group.A.lpq.array = sceneData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
         const resonanceRangeString     = `"[${rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
-        this.param.synth.TB303.filter.resonance = `sine.range(${resonanceRangeString}).slow(8)`
+        // this.param.synth.TB303.filter.resonance = `sine.range(${resonanceRangeString}).slow(8)`
 
 
         /**
@@ -286,7 +286,7 @@ export class DataSonification extends Sonification{
         // ii. Noise part level "velocity": constructed from data 
         const noiseRange = 1 ?? sceneData.scaledData["1m"].B.noise[0][group.B.noise.series].value
         group.B.noise.array         = sceneData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value * noiseRange)
-        this.param.synth.ModelD.noise.velocity  = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
+        this.param.synth.ModelD.mix.noise  = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
         /**
          *  GROUP C. Pattern "percussion" parts
@@ -312,6 +312,7 @@ export class DataSonification extends Sonification{
         const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
         this.param.C.part["3"].sound.length = group.C["3"].array.length
         this.param.C.part["3"].sound.code = c3.code
+        this.param.C.part["3"].sound.ampEnv = c3.ampEnv
         this.param.C.part["3"].gain = c3.gain
 
 

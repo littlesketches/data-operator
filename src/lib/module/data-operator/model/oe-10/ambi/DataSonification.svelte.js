@@ -54,7 +54,7 @@ export class DataSonification extends Sonification{
         setcpm(${this.param.global.bpm / timingConfig.beats.perBar})
 
         stack(
-            // Group A. Lead chimes
+            // Group A. Lead 
             n("${this.param.A.pitch.pattern}")      // Data for "${this.state.selection.group.A.pitchPattern}" scaled to pitch 
                 .scale("${this.param.global.scale.root}${this.param.A.octave}:${this.param.global.scale.type}")            
                 .scaleTranspose(${this.param.A.pitch.scaleTranspose})
@@ -82,29 +82,42 @@ export class DataSonification extends Sonification{
             ,
             // Group B. "Bass" 
             n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
-                .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
-                .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
-                .scaleTranspose(${this.param.B.pitch.scaleTranspose})
-                // .adsr("0.0:0.1:0.8:0.5")         
-                ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
+            .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
+            .scaleTranspose(${this.param.B.pitch.scaleTranspose})
+            .layer(
+                x=>x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),
+                x=>x.s("pulse").pw(0.35).velocity("${this.param.synth.ModelD.mix.osc2}"),
+                x=>x.s("square").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}") ,
+                x=>x.s("white").velocity("${this.param.synth.ModelD.mix.noise}")
+            )
+            .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
+            .adsr("${this.param.synth.ModelD.ampEnv.a}:${this.param.synth.ModelD.ampEnv.d}:${this.param.synth.ModelD.ampEnv.s}:${this.param.synth.ModelD.ampEnv.r}")    // Amp envelope (ADSR)
+            ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
                     : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
-                .s("${this.param.synth.bass.sound}")               // Sound source
-                .slow(${this.param.B.pitch.clockDivider})                
-                .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
-                ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
-                ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
-                ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}
-                ${this.param.B.fx.vibrato      ? this.param.global.fx.vibrato  : ''}
-                ${this.param.B.fx.phaser       ? this.param.global.fx.phaser  : ''}
-                ${this.param.B.fx.delay        ? this.param.global.fx.delay  : ''}
-                ${this.param.B.fx.filterLP     ? this.param.global.fx.filterLP  : ''}
-                ${this.param.B.fx.filterHP     ? this.param.global.fx.filterHP  : ''}
-                ${this.param.B.fx.reverb       ? `.room(${this.param.master.reverb.size * 3})` : ''}  
-                ${this.param.B.mute            ? this.param.global.fx.mute : `.gain(${this.param.B.gain})`}  
-                ${this.param.B.fx.halfTime     ? this.param.global.fx.halfTime  : ''}
-                ${this.param.B.fx.doubleTime   ? this.param.global.fx.doubleTime  : ''}    
-                .color("${this.param.visual.color.B}")
-                ,
+            .slow(${this.param.B.pitch.clockDivider})    
+            .ftype("ladder")
+            .lpf(${this.param.synth.ModelD.filter.cutoff})         // LPF cutoff 
+            .lpq(${this.param.synth.ModelD.filter.Q})              // LPF resonance
+            .lpenv(${this.param.synth.ModelD.filter.env.depth})    // filter env: modulation depth
+            .lpa(${this.param.synth.ModelD.filter.env.A})          // filter env attack
+            .lpd(${this.param.synth.ModelD.filter.env.D})          // filter env decay
+            .lps(${this.param.synth.ModelD.filter.env.S})          // filter env sustain
+            .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
+            // .s("${this.param.synth.bass.sound}")               // Sound source
+            ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
+            ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
+            ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}
+            ${this.param.B.fx.vibrato      ? this.param.global.fx.vibrato  : ''}
+            ${this.param.B.fx.phaser       ? this.param.global.fx.phaser  : ''}
+            ${this.param.B.fx.delay        ? this.param.global.fx.delay  : ''}
+            ${this.param.B.fx.filterLP     ? this.param.global.fx.filterLP  : ''}
+            ${this.param.B.fx.filterHP     ? this.param.global.fx.filterHP  : ''}
+            ${this.param.B.fx.reverb       ? `.room(${this.param.master.reverb.size * 3})` : ''}  
+            ${this.param.B.mute            ? this.param.global.fx.mute : `.gain(${this.param.B.gain})`}  
+            ${this.param.B.fx.halfTime     ? this.param.global.fx.halfTime  : ''}
+            ${this.param.B.fx.doubleTime   ? this.param.global.fx.doubleTime  : ''}    
+            .color("${this.param.visual.color.B}")
+            ,
             // Group C.
             stack( // Part 1: Membrane percussion sounds
                 s("${this.param.C.part["1"].sound.pattern}")
@@ -301,6 +314,6 @@ export class DataSonification extends Sonification{
         this.param.C.part["3"].sound.length = group.C["3"].array.length
         this.param.C.part["3"].sound.code = c3.code
         this.param.C.part["3"].gain = c3.gain
-
+        this.param.C.part["3"].sound.ampEnv = c3.ampEnv
     };
 }

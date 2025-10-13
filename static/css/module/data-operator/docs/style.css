@@ -23,16 +23,33 @@ span.keyboard{
 }
 span.key span,
 span.keyboard span{
-    font-size:          1rem;
+    font-size:          1.1rem;
     margin-top:         0.5rem;
-    margin-bottom:      -0.5rem;
+
 }
 
 
     /** SIDE GUIDE STYLING*/
     article.isSideGuide{
-        font-family:        "et-book";
         line-height:        1.5;
+        font-size:          1rem;
+    }
+
+    article.isSideGuide p,
+    article.isSideGuide dl,
+    article.isSideGuide ol,
+    article.isSideGuide ul {
+        font-size:          0.85rem;
+        line-height:        1.35rem;
+    }
+
+    article.isSideGuide p {
+        margin-top:         0.85rem;
+        margin-bottom:      0.85rem;
+    }
+
+    article.isSideGuide .subtitle-block{
+        margin-top:         2vh;
     }
     article.isSideGuide .subtitle{
         font-size:          x-large;
@@ -58,7 +75,7 @@ span.keyboard span{
     article.isSideGuide span.keyboard {
         padding:            0rem 0.25rem;
     }
-    .isSideGuide  h1,
+    /* .isSideGuide  h1, */
     .isSideGuide  label,
     .isSideGuide  input,
     .isSideGuide  span.sidenote,

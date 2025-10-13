@@ -58,8 +58,8 @@
         <PadUI {model}/>
     </div>
     
-    <div class="guide-button info-button"         data-type ='quickStart'   onclick={handle.toggleGuide} onkeydown={handle.toggleGuide} tabindex=-1></div>
-    <div class="sonification-button info-button"  data-type ='sonification' onclick={handle.toggleGuide} onkeydown={handle.toggleGuide} tabindex=-1></div>
+    <div class="guide-button info-button"         data-type ='quickStart'   onclick={handle.toggleGuide} tabindex=-1></div>
+    <div class="sonification-button info-button"  data-type ='sonification' onclick={handle.toggleGuide} tabindex=-1></div>
 </div>
 
 <div class = 'guidance__container' class:closed={!viewGuide}>

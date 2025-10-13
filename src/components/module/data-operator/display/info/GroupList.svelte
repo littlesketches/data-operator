@@ -9,9 +9,11 @@
 
     // Models
     const {dataModel, sonification, operatorConfig} = model
+
     // Variables 
     let currentSolo = $derived(sonification.state.snapshot.solo.current)
     const ui = operatorConfig.ui.type   
+
     // Handlers
     const handle = {
         click: function(ev){
@@ -20,7 +22,7 @@
             sonification.handle.selectGroupPart(group, part)
        }
     }
-console.log(dataModel.schema.map?.series)
+
 </script>
 
 

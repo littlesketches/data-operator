@@ -23,3 +23,10 @@ export const timingConfig = {
         perBeat:        4      
     }
 }
+
+export const clockDividerMap = {
+    "2n":   8,
+    "4n":   4,
+    "8n":   2,
+    "16n":  1
+}

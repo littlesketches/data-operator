@@ -21,22 +21,23 @@
 <nav>
     <ul>
         <li class = 'home'>
-            <a href = '/'>デ.オ.</a>
+            <!-- <a href = '/'>デ.オ.</a> -->
+            <a href = '/'>&larr;</a>
         </li>
-        <li class:active={docRoute === 'docs'}>
+        <li class = 'menu-item' class:active={docRoute === 'docs'} >
             <a href = '/docs'>About</a>
         </li>
-        <li class:active={docRoute === 'quick-start'}>
+        <li class = 'menu-item' class:active={docRoute === 'quick-start'}>
             <a href = '/docs/quick-start'>Quick start</a>
         </li>
-        <li class:active={docRoute === 'user-manual'}>
-            <a href = '/docs/user-manual'>User manual</a>
+        <li class = 'menu-item' class:active={docRoute === 'user-manual'}>
+            <a href = '/docs/user-manual'>Manual</a>
         </li>
-        <li class:active={docRoute === 'design'}>
-            <a href = '/docs/operator-design'>Operator design</a>
+        <li class = 'menu-item' class:active={docRoute === 'design'}>
+            <a href = '/docs/operator-design'>Design</a>
         </li>
-        <li class:active={docRoute === 'sonification'}>
-            <a href = '/docs/sonification'>Sonification notes</a>
+        <li class = 'menu-item' class:active={docRoute === 'sonification'}>
+            <a href = '/docs/sonification'>Sonification</a>
         </li>
     </ul>
 </nav>
@@ -69,7 +70,6 @@
         margin:             0;
         padding:            0;
         display:            flex;
-
         align-items:        end;
     }
 
@@ -78,7 +78,9 @@
         margin-bottom:      0;
         transition:         all 500ms;
     }
-
+    li.menu-item{
+        font-size: smaller;
+    }
     li:not(:first-of-type){
         padding-left:      1rem;
     }
@@ -92,4 +94,18 @@
         text-decoration-thickness:      4px;
         text-underline-offset:          4px;
     }
+
+    @media only screen and (max-width: 600px) {
+        li.menu-item{
+            font-size: small;
+        }
+        li:first-of-type{
+            border-right:       none
+        }
+        li:not(:first-of-type){
+            padding-left:       0.25rem;
+            padding-right:      0.5rem;
+        }
+    }
+
 </style>

@@ -18,11 +18,30 @@ export const paramInit = {
                     S:      'perlin.range(0,.5).slow(3)',  
                     depth:  'perlin.range(1,4).slow(2)',  
                 }
+            },
+            ampEnv: {
+                a: 0.01, d: 0.1, s: 0.8, r: 0.5
             }
         },
         ModelD: {
-            noise: {
-                velocity:   '1'
+            mix: {  
+                osc1:   1,
+                osc2:   1,
+                sub:    0.25,
+                noise:  0.25
+            },
+            ampEnv: {
+                a: 0.0, d: 0.1, s: 0.8, r: 0.5
+            },
+            filter: {
+                cutoff:     440,    // Default replaced with data-driven ranges
+                Q:          4,  
+                env: {
+                    A:      0,     
+                    D:      0.1,     
+                    S:      0.2,  
+                    depth:  2.5,  
+                }
             }
         }
     },
@@ -51,7 +70,7 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.85,           // Group level gain
+        gain:           1,           // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index

@@ -132,7 +132,7 @@ export class StrudelUtility{
                 const smpl = await Promise.all([
                     registerSynthSounds(),
                     registerZZFXSounds(),
-                    await import('@strudel/soundfonts').then(({ registerSoundfonts }) => { registerSoundfonts() }),
+                    // await import('@strudel/soundfonts').then(({ registerSoundfonts }) => { registerSoundfonts() }),
                     samples(`${ds}/tidal-drum-machines.json`),
                     samples(`${ds}/piano.json`),
                     samples(`${ds}/Dirt-Samples.json`),

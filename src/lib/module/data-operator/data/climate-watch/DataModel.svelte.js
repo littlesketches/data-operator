@@ -101,16 +101,24 @@ export class DataModel_CW extends DataModel{
                 metricType:    [
                     'annual', 
                     'annualPerCapita', 
-                    // 'annualPerGDP', 
                     'cumulative', 
                     'cumulativePerCapita', 
-                    // 'cumulativePerGDP'
                 ],
                 ghgType:    ['net', 'source', 'sink', 'gross']
 
             }, 
             map: {
-                countryMeta:    iso3map        
+                countryMeta:    iso3map,
+                series: {
+                    label: {
+                        netGhg_perCapita:     { label: "Net GHG per capita"},
+                        sourceGhg_perCapita:  { label: "Source GHG per capita"},
+                        sinkGhg_perCapita:    { label: "Sink GHG per capita"},
+                        netGhg:               { label: "Net GHG"},
+                        sourceGhg:            { label: "Source GHG"},
+                        sinkGhg:              { label: "Sink GHG"}
+                    }
+                }    
             }
         }
 

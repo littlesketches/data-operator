@@ -8,7 +8,7 @@ import { randomItem, randomInteger } from "../../../core/js/utils"
 export const paramInit = {
     synth: {
         lead: {
-            sound:        'handbells',
+            sound:        'piano',
             filter: {
                 cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
                 Q:          'sine.range(2,6).slow(2)',  
@@ -17,6 +17,30 @@ export const paramInit = {
                     D:      'perlin.range(.02,.2)',     
                     S:      'perlin.range(0,.5).slow(3)',  
                     depth:  'perlin.range(1,4).slow(2)',  
+                }
+            },
+            ampEnv: {
+                a: 0.01, d: 0.1, s: 0.8, r: 0.5
+            }
+        },
+        ModelD: {
+            mix: {  
+                osc1:   1,
+                osc2:   1,
+                sub:    0.25,
+                noise:  0.25
+            },
+            ampEnv: {
+                a: 0.0, d: 0.1, s: 0.8, r: 0.5
+            },
+            filter: {
+                cutoff:     440,    // Default replaced with data-driven ranges
+                Q:          4,  
+                env: {
+                    A:      0,     
+                    D:      0.1,     
+                    S:      0.2,  
+                    depth:  2.5,  
                 }
             }
         },
@@ -29,17 +53,17 @@ export const paramInit = {
     },
     // Group A: [melodic] 'synth'    
     A: {
-        gain:           0.85,            // Group level gain 
+        gain:           0.65,            // Group level gain 
         mute:           false,          // Mute available at group level
-        octave:         3,              // Scale octave
+        octave:         5,              // Scale octave
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              16,             // Euclidean pulse: default to all pitchs
-            rotation:           0,              // Euclidean rotation
+            pulse:              randomItem([5, 7, 9, 11, 13]),             // Euclidean pulse: default to all pitchs
+            rotation:           randomInteger(16),               // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
@@ -52,7 +76,7 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.25,           // Group level gain
+        gain:           0.5,           // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
@@ -63,7 +87,7 @@ export const paramInit = {
             pulse:              randomItem([7, 9, 11, 13]),    // Euclidean pulse (default on load)
             rotation:           randomInteger(16),          // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch
-            transpose:          -24,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
+            transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
             structLegato:       undefined,       // Legato version of pulse sequencer pattern
@@ -119,6 +143,7 @@ export const paramInit = {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
                     length:         undefined,
+                    ampEnv:         undefined,
                     clockDivider:   1               // Clock divider
                 }
             }

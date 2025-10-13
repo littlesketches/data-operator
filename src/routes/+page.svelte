@@ -6,6 +6,7 @@
     /**
      *   DATA OPERATOR MENU ITEMS
      */
+
     // Config
     const items = [
         { 
@@ -57,7 +58,6 @@
     }
 
     const sayDataOperator = () => { return ;sayJapanese("データオペレーター") }
-
 </script>
 
 
@@ -83,14 +83,12 @@
                     {#if item.subtitle}<h4 class = 'item-subtitle'>{item.subtitle}</h4>{/if}
                 </div>
                 
-
                 <div>
                     {#if item.description}<div class = 'item-description'>{item.description}</div>{/if}
                     <a href={item.href}>
                         <div class = 'item-link'>&rarr;</div>
                     </a>
                 </div>
-
             </li>
             {/each}
         </ul>
@@ -141,9 +139,9 @@
 
     .tagline__container{
         display:                flex;
-        align-items:            center;
-        height:                 10dvh;
+        height:                 12.5dvh;
         padding-left:           var(--left-padding);
+        padding-top:            var(--left-padding);
         text-transform:         lowercase;
         font-weight:            200;
         font-size:              1.5dvh;
@@ -236,9 +234,7 @@
         justify-content:    space-between;
         /* height:             100%; */
     }
-    li.menu-item a{
 
-    }
     li.menu-item:hover{
         filter:             brightness(1.4);
         z-index:            10;
@@ -258,7 +254,7 @@
         color:              #ddd;
         width:              min-content;
         letter-spacing:     0.1rem;
-        text-transform: lowercase;
+        text-transform:     lowercase;
 
     }
 
@@ -296,7 +292,7 @@
     @media (max-width: 800px) {
         .menu__container {
             -webkit-mask-image: none;
-            mask-image: none;
+            mask-image:         none;
         }
     }
 

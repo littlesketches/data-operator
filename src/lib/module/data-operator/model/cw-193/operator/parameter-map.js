@@ -11,7 +11,7 @@ export const paramInit = {
             oscType:        'sawtooth',
             filter: {
                 cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
-                Q:          'sine.range(2,6).slow(2)',  
+                Q:          'sine.range(8,12).slow(2)',  
                 env: {
                     A:      '0.005',     
                     D:      'perlin.range(.02,.2)',     
@@ -21,14 +21,30 @@ export const paramInit = {
             }
         },
         ModelD: {
-            noise: {
-                velocity:   '1'
+            mix: {  
+                osc1:   1,
+                osc2:   0.4,
+                sub:    0.65,
+                noise:  0.1
+            },
+            ampEnv: {
+                a: 0.0, d: 0.1, s: 0.75, r: 0.5
+            },
+            filter: {
+                cutoff:     220,    // Default replaced with data-driven ranges
+                Q:          12,  
+                env: {
+                    A:      0,     
+                    D:      0.1,     
+                    S:      0.2,  
+                    depth:  4,  
+                }
             }
         }
     },
     // Group A: [melodic] 'synth'    
     A: {
-        gain:           0.5,            // Group level gain 
+        gain:           0.35,            // Group level gain 
         mute:           false,          // Mute available at group level
         octave:         3,              // Scale octave
         swing: {
@@ -37,8 +53,8 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              16,             // Euclidean pulse: default to all pitchs
-            rotation:           0,              // Euclidean rotation
+            pulse:              randomItem([11, 13, 14, 15]),    // Euclidean pulse (default on load)
+            rotation:           randomInteger(16),          // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
@@ -51,7 +67,7 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.85,           // Group level gain
+        gain:           0.65,           // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
@@ -59,10 +75,10 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
+            pulse:              randomItem([7, 9, 10, 12, 13]),    // Euclidean pulse (default on load)
             rotation:           randomInteger(16),          // Euclidean rotation
-            legato:             true,           // Switch for euclidean pitch
-            transpose:          -24,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
+            legato:             false,           // Switch for euclidean pitch
+            transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
             structLegato:       undefined,      // Legato version of pulse sequencer pattern
@@ -119,6 +135,7 @@ export const paramInit = {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
                     length:         undefined,
+                    ampEnv:         undefined,
                     clockDivider:   2                 // Clock divider
                 },
                 velocity: {     
