@@ -5,6 +5,7 @@
  */
 
 import { randomItem, randomInteger } from "../../../core/js/utils"
+import { strudelVisOptions, strudelVisPalette }         from "../../_shared/strudel-vis-config"
 
 export const paramInit = {
     synth: {
@@ -173,16 +174,7 @@ export const paramInit = {
     },
     // Strudel in-built visualisation
     visual:  {
-        color: {
-            A:              '#fff', // '#f15a22',
-            B:              '#22baf1',
-            C:              '#f15a22',
-        },
-        type: {
-            none:           '',
-            scope:          `.scope({pos: 0.36, scale: 0.25, thickness: 7.5})`,     
-            pianoroll:      `.pianoroll({playhead: 0, vertical: false, flipTime: false  })`,
-            spectrum:       `.spectrum()`
-        }
+        color:      strudelVisPalette.operator,
+        type:       strudelVisOptions
     }
 }

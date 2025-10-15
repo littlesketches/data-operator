@@ -29,7 +29,7 @@
      *  II. SONIFICATION COMPOSITION composition associated with sonification
      */
 
-    const composition  = new Composition(app, sonification, strudel)
+    const composition = new Composition(app, sonification, strudel)
 
     // => Run composition on $effect
     $effect( () => {

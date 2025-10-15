@@ -11,12 +11,11 @@
     let mobileScreen = $derived(data.app.state.global.device.screen.width < 770)
 
     // ii. Query params
-    const queryParams = app.state.global.urlParams = data.url.searchParams
-
-    const mobileFlag = queryParams.get('mobile') !== null ? true : false,
+    const queryParams = app.state.global.urlParams = data.url.searchParams,
+        mobileFlag = queryParams.get('mobile') !== null ? true : false,
         apiData = queryParams.get('api') !== null ? true : false
 
-    // iii. Programatic mobile screen size check (on window resize)
+    // iii. Programmatic mobile screen size check (on window resize)
     const checkScreenSize = () => {
         sonification.state.isMobile = data.app.state.global.device.screen.width < 600 || mobileFlag 
     }

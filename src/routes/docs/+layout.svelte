@@ -33,7 +33,7 @@
         <li class = 'menu-item' class:active={docRoute === 'user-manual'}>
             <a href = '/docs/user-manual'>Manual</a>
         </li>
-        <li class = 'menu-item' class:active={docRoute === 'design'}>
+        <li class = 'menu-item' class:active={docRoute === 'operator-design'}>
             <a href = '/docs/operator-design'>Design</a>
         </li>
         <li class = 'menu-item' class:active={docRoute === 'sonification'}>

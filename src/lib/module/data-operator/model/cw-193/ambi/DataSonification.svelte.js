@@ -283,7 +283,7 @@ export class DataSonification extends Sonification{
 
         // Part 1. Beat pattern: "membrane" percussion
         // i. Update pattern params
-        this.param.C.part["1"].sound.pattern = group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern
+        this.param.C.part["1"].sound.pattern = group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern.all
 
         // Part 2. Hats pattern: "metal" percussion
         // i. Update pattern params

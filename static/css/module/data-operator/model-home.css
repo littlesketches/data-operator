@@ -68,8 +68,8 @@ ul.do_model-page__menu {
     display:                grid;
     grid-template-columns:  1fr 1fr 1fr;
     grid-auto-flow:         column;     
-    grid-auto-columns:      1fr; 
-    gap:                    2vh;                  
+    grid-auto-columns:      1fr;  
+    gap:                    max(2.5vw, 1.25vh);              
     list-style:             none;
     margin:                 0;
     padding:                0;
@@ -83,12 +83,11 @@ ul.do_model-page__menu {
     background:             #000;
     color:                  #fff;
     height:                 100%;
-
     font-weight:            700;
     transition:             all 500ms;
 }
 .do_model-page__menu li .wrapper{
-    padding:                2vh;
+    padding:                1.5vh;
     display:                flex;
     flex-direction:         column;
     justify-content:        space-between;
@@ -100,18 +99,18 @@ ul.do_model-page__menu {
     margin-block-start:     0;
     margin-block-end:       0;
     line-height:            1.15;
-
 }
+
 .do_model-page__menu li h2{
-    font-size:           small;
+    font-size:              max(1.5vw, 2vh); 
     margin-block-end:       0.5rem;
 }
 .do_model-page__menu li h3{
-    font-size:              3.5dvh;
+    font-size:              max(1.5vw, 2vh); 
     text-transform:         lowercase;   
 }
 .do_model-page__menu li .arrow{
-    font-size:            5vh; 
+    font-size:              max(5vw, 3.5vh); 
     line-height:            1;
     text-align:             end;
 }

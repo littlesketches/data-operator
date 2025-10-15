@@ -3,7 +3,8 @@
  *   - Strudel code parameter template (with defaults)
  *   - Contains default and structure for Sonification 'param' reactive state => derived 'code'
  */
-import { randomItem, randomInteger } from "../../../core/js/utils"
+import { randomItem, randomInteger }                from "../../../core/js/utils"
+import { strudelVisOptions, strudelVisPalette }     from "../../_shared/strudel-vis-config"
 
 export const paramInit = {
     synth: {
@@ -31,16 +32,13 @@ export const paramInit = {
                 noise:  0.25
             },
             ampEnv: {
-                a: 0.0, d: 0.1, s: 0.8, r: 0.5
+                A: 0.0,     D: 0.1,     S: 0.8,     R: 0.5
             },
             filter: {
                 cutoff:     440,    // Default replaced with data-driven ranges
                 Q:          4,  
                 env: {
-                    A:      0,     
-                    D:      0.1,     
-                    S:      0.2,  
-                    depth:  2.5,  
+                    A: 0,   D: 0.1,     S: 0.2,    depth:  2.5,  
                 }
             }
         },
@@ -173,16 +171,7 @@ export const paramInit = {
     },
     // Strudel in-built visualisation
     visual:  {
-        color: {
-            A:              '#d40481', 
-            B:              '#fff',
-            C:              '#d40481',
-        },
-        type: {
-            none:           '',
-            scope:          `.scope({pos: 0.36, scale: 0.25, thickness: 7.5})`,     
-            pianoroll:      `.pianoroll({playhead: 0, vertical: false, flipTime: false  })`,
-            spectrum:       `.spectrum()`
-        }
+        color:      strudelVisPalette.ambi,
+        type:       strudelVisOptions
     }
 }

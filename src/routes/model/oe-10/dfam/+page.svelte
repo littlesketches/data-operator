@@ -48,7 +48,6 @@
 </script>
 
 
-
 <!-- HTML COMPONENT MARKUP-->
 <div class = 'wrapper'>
     <DataOperator {model}/>
@@ -65,6 +64,3 @@
         background-color:  #171616;
     }
 </style>
-
-
-

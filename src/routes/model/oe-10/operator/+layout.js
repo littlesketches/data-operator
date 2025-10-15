@@ -27,9 +27,9 @@ const modelName = 'oe-10'
 // 2. Operator config object 
 const operatorConfig = {
     modelName,
-    theme:          'ko-ii',        // Specify theme
+    theme:          'ko-ii',            // Specify theme
     ui: {
-        type:       'std',      // Specify UI
+        type:       'operator',         // Specify UI
         keyguide,
         punchFX
     }
@@ -40,7 +40,7 @@ const config = {
     group:      groupConfig,            // Group configuration: choices of preset data series choices
     fx:         punchFX,                // Model-specific Punch FX 
     preset: {
-        C:      groupPartPresets        // Group C preset part 1&2 patterns
+        C:      groupPartPresets        // Group C preset part 1 & 2 patterns
     }   
 }
 

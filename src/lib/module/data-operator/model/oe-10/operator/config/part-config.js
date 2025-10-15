@@ -1,5 +1,5 @@
 /**
- *   PRESET PERCUSSION PATTERNS: OE-10
+ *   PRESET PERCUSSION PATTERNS: OE-10-OPERATOR
  *   - Strudel sound (drum kit) patterns with manually defined event arrays use with visuals
  *   - "vis" arrays are in a format matched to the VisPattern chart component = > used for synced charts and visuals
  */
@@ -23,9 +23,9 @@ export const groupPartPresets =  {
     },
     2: { // Part 2. Percussion patterns: "metal and misc" layer
         sound: {
-            0:  perc.hats_closed_8,
-            1:  perc.hats_closed_16,
-            2:  perc.hats_open_7_3_11_15,
+            0:  perc.hats_open_4,
+            1:  perc.hats_closed_8,
+            2:  perc.hats_closed_16,
             3:  perc.unknown_drummer,
             4:  perc.siberian_nights,
             5:  perc.brit_house,
@@ -33,7 +33,6 @@ export const groupPartPresets =  {
             7:  perc.slow_deep_house,
             8:  perc.groove_b,
         }
-
     },
     3: { // Part 3: Chords from synth or sampled sounds)
         chord: { 

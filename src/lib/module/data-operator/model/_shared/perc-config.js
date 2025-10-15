@@ -2,7 +2,17 @@
  *  LIBRARY FOR PERCUSSION CONFIG PATTERNS
  */
 export const percConfig = {
-    // A. On the beat:
+    silence:  {
+        label:   '45:33',
+        pattern: '<- - - -  - - - -  - - - -  - - - - >*16',
+        vis: [
+            ['-'], ['-'], ['-'], ['-'],
+            ['-'], ['-'], ['-'], ['-'],
+            ['-'], ['-'], ['-'], ['-'],
+            ['-'], ['-'], ['-'], ['-'],
+        ]
+    },
+    // A. Regular hats
     hats_closed_8:  {
         label:   'Close hats 8n',
         pattern: '<hh - hh -  hh - hh -  hh - hh -  hh - hh - >*16',
@@ -24,7 +34,7 @@ export const percConfig = {
         ]
     },
 
-    hats_open_7_3_11_15:  {
+    hats_open_4:  {
         label:   'Open hats 7-3-11-15',
         pattern: '<- - oh -  - - oh -  - - oh -  - - oh - >*16',
         vis: [

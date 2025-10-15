@@ -220,8 +220,8 @@ export class DataSonification extends Sonification{
          */ 
 
         // Data selected and reference variables
-        const sceneData       = this.data.scene[this.state.selection.sceneIndex],
-            scaleLock       = this.state.selection.scaleLock ? 'quantized' : 'value',
+        const sceneData = this.data.scene[this.state.selection.sceneIndex],
+            scaleLock   = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
                     pitch: {
@@ -261,21 +261,21 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => { return d[scaleLock]})
+        group.A.pitch.array         = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => { return d[scaleLock]})
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
         // ii. Velocity: constructed from selected data => update params
-        group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => { return d.value})
-        this.param.A.velocity.pattern  = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
+        group.A.velocity.array        = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => { return d.value})
+        this.param.A.velocity.pattern = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
         // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
-        group.A.lpf.array = sceneData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
+        group.A.lpf.array           = sceneData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
         const cutoffRangeString     = `"[${rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
         this.param.synth.TB303.filter.cutoff = `sine.range(${cutoffRangeString}).slow(4)`
 
         // iii. Filter resonance:  constructed from selected data => update params: set for change on 2n
-        group.A.lpq.array = sceneData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
-        const resonanceRangeString     = `"[${rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
+        group.A.lpq.array           = sceneData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
+        const resonanceRangeString  = `"[${rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
         this.param.synth.TB303.filter.resonance = `sine.range(${resonanceRangeString}).slow(8)`
 
 
@@ -289,8 +289,9 @@ export class DataSonification extends Sonification{
 
         // ii. Noise part level "velocity": constructed from data 
         const noiseRange = 1 ?? sceneData.scaledData["1m"].B.noise[0][group.B.noise.series].value
-        group.B.noise.array         = sceneData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value * noiseRange)
-        this.param.synth.ModelD.mix.noise   = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
+        group.B.noise.array               = sceneData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value * noiseRange)
+        this.param.synth.ModelD.mix.noise = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
+
 
         /**
          *  GROUP C. Pattern "percussion" parts
@@ -298,7 +299,7 @@ export class DataSonification extends Sonification{
 
         // Part 1. Beat pattern: "membrane" percussion
         // i. Update pattern params
-        this.param.C.part["1"].sound.pattern = group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern
+        this.param.C.part["1"].sound.pattern = group.C["1"].sound[this.state.selection.group.C.part["1"].series].pattern.all
 
         // Part 2. Hats pattern: "metal" percussion
         // i. Update pattern params
@@ -315,9 +316,9 @@ export class DataSonification extends Sonification{
 
         const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
         this.param.C.part["3"].sound.length = group.C["3"].array.length
-        this.param.C.part["3"].sound.code = c3.code
+        this.param.C.part["3"].sound.code   = c3.code
         this.param.C.part["3"].sound.ampEnv = c3.ampEnv
-        this.param.C.part["3"].gain = c3.gain
+        this.param.C.part["3"].gain         = c3.gain
 
         console.log('--UPDATE PARAM MAP', {sceneData},)
     };

@@ -23,7 +23,7 @@
                     <div class = 'wrapper'>
                         <div>
                             <h2>OE-10</h2>
-                            <h3 class = 'menu-title'>/ Operator</h3> 
+                            <h3 class = 'menu-title'>+ Operator</h3> 
                         </div>
                         <div class = 'arrow'>
                             &rarr;
@@ -36,7 +36,7 @@
                     <div class = 'wrapper'>
                         <div>
                             <h2>OE-10</h2>
-                            <h3 class = 'menu-title'>/ Data From Another Mother</h3> 
+                            <h3 class = 'menu-title'>+ Data From Another Mother</h3> 
                         </div>
                         <div class = 'arrow'>
                             &rarr;
@@ -49,7 +49,7 @@
                     <div class = 'wrapper'>
                         <div>
                             <h2>OE-10</h2>
-                            <h3 class = 'menu-title'>/ Ambient</h3> 
+                            <h3 class = 'menu-title'>+ Ambient</h3> 
                         </div>
                         <div class = 'arrow'>
                             &rarr;

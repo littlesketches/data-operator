@@ -53,9 +53,11 @@ canvas#test-canvas{
 
 }   
 
+
 /**
  *  THEMES
  */
+
 [data-theme="ko-ii"] {
     --col-body:             #ccc;
     --col-grad-0:           hsl(0,0%,85%);
@@ -86,6 +88,7 @@ canvas#test-canvas{
 /**
  * THEME: "AMBIENT"   
  */
+
 [data-theme="ambient"] {
     --col-body:             #ccc;
     --col-grad-0:           hsl(0,0%,85%);
@@ -124,15 +127,16 @@ canvas#test-canvas{
 [data-theme="ambient"] .button-label.invert{
     color:                  rgb(0, 0, 0, 0.5);
 }
-
 [data-theme="ambient"] .button-label.invert{
     background:          rgb(0, 0, 0, 0.35);
     color:              var(--col-light);
 }   
 
+
 /**
  * THEME: "DFAM"   
  */
+
 [data-theme="dfam"] {
     --col-body:             #7e7e7e;
     --col-grad-0:           hsl(0,0%,85%);
@@ -153,8 +157,6 @@ canvas#test-canvas{
     --pixel-3:              hsl(90, 100%, 20%);
     --pixel-4:              hsl(90, 100%, 00%);
 }
-
-
 
 
 /**
@@ -181,8 +183,6 @@ canvas#test-canvas{
     --pixel-3:              hsl(0, 0%, 40%);
     --pixel-4:              hsl(0, 0%, 20%);
 }
-
-
 
 [data-theme="plaid"] .interface__wrapper{
     background:
@@ -220,7 +220,6 @@ canvas#test-canvas{
  * THEME: "RAINBOW"   
  */
 
-
 [data-theme="rainbow"] .interface__wrapper{
     background:
         linear-gradient(red, transparent),
@@ -247,6 +246,7 @@ span.key{
     text-align:         center;  
     font-size:          1rem;
 }
+
 span.key span{
     font-size:          1rem;
     margin-top:         0.5rem;

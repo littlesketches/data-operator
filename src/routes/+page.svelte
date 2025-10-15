@@ -115,7 +115,7 @@
     /** TITLE & TAGLINE BLOCKS */
     .title__container,
     .tagline__container{
-        width:                  100%;
+        width:                  calc(100% - var(--left-padding));
         max-width:              800px;
         color:                  #fff;
         padding-left:           var(--left-padding);
@@ -123,15 +123,15 @@
 
     h1{ 
         font-family:            "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-        font-size:              9dvh;
+        font-size:              max(6vw, 6.25vh); 
         font-weight:            700;
         margin-block-start:     0;
         margin-block-end:       0;
-        line-height:            1;
+        line-height:            1.1;
     }
 
     h2.subtitle{
-        font-size:              5dvh;
+        font-size:              max(5vw, 43h); 
         margin-block-start:     0;
         display:                flex;
         width:                  fit-content;
@@ -152,13 +152,13 @@
     .blink {
         position:               relative;
         display:                inline-block;
-        min-width:              10ch; /* reserve width so text doesn’t jump */
+        /* min-width:              10ch;           reserve width so text doesn’t jump */
     }
 
     .word {
         position:               absolute;
         left:                   0;
-        top:                    -8.5dvh;
+        top:                    calc(-1 * max(5vw, 5.25vh) );
         opacity:                0;
         white-space:            nowrap;
     }
@@ -179,10 +179,10 @@
 
     /** CAROUSEL MENU  **/
     .menu__container{
-        width:                  100%;
-        overflow-x:             auto;
-        overflow-y:             hidden;
-        scrollbar-width:        none; /* Firefox */
+        width:                      100%;
+        overflow-x:                 auto;
+        overflow-y:                 hidden;
+        scrollbar-width:            none; /* Firefox */
         -webkit-overflow-scrolling: touch;        
 
         /* Left fade (0→400px), right fade from center → right edge */
@@ -193,8 +193,8 @@
             rgba(0,0,0,1) 50%,           /* fully visible until center */
             rgba(0,0,0,0) 100%           /* fade to transparent on right */
         );
-        -webkit-mask-repeat:    no-repeat;
-        -webkit-mask-size:      100% 100%;
+        -webkit-mask-repeat:        no-repeat;
+        -webkit-mask-size:          100% 100%;
 
         mask-image: linear-gradient(
             to right,
@@ -203,12 +203,12 @@
             rgba(0,0,0,1) 50%,
             rgba(0,0,0,0) 100%
         );
-        mask-repeat:        no-repeat;
-        mask-size:          100% 100%;
+        mask-repeat:                no-repeat;
+        mask-size:                  100% 100%;
     }
 
     .menu__container::-webkit-scrollbar {
-        display:            none; /* Chrome/Safari */
+        display:            none;       /* Chrome/Safari */
     }
 
     ul.track{
@@ -265,6 +265,7 @@
         transition:         all 200ms;
         transform-origin:   100% 50%;
     }
+
     .item-link:hover{
         transform:          scaleX(1.25);
     }
@@ -284,15 +285,19 @@
         font-weight:        600;
         width:              70%;
     }
+
     li:hover .item-description{
         opacity:            0.75;
-
     }
+
     /* Remove mask on screens narrower than 800px */
     @media (max-width: 800px) {
         .menu__container {
             -webkit-mask-image: none;
             mask-image:         none;
+            padding-left:       var(--left-padding);
+            padding-right:      var(--left-padding);
+            width:              calc(100% - 2 * var(--left-padding));
         }
     }
 
