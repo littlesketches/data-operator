@@ -4,21 +4,22 @@
 	import { fade, slide } from 'svelte/transition';
 
     // Components
-    import ButtonControls   from './ButtonControls.svelte';
-    import SelectTracks     from './mode-keys/SelectTracks.svelte';
-    import SelectScale      from './mode-keys/SelectScale.svelte';
-    import SelectScene from './mode-keys/SelectScene.svelte';
-    import ModifyMute from './mode-keys/ModifyMute.svelte';
-    import ShiftSolo from './mode-keys/ShiftSolo.svelte';
-    import ModifyTempo from './mode-keys/ModifyTempo.svelte';
+    import ButtonControls       from './ButtonControls.svelte';
+    import SelectTracks         from './mode-keys/SelectTracks.svelte';
+    import SelectScale          from './mode-keys/SelectScale.svelte';
+    import SelectScene          from './mode-keys/SelectScene.svelte';
+    import ModifyMute           from './mode-keys/ModifyMute.svelte';
+    import ShiftSolo            from './mode-keys/ShiftSolo.svelte';
+    import ModifyTempo          from './mode-keys/ModifyTempo.svelte';
     import ModifyPulseSequencer from './mode-keys/ModifyPulseSequencer.svelte';
-    import ModifyLegato from './mode-keys/ModifyLegato.svelte';
+    import ModifyLegato         from './mode-keys/ModifyLegato.svelte';
     import ModifyEuclideanRhythm from './mode-keys/ModifyEuclideanRhythm.svelte';
-    import ModifyClock from './mode-keys/ModifyClock.svelte';
-    import ShiftTranspose from './mode-keys/ShiftTranspose.svelte';
-    import ShiftExportShare from './mode-keys/ShiftExportShare.svelte';
-    import ShiftSwing from './mode-keys/ShiftSwing.svelte';
-    import FxPunchIn from './mode-keys/FxPunchIn.svelte';
+    import ModifyClock          from './mode-keys/ModifyClock.svelte';
+    import ShiftTranspose       from './mode-keys/ShiftTranspose.svelte';
+    import ShiftExportShare     from './mode-keys/ShiftExportShare.svelte';
+    import ShiftSwing           from './mode-keys/ShiftSwing.svelte';
+    import FxPunchIn            from './mode-keys/FxPunchIn.svelte';
+    import TrackShortcuts       from './mode-keys/TrackShortcuts.svelte';
 
     // Props
     let {isSideGuide = false} = $props()
@@ -37,7 +38,7 @@
         <h1 class = 'header'>// User manual</h1>
 
         <section>
-        <p>Welcome to the user manual for the <i>Data Operator</i>. This will explain what the <i>Data Operator</i>is, what it does; and how to use one<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">The main body of text covers the standard <i>Data Operator</i> features and controls. Any model or edition-specific features and differences will be mentioned in side notes (like this one!)</span>.</p>
+        <p>Welcome to the user manual for the <i>Data Operator</i>. This will explain what the <i>Data Operator</i> is, what it does; and how to use one<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">The main body of text covers the standard <i>Data Operator</i> features and controls. Any model or edition-specific features and differences will be mentioned in side notes (like this one!)</span>.</p>
 
         <p>If you're looking for a brief introduction, we recommend taking a look at the <a href = '/docs/quick-start'>Quick Start guide!</a><label for="sn-002" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-002" class="margin-toggle"/><span class="sidenote">If you're using the <i>Data Operator</i> on a computer, you can also open the <a href = '/docs/quick-start'>Quick Start guide</a> alongside the <i>Data Operator</i> interface by clicking on the 'top side' button that appears next to the faceplate </span>. And of course, we always recommend that you simply mess around with a Data Operator and see what happens. It can be quite complicated, but the instrument will react and provide feedback to your actions, so a great way to learn is to simply play with it!</p>
         </section>
@@ -148,18 +149,13 @@
             <p>The <strong>shortcut MIX state</strong> is a fun, immediate place to start to explore some of the key features of the Data Operator. Of course, to gain finer control over these features and and unlock more ways to control the Data Operator, we'll 
             </p>
 
+            <hr>
             <h3>>> Track selection changes the shortcuts</h3>
 
             <p>Before we move on, we need to mention that shortcuts will change if a non-MIX track has been selected (see <span class = 'mode-label'>select</span> below). Fortunately, the options are the same for each track:</p>
+            <TrackShortcuts/>
+            <hr>
 
-            <ul>
-                <li>The <span class = 'key'>&plus;</span> and <span class = 'key'>&minus;</span> will now adjust the volume of the selected track.
-                </li>
-                <li>The number keys <span class = 'key'>1</span> to <span class = 'key'>9</span>  will select from one of nine preset mapped data series or patterns.
-                </li>
-                <li>Key <span class = 'key'>0</span> will select the "MIX" track: think of it like a 'home key' for selecting the "MIX" track (i.e. the track selected in the default/on-load state).
-                </li>
-            </ul>
         </section>
 
         <section>
@@ -167,7 +163,7 @@
             <p>There are four performance <strong>modes</strong> (that we'll simply call 'modes') available in the <i>Data Operator</i>: these provide access to some interesting data exploration and musical tools. These tools are how you can learn <i>play the Data Operator</i>. The mode buttons are distinguished by an inner circle around their label and are positioned around bottom and lower right of the number pad, The modes are:
             </p>
 
-            <ul>
+            <ul style="list-style: none; padding-inline-start: 1rem">
                 <li><span class = 'key'>&times;</span> is the <span class = 'mode-label'>select</span> mode: this lets you select the tracks and configure the musical scale (which applies to all pitched tracks, to keep things in harmony).
                 </li>
                 <li><span class = 'key'>&sdot;</span> is the <span class = 'mode-label'>modify</span> mode: this lets you mute tracks and provides access to control 'rhythms', either via track sequencers or euclidean rhythm controls.
@@ -189,7 +185,7 @@
 
         <hr>
         <section>
-            <h2>1. Select mode</h2>
+            <h2 class = 'mode'>1. Select mode</h2>
 
             <p>In <span class = 'mode-label'>select</span> mode, all actions remain the same for every selected track. So it doesn't matter what track selection you're in, you'll get these actions.</p>
 
@@ -205,7 +201,7 @@
 
         <hr>
         <section>
-            <h2>2. Modify mode</h2>
+            <h2 class = 'mode'>2. Modify mode</h2>
             <p>In modify mode, the mute and tempo actions are available for every selected track. The options for editing the "pulse" rhythms however, will differ depending on which track is selected.</p>
 
             <h3>a. Muting tracks</h3>
@@ -229,7 +225,7 @@
 
         <hr>
         <section>
-            <h2>3. Shift mode</h2>
+            <h2 class = 'mode'>3. Shift mode</h2>
             <p>In shift mode, the most actions remain the same for every selected track. The exceptions are in the <span class = 'key'>&minus;</span> and <span class = 'key'>&plus;</span> keys, which cover legato and swing, depending on what track is selected.
             </p>
 
@@ -250,7 +246,7 @@
 
         <hr>
         <section>
-            <h2>4. FX mode</h2>
+            <h2 class = 'mode'>4. FX mode</h2>
             <p>The final mode is the "punch-in" FX mode. These are effects<label for="sn-015" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-015" class="margin-toggle"/><span class="sidenote">The types of effects available may vary between <i>Data Operator</i> versions, to suit the instrument design and composition style. Slow down and speed up effects are however, expected to be a consistently present and tied to the <span class = 'key'>&minus;</span> and <span class = 'key'>&plus;</span>.</span> that are applied only for the duration that each FX button is held down (alongside the FX mode button). FX are applied to the selected track (A to C) or to the entire MIX (if that is selected). They are a really fun and interactive way to flavour the data sonification to your liking! And as a bonus, multiple punch-in FX can be applied at the same time for even crazier results!!
             </p>
 
@@ -264,7 +260,6 @@
 
 <!-- STYLES-->
 <style>
-
     .subtitle-block{
         font-size:          x-small;
         display:            flex;
@@ -279,7 +274,12 @@
     h1{
         margin-block-start: 0;
     }
-
+    h2.mode{
+        /* color:              var(--col-highlight); */
+    }
+    h3{
+        margin-top:         10vh;
+    }
     li.arrow-marker::marker{
         content:     "→   "
     }
@@ -288,6 +288,6 @@
     }
     .mode-label{
         text-transform:     uppercase;
-        font-style: italic;
+        font-style:         italic;
     }
 </style>

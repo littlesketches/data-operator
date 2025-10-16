@@ -2,7 +2,7 @@
 <script>
     // Libs and utils
 	import { fade }         from 'svelte/transition';
-
+    import { onMount }      from 'svelte';
     // Components
     import TopPanel         from "./ui/TopPanel.svelte";
     import Display          from "./display/Display.svelte";
@@ -44,6 +44,14 @@
         }
     }
 
+    // Fade out
+    onMount( () => {
+        setTimeout(() => {
+            const buttons = document.querySelectorAll('.info-button');
+
+            buttons.forEach(button =>  button.classList.add('fade') );
+        }, 2500);
+    })
 </script>
 
 
@@ -57,7 +65,6 @@
         <Display {model}/>
         <PadUI {model}/>
     </div>
-    
     <div class="guide-button info-button"         data-type ='quickStart'   onclick={handle.toggleGuide} tabindex=-1></div>
     <div class="sonification-button info-button"  data-type ='sonification' onclick={handle.toggleGuide} tabindex=-1></div>
 </div>
@@ -120,6 +127,9 @@
     }
 
     /* Info buttons */
+    .info-button__wrapper{
+        position:           relative;
+    }
     .info-button{
         position:           absolute;
         display:            flex;
@@ -135,17 +145,49 @@
         border-radius:      0 0.5vh 0.5vh 0;
         z-index:            11;        
     }
+    .fade.info-button::after{
+        opacity:            0
+    }
     .mobile  .info-button{
         display:            none;
+    }
+    .info-button::after{
+        font-family:        'Orbit';
+        position:           absolute;
+        top:                50%;
+        left:               0%;         /* position to the right */
+        transform: translateY(-50%);
+        margin-left:        1vh;
+        opacity:            1;
+        color:               #fff;
+        padding:             0.3em 0.6em;
+        font-size:          1.25vh;
+        white-space:        nowrap;
+        animation:          showThenFade 2s ease-in-out forwards;
+        transition:         all 500ms;
+    }
+
+
+    .info-button:hover::after {
+        opacity:            1;
+        animation:          none;
     }
 
     .guide-button{
         top:                3.5vh;     /* distance from the top */
     }
+    .guide-button::after{
+        content:            "← Quick start guide";
+    }
+
+
+
     .sonification-button{
         top:                12vh;     /* distance from the top */
     }
-
+    .sonification-button::after{
+        content:            "← Sonification notes";
+    }
     /**
      *   THEMES
      */

@@ -187,25 +187,29 @@
     <g class = ''>
         <foreignObject x = "65" y = "280" width= "200" height="310">
             <div class="content users"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Users can be anyone: from casual users with limited or no domain knowledge; or those with deep domain knowledge. To bridge this breadth of user Data Operator is designed for the two extremes:</p>
+                <p>Users can be anyone: from casual users with limited or no domain knowledge; or those with deep domain knowledge. To bridge this breadth of user Data Operator is designed for the extremes:</p>
                 <ol>
                     <li>A 'play first' user who isn't particularly aware or is interested in the data. Potentially, these users may become more interested in what the data represents; and</li>
                     <li>Domain experts who are open to a novel approach to representing data they are familiar with (but by nature of the data sources being used, is likely to be quite 'basic' to their eyes). The Data Operator is not targeted at domain experts looking for specific analytical insights. </li>
                 </ol>
-                <p>Alternatively (and more generically), the targeted Data Operator is one how is open to new idea and approaches to exploring data, i.e. an 'elastic mind'.</p>
-                <p>It is acknowledged that most users are 'on the spectrum', however the interface goal of engaging the user to explore and play, is considered a priority over the 'context' of the data. Further work to add/use the Data Operator platform in a 'storytelling' environment would take a more targeted approach to 'users'. 
-                </p>
 
+                <p>Alternatively (and more generically), the targeted Data Operator user is one who is open to new ideas and approaches to exploring data.</p>
+
+                <p>Note: the interface goal of engaging the user to 'explore and play' is prioritised over explaining the 'context' of the data. Further work to add/use the Data Operator platform in a 'storytelling' environment would take a more targeted approach to 'users'. 
+                </p>
             </div>
         </foreignObject>
 
         <foreignObject x = "310" y = "280" width= "200" height="310">
             <div class="content goals"  xmlns="http://www.w3.org/1999/xhtml">
                 <p>The primary goal of the Data Operator is to use sonification as a means to create a tool for 'thought and expression'.</p>
+
                 <p>By 'thought', we mean to think about: the behaviours exhibited in the data (e.g.  observed patterns, trends and comparisons and correlations); and how to select, control and manipulate that data to hear/see changes. 
                 </p>
+
                 <p>By 'expression', we mean that users learn to 'play' the system to their (audible) liking. This in itself is of course, not a 'worthy' data pursuit. But we think there may be some merit in 'training the ear' to be sensitive to data changes.</p>
-                <p>Ultimately, at least on the surface, the Data Operator is more aimed at (novel) communication and advocacy: to engage users with data. Again, further work to add/use the Data Operator platform in a 'storytelling' environment would help to gear the sonification towards explanation.</p>
+
+                <p>Ultimately, at least on the surface, the Data Operator is aimed at (novel) communication and advocacy: to engage users with data. Again, further work to add/use the Data Operator platform in a 'storytelling' environment would help to gear the sonification towards explanation.</p>
 
             </div>
         </foreignObject>
@@ -255,19 +259,22 @@
 
         <foreignObject x = "790" y = "690" width= "280" height="240">
             <div class="content causal"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Causal to go here. </p>
+                <p>In a data-sense, there is no intent for users to link sound to the underlying data context. However as an interactive 'instrument', users are expected to make linkages between patterns in data and the sounds they are mapped to: this is achieved by through the interactive features that allow data series and data 'scenes' (and their mappings) to be cycled through during playback.</p>
             </div>
         </foreignObject>
 
         <foreignObject x = "1110" y = "690" width= "280" height="240">
             <div class="content semantic"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Semantic to go here. </p>
+                <p>The timing of events and frequency mapped data imply a degree of semantic encoding that is intended to be directly decoded by the user with the assistance of visually synced charts and animation. Other parameter mapping types - particularly dynamics (volume) and filter settings may also be decoded, but are more subtle in nature and are considered to be secondary layers in the sonification.
+                </p>
             </div>
         </foreignObject>
 
         <foreignObject x = "1428" y = "690" width= "280" height="240">
             <div class="content reduced"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Reduced to go here. </p>
+                <p>The user is expected to focus on multiple layers of sound, all mapped to data parameters. The user is able to using 'mixing' tools to mute and solo tracks to focus on specific data series of interest.</p>
+                <p>The Data Operator is designed around a (set of) looping sequence(s) which means that the playback of repeating, interlocking patterns, is at the heart of listening experience.  
+                </p>
             </div>
         </foreignObject>
 
@@ -286,11 +293,11 @@
         <foreignObject x = "420" y = "720" width= "330" height="210">
             <div class="content narrative"  xmlns="http://www.w3.org/1999/xhtml">
                 <p>The (explicit) narrative element of (basic) Data Operator is limited. This is expected to be extended by a narrative-focused "Composition" component that would be narrative focused. </p>
+
+                <p>NOTE: The initial of the Data Operator does not fit particularly well on a "Analytical-Narrative" spectrum. This is somewhat 'by design' as seperate extensions or 'plug-ins' to cater for these focuses are planned. </p>
             </div>
         </foreignObject>
-
     </g>
-
 </svg>
 
 

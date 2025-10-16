@@ -208,7 +208,7 @@ export class DataSonification extends Sonification{
             this.state.selection.group.A.pitchPattern = randomItem(this.schema.group.A.pitch.series)
             this.state.selection.group.B.pitchPattern = randomItem(this.schema.group.B.pitch.series)
 
-            // i. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
+            // ii. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
             this.state.selection.group.A.euclideanArray = rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
             this.state.selection.group.B.euclideanArray = rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
             this.state.selection.group.C.part["1"].euclideanArray = rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)

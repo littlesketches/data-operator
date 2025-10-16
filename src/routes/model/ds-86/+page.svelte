@@ -6,7 +6,10 @@
 <section class = 'do-model-page__container'>
     <div class = 'do-model-page__wrapper'>
         <div class = 'do-model-page__title-block'>
-            <h1 class = 'do-header'>データオペレーター</h1>
+            <div class ='do-header__container' >
+                <div class = 'button'><a href = '/'>&larr;</a></div>
+                <h1 class = 'do-header'>データオペレーター</h1>
+            </div>
             <h1 class = 'model-header'>DS-86</h1>
         </div>
 
@@ -17,7 +20,15 @@
         <ul class = 'do_model-page__menu'>
             <a href = "/model/ds-86/operator">
                 <li class = 'operator'>
-                    <h3 class = 'menu-title'>Operator</h3> 
+                    <div class = 'wrapper'>
+                        <div>
+                            <h2>DS-86</h2>
+                            <h3 class = 'menu-title'>+ Operator</h3> 
+                        </div>
+                        <div class = 'arrow'>
+                            &rarr;
+                        </div>
+                    </div>
                 </li>
             </a>
             <!-- <a href = "/model/cw-193/dfam">
@@ -45,98 +56,6 @@
 </section>
 
 <!--STYLE-->
-<style>
-    strong{
-        font-weight: 600;
-    }
-    
-    /* DATA OPERATOR: MODEL HOMEPAGE */
-    section.do-model-page__container{
-        /* z-index:                1000; */
-        display:                flex;
-        width:                  100%;
-        justify-content:        center;
-        line-height:            1.5;
-        height:                 10dvh;
-    }
-
-    .do-model-page__wrapper{
-        width:                  100%;
-        max-width:              720px;
-        margin:                 10vh 5vh 2.5vh;
-    }
-
-    /** Title block*/    
-    .do-model-page__title-block{
-        /* display:                flex; */
-        justify-content:        space-between;
-        align-items:            center;
-    }
-
-    .do-model-page__container h1{
-        margin-block-start:     0;
-        margin-block-end:       0;
-        line-height:            1;
-    }
-    .do-model-page__container .model-header{
-        font-size:              8vh;
-    }
-    .do-model-page__container .do-header{
-        font-size:              2.5vh;
-    }
-    
-    /** Intro block /*/
-    .do-model-page__content{
-        margin:                 5vh 0;
-    }
-    .do-model-page__content .note{
-        font-size:              small;
-        font-style:             italic;
-        text-align:             end;
-    }
-    /* Edition/version menu */
-    ul.do_model-page__menu {
-        display:                grid;
-        grid-template-columns:  1fr 1fr 1fr;
-        grid-auto-flow:         column;     
-        grid-auto-columns:      1fr; 
-        gap:                    2vh;                  
-        list-style:             none;
-        margin:                 0;
-        padding:                0;
-        width:                  100%;
-    }
-    .do_model-page__menu a{
-        text-decoration:        none;
-    }
-    .do_model-page__menu li{
-        aspect-ratio:           1 / 1;
-        background:             #000;
-        color:                  #fff;
-        display:                flex;
-        padding:                1.5vh;
-        font-weight:            700;
-        font-size:              1.5vh;
-        text-transform:         lowercase;
-        transition:             all 500ms;
-    }
-    .do_model-page__menu li h3{
-        margin-block-start:     0;
-        margin-block-end:     0;
-    }
-
-    .do_model-page__menu li:hover.operator{
-        background:            var(--col-operator-highlight);
-    }
-    .do_model-page__menu li:hover.dfam{
-        background:            var(--col-dfam-highlight);
-    }
-    .do_model-page__menu li:hover.ambi{
-        background:
-            linear-gradient(rgb(168, 53, 188), transparent),
-            linear-gradient(to top left, rgb(209, 207, 45), transparent),
-            linear-gradient(to top right, rgb(10, 178, 184), transparent);
-        background-blend-mode: screen;
-    }
-
-</style>
+<svelte:head>
+    <link  rel='stylesheet' href='/css/module/data-operator/model-home.css'>
+</svelte:head>
