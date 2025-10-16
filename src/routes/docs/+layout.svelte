@@ -36,7 +36,7 @@
         <li class = 'menu-item' class:active={docRoute === 'operator-design'}>
             <a href = '/docs/operator-design'>Design</a>
         </li>
-        <li class = 'menu-item' class:active={docRoute === 'sonification'}>
+        <li class = 'menu-item hide' class:active={docRoute === 'sonification'}>
             <a href = '/docs/sonification'>Sonification</a>
         </li>
     </ul>
@@ -53,6 +53,9 @@
 </svelte:head>
 
 <style>
+    .hide{
+        display:            none;
+    }
     /* Navigation */
     nav{
         padding:            1rem 0;

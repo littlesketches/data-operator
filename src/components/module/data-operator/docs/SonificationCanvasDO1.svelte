@@ -125,15 +125,16 @@
             <tspan x="0" y="8.4">Iconic: is sound similar to the phenomenon you want to represent?</tspan>
             <tspan x="0" y="16.8">Symbolic: is sound arbitrarily related to the phenomenon you want to represent?</tspan>
             <tspan x="0" y="42">e.g.</tspan>
-            <tspan x="0" y="50.4">Indexical: the intensity of rain is detected by listening to the sound it emits.</tspan>
-            <tspan x="0" y="58.8">Iconic: the intensity of rain is mimicked by the sound of rice grains falling on a surface.</tspan>
+            <tspan x="0" y="50.4">Indexical: the intensity of rain is detected by listening to the sound it emits.</tspan>  
+            
+            <!-- <tspan x="0" y="58.8">Iconic: the intensity of rain is mimicked by the sound of rice grains falling on a surface.</tspan>
             <tspan x="0" y="67.2">Symbolic: the intensity of rain is represented by the sound of different musical instruments.</tspan>
             <tspan x="0" y="192">e.g. when you tap a container and the sound it</tspan>
             <tspan x="0" y="200.396">makes give you information on how full it is.</tspan>
             <tspan x="239" y="181.993">e.g. when you need to apply Morse code to decipher</tspan>
             <tspan x="239" y="190.393">the message contained in a sound</tspan>
             <tspan x="479" y="181.993">e.g. when we distinguish the interval between two</tspan>
-            <tspan x="479" y="190.393">notes or the pitch of a bridsong.</tspan>
+            <tspan x="479" y="190.393">notes or the pitch of a bridsong.</tspan> -->
         </text >
 
         <text class ='section-header' transform="matrix(1 0 0 -1 593.2412 296.3794)">
@@ -175,10 +176,6 @@
             <path fill="none" stroke="#000" stroke-miterlimit="10" stroke-width=".75" d="M553 251H50c-2.209 0-4 1.791-4 4s1.791 4 4 4h503c2.209 0 4-1.791 4-4s-1.791-4-4-4Z" />      
         </g>
 
-
-
-
-
         <text class = 'point-text' transform="matrix(1 0 0 -1 1174.4507 20.3877)">
             Lenzi S. and Ciuccarelli P.
         </text>
@@ -190,49 +187,69 @@
     <g class = ''>
         <foreignObject x = "65" y = "280" width= "200" height="310">
             <div class="content users"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Users to go here. </p>
+                <p>Users can be anyone: from casual users with limited or no domain knowledge; or those with deep domain knowledge. To bridge this breadth of user Data Operator is designed for the two extremes:</p>
+                <ol>
+                    <li>A 'play first' user who isn't particularly aware or is interested in the data. Potentially, these users may become more interested in what the data represents; and</li>
+                    <li>Domain experts who are open to a novel approach to representing data they are familiar with (but by nature of the data sources being used, is likely to be quite 'basic' to their eyes). The Data Operator is not targeted at domain experts looking for specific analytical insights. </li>
+                </ol>
+                <p>Alternatively (and more generically), the targeted Data Operator is one how is open to new idea and approaches to exploring data, i.e. an 'elastic mind'.</p>
+                <p>It is acknowledged that most users are 'on the spectrum', however the interface goal of engaging the user to explore and play, is considered a priority over the 'context' of the data. Further work to add/use the Data Operator platform in a 'storytelling' environment would take a more targeted approach to 'users'. 
+                </p>
+
             </div>
         </foreignObject>
 
         <foreignObject x = "310" y = "280" width= "200" height="310">
             <div class="content goals"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Goals to go here. </p>
+                <p>The primary goal of the Data Operator is to use sonification as a means to create a tool for 'thought and expression'.</p>
+                <p>By 'thought', we mean to think about: the behaviours exhibited in the data (e.g.  observed patterns, trends and comparisons and correlations); and how to select, control and manipulate that data to hear/see changes. 
+                </p>
+                <p>By 'expression', we mean that users learn to 'play' the system to their (audible) liking. This in itself is of course, not a 'worthy' data pursuit. But we think there may be some merit in 'training the ear' to be sensitive to data changes.</p>
+                <p>Ultimately, at least on the surface, the Data Operator is more aimed at (novel) communication and advocacy: to engage users with data. Again, further work to add/use the Data Operator platform in a 'storytelling' environment would help to gear the sonification towards explanation.</p>
+
             </div>
         </foreignObject>
 
         <foreignObject x = "550" y = "280" width= "200" height="310">
             <div class="content context"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Context to go here. </p>
+                <p>This is a web application that can be played on personal devices (phones, tables and computers), either through speakers or with headphones. Accordingly, it is aimed at personal use or for 'performance' (to a an audience). </p>
+                <p>The 'models' of the Data Operator used different datasets that vary on geographical scale (e.g. some include country-level data that can be compared). This affords some opportunity for cultural contexts and sonification parameter mapping (e.g. application of Euclidean rhythms, based on Toussaint's study of world rhythms). Currently however, this is not explored/implemented.
+                </p>
             </div>
         </foreignObject>
 
         <foreignObject x = "790" y = "230" width= "440" height="140">
             <div class="content types-of-sounds"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Types of sounds to go here. </p>
+                <p>Sounds used are virtual musical instruments: either synthesized in the browser or come from sampled acoustic or electronic instruments, with 'typical' audio effects included. This is all done in real-time all via webAudio API, using the Strudel library/engine, which affords interactivity.
+                </p>
+                <p>The choice of sounds is orientated towards creating familiar styles and genres of music, however all types of sounds and experimental styles can be supported.
+                </p>
             </div>
         </foreignObject>
-
-        <foreignObject x = "790" y = "475" width= "440" height="115">
-            <div class="content functions"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Functions of sounds to go here. </p>
-            </div>
-        </foreignObject>
-
         <foreignObject x = "1270" y = "230" width= "440" height="140">
             <div class="content behaviour"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for behaviour to go here. </p>
+                <p>Behaviours are specific to each Data Operator 'model' but generally include:</p>
+                <ul>
+                    <li>Pitch/frequency: used for at least two and often three instruments as note/chord sequences</li>
+                    <li>Dynamics: used across multiple instruments to create variation in volume (note velocity). In some cases, this is also used to affect envelope parameters for amplitude, pitch and filter </li>
+                    <li>Timbre: used across multiple instruments as modulation sources to create variations in timbre (e.g. mapping data patterns to filter cutoff and resonance)</li>
+                </ul>
+                <p>Data mapped to tonal instruments are also differentiated aggregated (scaled) to different musical timings, and used together with a clock divider. Chords for example, are aggregated to longer intervals and played at a slower rate, mimicking a chord progression.</p>
             </div>
         </foreignObject>
 
         <foreignObject x = "790" y = "475" width= "440" height="115">
             <div class="content functions"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Functions of sounds to go here. </p>
+                <p>The functions are all symbolic and mapped to virtual instruments. Instruments used are differentiated by tonality vs atonality (i.e. percussive sounds);  frequency range (e.g. monophonic lead an bass sequencers) and harmonic content (e.g. pads/drones/chords). </p>
+           
+                <p>A clock divider (that can be set by the user) is available for instruments (and is shown visually) as a way to create 'space' and rhythm in the compositions.</p>
             </div>
         </foreignObject>
 
         <foreignObject x = "1270" y = "455" width= "440" height="135">
             <div class="content multi-modality"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for multi-modality to go here. </p>
+                <p>Sound is coupled with data driven-visuals &mdash; charts and visual illustration &mdash; that include animated components are synced to the timing of the music. On computers, a further animated sound wave illustration is presented as a background visual.</p>
+                <p>The overriding idea here is that this data sonification is designed to  accompanied by data visualisation.</p>
             </div>
         </foreignObject>
 
@@ -256,13 +273,19 @@
 
         <foreignObject x = "65" y = "720" width= "330" height="210">
             <div class="content analytical"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Analytical to go here. </p>
+                <p>Data values from a range of (<u></u>ser selectable) data series is what is being represented by sound. These values are (mostly) however, aggregated to musically-suitable intervals (e.g. 16steps/16n, 8n, 4n, 2n and 1m ) for mapping/quantization to conventional music time.
+                </p>
+                <ul>
+                    <li>Mapping to note frequency (pitch) is also scaled to musical scale degrees, which are then transformed by a (user selected) musical scale (that can also be transposed).</li>
+                    <li>Mapping to other note parameters (e.g. velocity) is unquantized but scaled to the appropriate range</li>
+                    <li>More subtle data representations can include using data to set modulation ranges (i.e. for LFOs controlling parameters like filter cutoff, resonance etc.), at slower clock rates to introduce subtle and smooth timbral changes.</li>
+                </ul>
             </div>
         </foreignObject>
 
         <foreignObject x = "420" y = "720" width= "330" height="210">
             <div class="content narrative"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Response for Narrative to go here. </p>
+                <p>The (explicit) narrative element of (basic) Data Operator is limited. This is expected to be extended by a narrative-focused "Composition" component that would be narrative focused. </p>
             </div>
         </foreignObject>
 
@@ -320,18 +343,24 @@
     }
 
     foreignObject div{
-        background:     aqua;
         height:         100%;
         overflow:       auto;
     }
 
     .content,
+    .content ol,
+    .content ul,
     .content p{
-        line-height:    1;
-        font-size:      10px;
+        line-height:    1.1;
+        font-size:      9px;
         font-weight:    600;
         margin-block-start: 0;
+        margin-block-end: 0.5rem;
         color:      #000;
-    }
 
+    }
+    .content ol,
+    .content ul{
+        padding-inline-start: 1rem;
+    }
 </style>

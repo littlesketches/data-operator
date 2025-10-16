@@ -26,7 +26,7 @@ export const keyguide = {
             group:  'Select<br>#5'
         },
         6: {
-            master: '<br>Scale<br>root<br>+',
+            master: 'Scale<br>root<br>+',
             group:  'Select<br>#6'
         },
         7: {
@@ -38,7 +38,7 @@ export const keyguide = {
             group:  'Select<br>#8'
         },
         9: {
-            master: '<br>Scale<br>type<br>+',
+            master: 'Scale<br>type<br>+',
             group:  'Select<br>#9'
         },
         0: {
@@ -88,8 +88,8 @@ export const keyguide = {
             group:  'Scale<br>type<br>-'
         },
         9: {
-            master: '<Scale<br>type<br>+',
-            group:  '<Scale<br>type<br>+'
+            master: 'Scale<br>type<br>+',
+            group:  'Scale<br>type<br>+'
         },
         0: {
             master: 'Select<br>MIX',

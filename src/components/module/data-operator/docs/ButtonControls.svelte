@@ -3,7 +3,9 @@
     let {isAside = false} = $props() 
 </script>
 
-    <p>There are a few different ways you can use the buttons on the <i>Data Operator</i>. If you're on a mobile device, you don't get much choice, what you see on your little screen is what you get. If however, you're on a device with a keyboard attached, you'll be able to use various keys to control/mirror the buttons on the <i>Data Operator</i>. You'll notice that on a full sized keyboard, the <i>Data Operator</i> layout resembles the numpad section: they controls are (nearly) mapped 1 to 1: 
+    <p>There are a few different ways you can use the buttons on the <i>Data Operator</i>. If you're on a mobile device, you don't get much choice, what you see on your little screen is what you get. This is the most natural way to play the <i>Data Operator</i> &mdash; by holding it a using your hands and thumbs to play it!
+    </p>
+    <p>If you're using a device with a keyboard attached, you can use various keys to control/mirror the buttons on the <i>Data Operator</i><label for="sn-B" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-B" class="margin-toggle"/><span class="sidenote">Although it may not seem as intuitive as a touchscreen, a mechanical does provide a very tactile response that is much more similar to MIDI keyboards and controllers.</span>. On a full sized keyboard, the <i>Data Operator</i> layout resembles the numpad section: they controls are (nearly) mapped 1 to 1: 
     </p>
 
     <div class = 'pad__container'>
@@ -31,13 +33,13 @@
         </div>
     </div>
 
-
     <p>On any keyboard (including laptops), an alternative 'pad' of keys can be used:</p>
 
     <div class = 'pad__container'>
         <div class = 'pad-aside'>
             With these pad, you can try using the <span class = 'keyboard'>Return</span> keys for <span class = 'key'><span class="material-symbols-outlined">function</span></span>, either <span class = 'keyboard'>Shift</span> keys for <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the keys for <span class = 'keyboard'>,</span> and  <span class = 'key'>&sdot;</span>, respectively.
         </div>
+
         <div class = 'keypad pad'>
             <div class = 'pad-button'>Q</div>
             <div class = 'pad-button'>W</div>
@@ -54,14 +56,11 @@
             <div class = 'pad-button'>C</div>
 
             <div class = 'pad-button zero numpad'>alt/option</div>
-
         </div>
     </div>
 
-    <p>For clarity, the both<label for="sn-A" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-A" class="margin-toggle"/><span class="sidenote">It should mentioned that the standard row of keyboard number keys with - and + also work. We dont' generally recommend the number row however, as they don't visually map well to the 'pad'.</span>  sets of mappings are available at the same time on keyboards. This is so that you can find your most comfortable and preferred set of shortcuts. It's confusing at first, but with a bit button mashing and practice, you'll soon figure it out!
+    <p>For clarity, the both<label for="sn-B" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-B" class="margin-toggle"/><span class="sidenote">It should mentioned that the standard row of keyboard number keys with - and + also work. We don't generally recommend the number row however, as they don't visually map well to the 'pad'.</span> sets of mappings are available at the same time. Its up to you to work out what works best for you! And yes, it's confusing at first, but with a bit button mashing and practice, you'll soon figure it out!
     </p>
-
-    <p>And finally, there's one additional set of shortcut 'pads' that work with the 4x4 grid used in the pulse sequencer (explained below)</p>
 
 
 <!-- STYLES-->
@@ -76,7 +75,6 @@
         line-height: 2;
         font-style: italic;
     }
-
 
     .pad{
         display: grid;

@@ -2,6 +2,7 @@
 <script>
     // Libs and utils
 	import { fade } from 'svelte/transition';
+    import ButtonControls from './ButtonControls.svelte';
 
     // Props
     let {isSideGuide = false} = $props()
@@ -44,19 +45,12 @@
 
         <section class = 'aside'>
             <hr>
-            <h3>An aside: device controls</h3>
-
-            <p>Before we go on, its worth mentioning the different ways you can use the buttons on the <i>Data Operator</i>. If you're on a mobile device, you don't get much choice, what you see on your little screen is what you get. If however, you're on a device with a keyboard attached, you'll be able to use various keys to control/mirror the buttons on the <i>Data Operator</i>. You'll notice that on a full sized keyboard, the <i>Data Operator</i> layout resembles the numpad section: they controls are basically mapped 1:1, with the <span class = 'keyboard'>Shift</span> key equivalent to <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the adjacent <span class = 'keyboard'>&rarr;</span> key being <span class = 'key'>&times;</span>.
-            </p>
-            <p>On any keyboard (including laptops), both the row of number and -/+ keys and pad formed around keys <span class = 'keyboard'>q</span> to  <span class = 'keyboard'>r</span>, <span class = 'keyboard'>a</span> to <span class = 'keyboard'>f</span>, and <span class = 'keyboard'>z</span> to <span class = 'keyboard'>c</span> + <span class = 'keyboard'>alt/option</span> can be used in place of the number pad.</p>
-
-            <p>For the mode buttons (that we're just about to get to) the <span class = 'keyboard'>Return</span> key is always <span class = 'key'><span class="material-symbols-outlined">function</span></span>, while <span class = 'keyboard'>.</span>  is <span class = 'key'>&sdot;</span>  and <span class = 'keyboard'>,</span>  is <span class = 'key'>&times;</span>. It's confusing at first, but with a bit button mashing and practice, you'll soon figure it out!
-            </p>
-            <p>A full list of shortcut keys is available in the <a href ='/docs/user-manual' target = '_blank'>user manual</a>. With that out of the way, let's move on...</p>
-            <hr>
+            <h3>An aside: finding controls</h3>
+            <ButtonControls/>
         </section>
-
+    <hr>
         <section>
+            <p>Back to the guide...</p>
             <ol start="4">
                 <li>
                     <p><strong>Hold down each of the four (performance) "mode" buttons, one at a time, and see what happens</strong>: these mode buttons are distinguished by an inner circle around their label and wrap around bottom and lower right of the number pad. Notice that when you hold them down, labels telling you what the other buttons do will appear. This is how we get deeper into the features and controls in the Data Operator. The details can be found in the <a href ='/docs/user-manual' target = '_blank'>user manual</a> but very quickly:</p>

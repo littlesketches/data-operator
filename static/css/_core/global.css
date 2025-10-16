@@ -1,3 +1,6 @@
+:root{
+    --col-highlight:        #f15a22;
+}
 body{
     margin:             0;
     font-weight:        300;

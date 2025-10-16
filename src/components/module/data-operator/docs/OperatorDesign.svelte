@@ -22,25 +22,30 @@
         <section>
             <h2>Towards a Data instrument</h2>
             <blockquote>
-                <p>The <i>Data Operator</i> is a sonification tool that <strong>makes data fun to play with</strong>. It  features a quirky interface &mdash; filled with large buttons and a small but action-packed screen &mdash; that invite users to learn how to transform data into delightful musical compositions. The <i>Data Operator</i> is a noise making device, designed in the spirit of an electronic musical instrument.
-                </p>
-                <!-- <footer>&mdash; Towards a data instrument?</footer> -->
+                <p>The <i>Data Operator</i> is a sonification tool that <strong>makes data fun to play with</strong>. It  features a quirky interface &mdash; filled with large buttons and a small but action-packed screen &mdash; that invites users to learn how it operates, and how to turn data into patterns and musical compositions. The <i>Data Operator</i> is a noise making device with audio and visual feedback; designed in the spirit of an electronic musical instrument.</p>
             </blockquote>
+<!-- 
+            <p>At a deeper level, the <i>Data Operator</i> is a tool that encourages users:</p>
+            <ul>
+                <li>to play with and learn how complicated (data/modelled) systems behave;</li>
+                <li>to think creatively about how they want a system to behave; </li>
+                <li>to express and share their ideas .</li>
+            </ul>  -->
+
         </section>
 
         <hr>
         <section>
             <h2>About these design notes</h2>
-            <p>These notes document the design and technical implementation of the Data Operator. They have been broken into areas that on first glance, seem loosely connected. However they are presented this way because during the design journey of the <i>Data Operator</i>, it quickly became apparent that each of these areas places limitations on one another, which ultimately shaped the design of the Data Operator. 
+            <p>These ramblings document the design and technical implementation of the Data Operator. They have been broken into six concepts and areas that may seem loosely connected, but were found to places limitations on one another: Ultimately, these compromises shaped the design of the Data Operator. 
             </p>
 
             <ol>
-                <li>User mindset: instant fun</li>
-                <li>Play anywhere: multiple device support</li>
-                <li>Instrument approach</li>
-                <li>Data & data models</li>
-                <li>Sonification approach</li>
-                <li>Audio engine</li>
+                <li>Instant fun</li>
+                <li>Play anywhere</li>
+                <li>Learn like an instrument</li>
+                <li>Strudel sounds + sharing</li>
+                <li>Data & data sonification</li>
             </ol>
 
         </section>
@@ -65,7 +70,7 @@
 
         <hr>
         <section>
-            <h2>2. Play anywhere: multiple device support</h2>
+            <h2>2. Play anywhere</h2>
             <p>The <i>Data Operator</i> is designed to be playable on all (major browser-based) devices: mobile, table, and laptop/desktop computers. The ability to play with a <i>Data Operator</i> comfortably 'on-the-go' (i.e. on a mobile phone), is a primary goal and closely linked to #1 (fun!). The maximum number of buttons that can be supported by mobile touchscreen devices is a 4x4 grid.
             </p>
             <ul>
@@ -80,7 +85,7 @@
 
         <hr>
         <section>
-            <h2>3. Instrument approach</h2>
+            <h2>3. Learn an instrument</h2>
             <p>In the spirit of musical instruments design, the <i>Data Operator</i> is meant to be played with an <i>learned</i>. To naturally build on the  'instant fun' mantra, a 'moderate but shallow' learning curve is designed for<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">The <i>Data Operator</i>  takes design inspiration from the lovable Teenage Engineering <a href = 'https://teenage.engineering/products/po' target = '_blank'>Pocket Operator</a> and <a href ="https://teenage.engineering/products/ep-133">EP</a> series of instruments.</span>. This is an important UX concept as it allows for interface depth and a raft of musical features that are critical to design of the <i>Data Operator</i> as an 'active' instrument, capable of more than just playback..
             </p>
             <ul>
@@ -93,11 +98,38 @@
 
         <hr>
         <section>
-            <h2>4. Data & data models</h2>
+            <h2>4. Strudel sounds & sharing </h2>
+            <p>The <i>Data Operator</i> platform has been developed around the brilliant <a href = 'https://strudel.cc/learn/getting-started/' target ="_blank">Strudel</a> live coding audio engine. This provides convenient access to powerful audio synthesis and sample playback tools, audio processing effects, and musical tools that are well suited parameter mapping (modelled) data to audio instrument parameters. Strudel naturally supports 'stacking' sound patterns to produce 'full' multi-track compositions.
+            </p>
+            <p>The notable limitation of using Strudel in the <i>Data Operator</i>is that is built around a cycle/loop of music. This means: </p>
+            <ul>
+                <li>Functionality needs to be developed on top of Strudel to enable animation synchronisation (i.e. an event callback)<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">These features are included in a core Class within the <i>Data Operator</i> source code, but are expected to be made more robust and sophisticated in the future.</span>.</li>
+                <li>Functionality needs to be developed on top of Strudel to support (time-dependent) layering and/or automation of track parameters<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">This is the <strong>Composition</strong> feature of the <i>Data Operator</i> which is present but under/not utilised in the initial <i>Data Operator</i> series</span>.</li>
+                <li>It is not feasible to add a 'playable' instrument in Strudel (e.g. controlled via a MIDI keyboard).<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">Technically this is probably possible, but it is not a documented feature at the time of development.</span></li>
+            </ul>
+            <p>The core UI of <a href = 'https://strudel.cc/learn/getting-started/' target ="_blank">Strudel</a> is the <a href = 'https://strudel.cc/' target = '_blank'>REPL-based interface</a>. This is not used in the <i>Data Operator</i> interface, however REPL allows for code to be extracted from the <i>Data Operator</i> that can be played in the public REPL, which:</p>
+            <ul>
+                <li>Allows users save the data sonificaton they are currently playing (i.e. including their selections and musical tweaks) </li>
+                <li>Allows users to generate a REPL-link that contains their current sonification, which can be shared with others<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">This feature provides a viable pathway fo social and even collaborative features to be added the the <i>Data Operator</i> </span>. </li>
+            </ul>
 
-            <p> </p>
+        </section>
 
-            <p>Each <i>Data Operator</i> starts with data. This data can be static, or a stream, or be part of a model or simulation that that the <i>Data Operator</i> can be hooked into (i.e. as a data model controller). The primary role of the Data Operator, is to then map incoming data, to parameters of its internal instruments and sound patterns, to produce music. The interface of the <i>Data Operator</i> then allows users to use a set of music-related tools to explore and <i>play with</i> the source data: controlling and manipulating the data sonification on-the-fly, in real-time. </p>
+        <hr>
+        <section>
+            <h2>5. Data & data sonification</h2>
+
+            <p>Although the <i>Data Operator</i> is built around the concept of a data sonification and the core building block that is the data that represents, the <i>Data Operator</i> as a 'platform' is designed to be agnostic to the data and data sonification approach. Or perhaps more accurately:</p>
+
+            <ul>
+                <li>Data is expected to be shaped (via Data Models) into forms and formats that make it easy to map data parameters to (the most common and useful) sound parameters<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">This initial <i>Data Operator</i> models use time series data which is a natural fit for playing sound across time (i.e. time is scaled to musical time).</span>.
+                </li>
+                <li>The sonification choice of <strong>parameter mapping</strong> is fixed.</li>
+            </ul>
+
+            <p>To complete the <i>Data Operator</i> design documentation, the <a href = 'https://sonification.design/about.html' target ="_blank">Data Sonification Canvas</a> developed by Sara Lenzi and Paolo Ciuccarelli, has been used below as a tool for reflection and prompting future ideas:</p>
+
+            <!-- <p>Each <i>Data Operator</i> starts with data. This data can be static, or a stream, or be part of a model or simulation that that the <i>Data Operator</i> can be hooked into (i.e. as a data model controller). The primary role of the Data Operator, is to then map incoming data, to parameters of its internal instruments and sound patterns, to produce music. The interface of the <i>Data Operator</i> then allows users to use a set of music-related tools to explore and <i>play with</i> the source data: controlling and manipulating the data sonification on-the-fly, in real-time. </p>
 
             <p>With <i>Data Operator</i> basically get one looping  bar of music (a 'cycle' with 16-step) to sequence and jam with, using (up to) 5 tracks for instruments and sounds. It doesn't sound like much, but you can make a hell of racket with this little setup. The input data will generally be chosen and modelled with multiple data series can be swapped in and out of the <i>Data Operator</i>. The standard approach is to have 10 data series or sound patterns and available per track, which is 100,000 combinations per for every 'slice' of data, known as a 'scene'. And most data sets chosen have dozens or hundreds (or more) scenes available!
             </p>
@@ -112,33 +144,7 @@
             </ul>
             
             <p>Of course, the goals and design of the <i>Data Operator</i> differ significantly from the <a href = 'https://strudel.cc/' target = '_blank'>REPL-based Strudel interface</a>
-            </p>          
-        </section>
-
-        <hr>
-        <section>
-            <h2>5. Sounds & sharing Audio engine</h2>
-            <p>The <i>Data Operator</i> platform has been developed around the brilliant <a href = 'https://strudel.cc/learn/getting-started/' target ="_blank">Strudel</a> live coding audio engine. This provides convenient access to powerful audio synthesis and sample playback tools, audio processing effects, and musical tools that are well suited parameter mapping (modelled) data to audio instrument parameters. Strudel naturally supports 'stacking' sound patterns to produce 'full' multi-track compositions.
-            </p>
-            <p>The notable limitation of using Strudel in the <i>Data Operator</i>is that is built around a cycle/loop of music. This means: </p>
-            <ul>
-                <li>Functionality needs to be developed on top of Strudel to enable animation synchronisation (i.e. an event callback)<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">These features are included in a core Class within the <i>Data Operator</i> source code, but are expected to be made more robust and sophisticated in the future.</span>.</li>
-                <li>Functionality needs to be developed on top of Strudel to support (time-dependent) layering and/or automation of track parameters<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">This is the <strong>Composition</strong> feature of the <i>Data Operator</i> which is present but under/not utilised in the initial <i>Data Operator</i> series</span>.</li>
-            </ul>
-            <p>The core UI of <a href = 'https://strudel.cc/learn/getting-started/' target ="_blank">Strudel</a> is the <a href = 'https://strudel.cc/' target = '_blank'>REPL-based interface</a>. This is not used in the <i>Data Operator</i> interface, however REPL allows for code to be extracted from the <i>Data Operator</i> that can be played in the public REPL. Features can be built around this thata:</p>
-            <ul>
-                <li>Allows users save the data sonificaton they are currently playing (i.e. including their selections and musical tweaks) </li>
-                <li>Allows users to generate a REPL-link that contains their current sonification, which can be shared with others<label for="sn-001" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-001" class="margin-toggle"/><span class="sidenote">This feature provides a viable pathway fo social and even collaborative features to be added the the <i>Data Operator</i> </span>. </li>
-            </ul>
-
-        </section>
-
-
-        <hr>
-        <section>
-            <h2>6. Sonification approach </h2>
-            <p>The <i>Data Operator</i> 
-            </p>
+            </p>           -->
         </section>
 
         <SonificationCanvasDO1/>
