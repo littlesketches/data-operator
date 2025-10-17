@@ -83,14 +83,21 @@
     /*** LABEL STYLING  */
     .seq-label{
         display:            flex;
-        color:              var(--col-light);
+        color:              var(--col-grad-0);
         font-size:          1.25vh;
         font-family:        'Orbit';
-        background:         var(--col-grad-1);
+        background:         var(--col-grad-2);
         padding:            0.75vh;
         transition:         all 200ms;
         transform-origin:   50% 50%;
     }
+    @media (max-width: 768px) {
+        .seq-label{
+            padding:        1.5vh;
+            font-size:      1.75vh;
+        }
+    }
+
     .group_A .seq-label{
         border-radius:      50%;
     }
@@ -99,13 +106,14 @@
     }
    
     .active-step .seq-label{
-        background:         var(--col-grad-3);
+        background:         var(--col-grad-5);
     }
 
     .step.active-step .seq-label{
         transform:          scale(1.5);
         background-color:   var(--col-highlight);
     }   
+
     /** ACTIVE STEP **/
     .step.button .button__wrapper{ 
         box-shadow:          1vh  1vh 1vh var(--col-light),

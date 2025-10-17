@@ -92,7 +92,6 @@
         align-items:            end;
         justify-content:        center;
         padding:                calc(var(--margin-std) * 1);
-
     }   
 
     .button__label span{
@@ -103,7 +102,6 @@
         border-radius:          50%;
         margin-left:            var(--margin-x2);
         color:                  var(--col-highlight);
-
     }
 
     .mobile .button__container{

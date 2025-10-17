@@ -1,6 +1,6 @@
 /* DATA OPERATOR: MODEL HOMEPAGE */
 section.do-model-page__container{
-    /* z-index:                1000; */
+    z-index:                1000;
     display:                flex;
     width:                  100%;
     justify-content:        center;

@@ -2,7 +2,8 @@
 <script>
     // Libs and utils
 	import { fade }         from 'svelte/transition';
-    import { onMount }      from 'svelte';
+    import { onMount, 
+        onDestroy }          from 'svelte';
 
     // Components
     import TopPanel         from "./ui/TopPanel.svelte";
@@ -53,12 +54,25 @@
         }
     }
 
-    // Show guidance labels => fade out
+    // On start/mount
     onMount( () => {
-        setTimeout(() => {
+        // Show guidance labels => fade out
+        setTimeout(() => { 
             const buttons = document.querySelectorAll('.info-button');
             buttons.forEach(button =>  button.classList.add('fade') );
         }, 5000);
+        // Restore strudel vis
+        const el =  document.getElementById('test-canvas')
+        if(el)         el.style.opacity = 1
+    })
+
+    // On exit/destory
+    onDestroy( () => {
+        // Stop the transport
+        sonification.handle.stop()
+        // Hide any existing strudel vis
+        const el =  document.getElementById('test-canvas')
+        if(el) el.style.opacity = 0       
     })
 </script>
 
@@ -95,7 +109,6 @@
         --margin-half:          calc(var(--margin-std) * 0.5);
         --margin-x2:            calc(var(--margin-std) * 2);
         font-family:            "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-
         font-weight:            400;
         font-style:             normal;
         max-width:              100%;
@@ -103,9 +116,9 @@
         aspect-ratio:           12 / 19.5;
         position:               relative;
         touch-action:           none;
-        user-select: none;
-        -webkit-user-select: none;
-        -webkit-touch-callout: none;
+        user-select:            none;
+        -webkit-user-select:    none;
+        -webkit-touch-callout:  none;
     }
 
     .guidance__container{

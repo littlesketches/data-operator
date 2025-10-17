@@ -48,10 +48,8 @@ export class DataModel_IDMC extends DataModel{
 
     async #loadData(){
         // i. Load and parse CSV data 
-
         const inputData = {}
 
-        // Object.entries(idmcTableUrls).forEach( async([tableName, url]) => {
         for(const [tableName, url] of Object.entries(idmcTableUrls)){
             const res = await this.fetch(url);
 
@@ -67,7 +65,6 @@ export class DataModel_IDMC extends DataModel{
                     if(key.slice(0,4).toLowerCase() === 'date') row.date =  d3.timeParse("%Y-%m-%d")(value)        // Parse date to day and time
                 })
             })
-
         }
 
         // => Return input data

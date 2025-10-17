@@ -72,12 +72,12 @@ export const keyguide = {
             group:  'Select<br>BASS<br>(B)'
         },
         5: {
-            master: '<br>Scale<br>root<br>-',
-            group:  '<br>Scale<br>root<br>-'
+            master: 'Scale<br>root<br>-',
+            group:  'Scale<br>root<br>-'
         },
         6: {
-            master: '<br>Scale<br>root<br>+',
-            group:  '<br>Scale<br>root<br>+'
+            master: 'Scale<br>root<br>+',
+            group:  'Scale<br>root<br>+'
         },
         7: {
             master: 'Select<br>LEAD<br>(A)',

@@ -716,6 +716,12 @@
         box-shadow:              2.5px  2.5px 5px #8e8d8d,
                                 -2.5px -2.5px 5px #fff;
     }
+    @media (max-width: 768px) {
+        .button__wrapper{
+            border-radius:          1vh;
+        }
+    }
+
 
     .numpad .button__wrapper{
         color:                  var(--col-light);
@@ -739,11 +745,7 @@
         color:                  var(--col-light);
     }
 
-    @media (hover: hover) and (pointer: fine) {
-        .button:hover  .button__wrapper{
-            filter:             brightness(1.15); 
-        }
-    }
+
 
     .button:active .button__wrapper,
     .button.active .button__wrapper{ 
@@ -847,6 +849,7 @@
         opacity:                0;
         transition:             all 500ms;
         z-index:                10;
+        padding:                1.5vh
     }
 
     :global(.button-guidance .group){
@@ -864,4 +867,14 @@
         opacity:                0.05;
     }
 
+
+    @media (hover: hover) and (pointer: fine) {
+        .button:hover  .button__wrapper{
+            filter:             brightness(1.15); 
+        }
+        .button-label.invert{
+            width:                  6.25vh;
+            height:                 6.25vh;
+        }
+    }
 </style>
