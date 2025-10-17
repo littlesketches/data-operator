@@ -94,6 +94,7 @@
         max-height:             100dvh;
         aspect-ratio:           12 / 19.5;
         position:               relative;
+        touch-action:           none;
     }
 
     .guidance__container{

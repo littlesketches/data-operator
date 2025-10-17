@@ -39,7 +39,7 @@ export class DataSonification extends Sonification{
         /* 
          @title IDMC Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
          @by Data Operator DS-86
-         @details Sonification of Internal discplacement data (from IDMC)
+         @details Sonification of internal displacement data (from IDMC)
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */

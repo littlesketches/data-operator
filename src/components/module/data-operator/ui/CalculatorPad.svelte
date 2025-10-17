@@ -4,7 +4,7 @@
     let { model } = $props()
 
     // Models
-    const {sonification, operatorConfig} = model
+    const {sonification, operatorConfig, strudel} = model
 
     // Variables and operator-specific config
     const fxNames   = Object.keys(operatorConfig.ui.punchFX),
@@ -22,12 +22,27 @@
         part      = $derived(sonification.state.selection.group.C.activePart),
         shift     = $derived(sonification.state.selection.shift)
 
+
+    const activePointers = new Map();
+
     /**
      *  SCREEN BUTTON HANDLERS
      */
 
     const handle = {
         pointerdown: function(ev){
+            // Track pointers (for touch)
+            activePointers.set(ev.pointerId, {
+                id:     ev.pointerId,
+                x:      ev.clientX,
+                y:      ev.clientY,
+                target: ev.target
+            });
+
+            ev.target.setPointerCapture(ev.pointerId);
+            ev.target.parentElement.classList.add('active')
+
+            // Get attributes
             const type = this.getAttribute('data-type'),           // Button type    
                 keyGroup = this.getAttribute('data-keygroup')
 
@@ -38,7 +53,7 @@
                 activatePart        // Flag part to select
 
 
-            // 3. On screen key event methods
+            // 2. On screen key event methods
             switch(type){
                 case 'shift':
                     sonification.state.selection.shift = true;
@@ -68,13 +83,14 @@
                     break
             }
 
-            // 4. Activate interactive methods
+            // 3. Activate interactive methods
             // i. Set (single) active mode 
             if(activateMode){
                 Object.keys(modeState).forEach(d => modeState[d] = d === activateMode)    // Set only active node to true
                 sonification.state.selection.heldModes.add(activateMode)        // Add to held nodes 
                 sonification.state.selection.activeMode = activateMode          // Set active mode                                    
             }
+
             // ii. Select pattern: covers numkey selection on master/non-master group pages 
             if(!isNaN(activatePattern)){
                 const index = group !== 'master' ? activatePattern - 1 : activatePattern        // Offset between master and other groups
@@ -83,6 +99,9 @@
 
             // X. Numkey & navkey handlers: replicated in/from KeyboardUI
             function numkeyAction(mode, numkey, keyGroup, direction){
+                 sonification.state.selection.heldKeys.add(mode);
+                 sonification.state.selection.heldKeys.add(numkey);
+
                 switch(mode){
                     case 'fx':      // Numkey activates punch-in FX for 0-9, for selected group
                         sonification.handle.punchInFX(group, fxNames[numkey], true) 
@@ -266,6 +285,17 @@
             }
         },
         pointerup: function(ev){
+            /**
+             *  MANAGE TOUCH EVENTS
+             */
+
+            activePointers.delete(ev.pointerId);
+            ev.target.releasePointerCapture(ev.pointerId);
+            ev.target.parentElement.classList.remove('active')
+
+            console.log('up', activePointers, ev);
+            handle.globalCleanup()
+
             const type = this.getAttribute('data-type')
 
             switch(type){
@@ -273,8 +303,14 @@
                     selection.shift = false;
                     break
                 case 'mode':
+
                     Object.keys(sonification.state.mode).forEach(d => sonification.state.mode[d] = false)    // Set only active node to true                     
                     sonification.state.selection.activeMode = null
+                    // Turn off all punch FX
+                    Object.keys(sonification.param[group].fx).forEach(key =>  sonification.param[group].fx[key] = false)
+                    sonification.handle.updateREPL(strudel.state.transport === "playing")
+
+                    console.log('TURN OFF PUNCH!')
                     break
 
                 case 'numpad':
@@ -305,6 +341,20 @@
                     }
                     break
             }
+        },
+        pointermove: function(ev){
+            if (activePointers.has(ev.pointerId)) {
+                const p = activePointers.get(ev.pointerId);
+                p.x = ev.clientX;
+                p.y = ev.clientY;
+                // do something with the updated position
+            }
+        }, 
+        globalCleanup(ev) {
+        for (const [id, data] of activePointers) {
+            data.target.classList.remove('active');
+        }
+        activePointers.clear();
         }
     }
 
@@ -325,7 +375,7 @@
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 7 - 1
     }
     style  = 'grid-column: {(sonification.state.isMobile ? 1 : 3)}; grid-row:1'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label'>7</div>
         <div class = 'button-indicator__container'>
@@ -348,7 +398,7 @@
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 8 - 1
     }
     style  = 'grid-column: {(sonification.state.isMobile ? 2 : 4)}; grid-row:1'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label'>8</div>
         <div class = 'button-indicator__container'>
@@ -371,7 +421,7 @@
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 9 - 1
     }
     style  = 'grid-column: {(sonification.state.isMobile ? 3 : 5)}; grid-row:1'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label '>9</div>
         <div class = 'button-indicator__container'>
@@ -387,7 +437,7 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('-') || heldKeys.has('_') || heldKeys.has('r') || heldKeys.has('R')}
     style  = 'grid-column: {(sonification.state.isMobile ? 4 : 6)}; grid-row:1'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
 
     <div class = 'button__wrapper'>
         <div class = 'button-label'>&minus;</div>
@@ -412,7 +462,7 @@
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 4 - 1
     }
     style  = 'grid-column: {(sonification.state.isMobile ? 1 : 3)}; grid-row:2'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label'>4</div>
         <div class = 'button-indicator__container'>
@@ -435,7 +485,7 @@
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 5 - 1
     }
     style  = 'grid-column: {(sonification.state.isMobile ? 2 : 4)}; grid-row:2'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper numpad'>
         <div class = 'button-label'>5</div>
         <div class = 'button-indicator__container'>
@@ -458,7 +508,7 @@
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 6 - 1
     }
     style  = 'grid-column: {(sonification.state.isMobile ? 3 : 5)}; grid-row:2'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper numpad'>
         <div class = 'button-label'>6</div>
         <div class = 'button-indicator__container'>
@@ -474,7 +524,7 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('+') || heldKeys.has('=') || heldKeys.has('Backspace') || heldKeys.has('f')|| heldKeys.has('F') }
     style  = 'grid-column: {(sonification.state.isMobile ? 4 : 6)}; grid-row:2'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label'>&plus;</div>
         <div class = 'button-indicator__container'>
@@ -500,7 +550,7 @@
     }
     class:part-active = { group === 'C' ? sonification.state.selection.group.C.activePart === 1 : false }
     style  = 'grid-column: {(sonification.state.isMobile ? 1 : 3)}; grid-row:3'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper numpad'>
         <div class = 'button-label'>1</div>
         <div class = 'button-indicator__container'>
@@ -528,7 +578,7 @@
     }
     class:part-active = { group === 'C' ? sonification.state.selection.group.C.activePart === 2 : false }
     style  = 'grid-column: {(sonification.state.isMobile ? 2 : 4)}; grid-row:3'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper numpad'>
         <div class = 'button-label'>2</div>
         <div class = 'button-indicator__container'>
@@ -555,7 +605,7 @@
     }
     class:part-active = { group === 'C' ? sonification.state.selection.group.C.activePart === 3 : false }
     style  = 'grid-column: {(sonification.state.isMobile ? 3 : 5)}; grid-row:3'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper numpad'>
         <div class = 'button-label'>3</div>
         <div class = 'button-indicator__container'>
@@ -574,7 +624,7 @@
     class:modeguide={mode}
     class:active={sonification.state.mode.fx}
     style  = 'grid-column: {(sonification.state.isMobile ? 4 : 6)}; grid-row:3'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label invert'>
             <span class="material-symbols-outlined">function</span>
@@ -590,7 +640,7 @@
     class:modeguide={mode}
     class:active={sonification.state.mode.select} 
     style  = 'grid-column: {(sonification.state.isMobile ? 1 : 3)}; grid-row:4'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label invert'>
             <div class ='button-label__wrapper'>&times;</div>
@@ -605,7 +655,7 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('0') || heldKeys.has(')') || heldKeys.has('Alt')} 
     style  = 'grid-column: {(sonification.state.isMobile ? 2 : 4)}; grid-row:4'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label'>0</div>
         <div class = 'button-indicator__container'>
@@ -621,7 +671,7 @@
     class:modeguide={mode}
     class:active={sonification.state.mode.modify} 
     style  = 'grid-column: {(sonification.state.isMobile ? 3 : 5)}; grid-row:4'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper '>
         <div class = 'button-label invert'>&sdot;</div>
         <div class = 'button-indicator__container'>
@@ -634,7 +684,7 @@
     class:modeguide={mode}
     class:active = {selection.shift} 
     style  = 'grid-column: {(sonification.state.isMobile ? 4 : 6)}; grid-row:4'
-    onpointerdown="{handle.pointerdown}" onpointerup="{handle.pointerup}">
+    onpointerdown={handle.pointerdown} onpointerup={handle.pointerup} onpointercancel={handle.pointerup} onpointerleave={handle.pointerup}  onpointermove={handle.pointermove}>
     <div class = 'button__wrapper'>
         <div class = 'button-label invert'>
             <span class="material-symbols-outlined">shift_lock</span>
@@ -655,6 +705,7 @@
         -webkit-user-select:    none;     
         z-index:                1;
         aspect-ratio:           1/1;
+        touch-action:           none;
     }
 
     .button__wrapper{
