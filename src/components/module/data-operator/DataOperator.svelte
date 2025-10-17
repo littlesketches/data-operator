@@ -181,7 +181,7 @@
         position:           absolute;
         top:                50%;
         left:               0%;         /* position to the right */
-        transform: translateY(-50%);
+        transform:          translateY(-50%);
         margin-left:        1vh;
         opacity:            1;
         color:               #fff;

@@ -1,7 +1,7 @@
 <!-- ROBOT DRUMMER: INSTRUMENT SYNCED SVG ANIMATION -->
 <script>
     // Config
-    import { groupPartPresets } from '$src/lib/module/data-operator/model/oe-10/operator/config/part-config';
+    import { groupPartPresets } from '$src/lib/module/data-operator/sonification/oe-10/operator/config/part-config';
 
     // Props
     let {model} = $props()

@@ -872,6 +872,11 @@
         .button:hover  .button__wrapper{
             filter:             brightness(1.15); 
         }
+    }
+    /** 
+     *  MOBILE STYLING
+     */
+    @media (max-width: 768px) {
         .button-label.invert{
             width:                  6.25vh;
             height:                 6.25vh;

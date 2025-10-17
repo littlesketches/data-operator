@@ -162,7 +162,9 @@ export class DataModel_IDMC extends DataModel{
 
         // 2. Transform data into scenes
         const model = modelData.map( d => {
+
             const ISO3 = d.ISO3
+
             // i. Init model props
             const intervalData = {},
                 scale = {},
@@ -182,6 +184,7 @@ export class DataModel_IDMC extends DataModel{
                 disasterEvents,      
                 disasterCount
             }
+
 
             // iii. Transform data into timing intervals
             Object.entries(timingInterval).forEach( ([interval, bins]) => {
@@ -212,14 +215,17 @@ export class DataModel_IDMC extends DataModel{
                                 // I. Create scales 
                                 for (let [seriesName, d] of Object.entries(seriesData)) {
                                     // a. Add scale for key
-                                    const dataScale = scale[interval][group][paramName][seriesName] =  d3.scaleLinear()
-                                                                                .domain(d3.extent(intervalData[interval][seriesName]))
-                                                                                .range([groupScale[paramName].min, groupScale[paramName].max])
+                                    const domain    = d3.extent(intervalData[interval][seriesName]),
+                                        range       = [groupScale[paramName].min, groupScale[paramName].max],
+                                        noDomain    = domain[0] === domain[1],
+                                        dataScale   = scale[interval][group][paramName][seriesName] 
+                                                    =  d3.scaleLinear().domain(domain).range(range)
+
                                     // b. Add scaled data
                                     scaledData[interval][group][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
                                         return {
-                                            value:          dataScale(d),
-                                            quantized:      Math.round(dataScale(d))
+                                            value:         noDomain ? range[0] : dataScale(d), 
+                                            quantized:     noDomain ? range[0] : Math.round(dataScale(d)) 
                                         }
                                     })
                                 }
@@ -261,7 +267,12 @@ export class DataModel_IDMC extends DataModel{
 
             })
 
-
+console.log(this.schema.map.countryMeta[ISO3], {
+                meta:        this.schema.map.countryMeta[ISO3],
+                intervalData,
+                scale,
+                scaledData,
+            })
             // => Return model object 
             return  {
                 meta:        this.schema.map.countryMeta[ISO3],

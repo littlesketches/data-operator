@@ -91,12 +91,7 @@
         transition:         all 200ms;
         transform-origin:   50% 50%;
     }
-    @media (max-width: 768px) {
-        .seq-label{
-            padding:        1.5vh;
-            font-size:      1.75vh;
-        }
-    }
+
 
     .group_A .seq-label{
         border-radius:      50%;
@@ -122,4 +117,14 @@
                              1vh -1vh 1vh var(--col-light);      
     }
    
+
+    /** 
+     *  MOBILE STYLING
+     */
+    @media (max-width: 768px) {
+        .seq-label{
+            padding:        1.5vh;
+            font-size:      1.75vh;
+        }
+    }
 </style>

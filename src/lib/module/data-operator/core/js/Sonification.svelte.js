@@ -665,7 +665,7 @@ export class Sonification{
                 // => Evaluate strudel code
                 this.updateREPL(strudel.state.transport === "playing")        
             },
-            openPulseSequencer(group, type = 'pitch'){    // Potentially move to UI or have UI depend on state chang
+            openPulseSequencer(group, type = 'pitch'){    // Potentially move to UI or have UI depend on state change
                 // i. Update state for pulse sequencer (UI)
                 sonification.state.sequencer.ui.isOpen = true
                 sonification.state.sequencer.ui.group = group
@@ -701,6 +701,16 @@ export class Sonification{
                 // => Update strudel code
                 this.updateREPL(strudel.state.transport === "playing")     
             },
+            pulseOnDeltaSequence(array, group, type = 'pitch'){
+                console.log(array, group)
+                // i. Turn input array into pulse array
+                const pulseArray = array
+
+                //  ii. Activate the pulse sequencer
+                sonification.state.sequencer[group].active = true 
+
+            },
+
             // Scale and transposition
             transposePattern: (degree, group) => {
                 // i. Check for pitch group

@@ -4,8 +4,8 @@
 
 // Classes
 import { App }                      from '$lib/_core/app/App.svelte';
-import { DataModel_OE as DataModel} from '$lib/module/data-operator/data/open-electricity/DataModel.svelte.js';
-import { DataSonification }         from '$lib/module/data-operator/model/oe-10/dfam/DataSonification.svelte.js';
+import { DataModel_OE as DataModel} from '$src/lib/module/data-operator/data-model/open-electricity/DataModel.svelte.js';
+import { DataSonification }         from '$src/lib/module/data-operator/sonification/oe-10/dfam/DataSonification.svelte.js';
 
 // Config
 import { appConfig }        from '$lib/_core/config/app-config';
@@ -13,9 +13,9 @@ import { appConfig }        from '$lib/_core/config/app-config';
 // Custom Data Operator model config
 import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/dfam/keyguide.js';
 import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/dfam/fx-config.js';
-import { scaleConfig }      from '$lib/module/data-operator/model/oe-10/dfam/config/scale-config.js';
-import { groupConfig }      from '$lib/module/data-operator/model/oe-10/dfam/config/group-config.js';
-import { groupPartPresets } from '$lib/module/data-operator/model/oe-10/dfam/config/part-config.js';
+import { scaleConfig }      from '$src/lib/module/data-operator/sonification/oe-10/dfam/config/scale-config.js';
+import { groupConfig }      from '$src/lib/module/data-operator/sonification/oe-10/dfam/config/group-config.js';
+import { groupPartPresets } from '$src/lib/module/data-operator/sonification/oe-10/dfam/config/part-config.js';
 
 
 /**

@@ -19,9 +19,9 @@
 </script>
 
 <svelte:window 
-    bind:innerWidth  = {data.app.state.global.device.screen.width} 
-    bind:innerHeight = {data.app.state.global.device.screen.height}
-    on:resize        = {() => sonification.checkScreenSize(mobileFlag)}
+    bind:innerWidth= {data.app.state.global.device.screen.width} 
+    bind:innerHeight= {data.app.state.global.device.screen.height}
+    on:resize= {() => sonification.checkScreenSize(mobileFlag)}
  />
 
 <!-- LAYOUT-->

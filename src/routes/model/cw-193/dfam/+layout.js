@@ -4,8 +4,8 @@
 
 // Classes
 import { App }                      from '$lib/_core/app/App.svelte';
-import { DataSonification }         from '$src/lib/module/data-operator/model/cw-193/dfam/DataSonification.svelte.js';
-import { DataModel_CW as DataModel} from '$src/lib/module/data-operator/data/climate-watch/DataModel.svelte.js';
+import { DataSonification }         from '$src/lib/module/data-operator/sonification/cw-193/dfam/DataSonification.svelte.js';
+import { DataModel_CW as DataModel} from '$src/lib/module/data-operator/data-model/climate-watch/DataModel.svelte.js';
 
 // Config
 import { appConfig }        from '$lib/_core/config/app-config';
@@ -13,9 +13,9 @@ import { appConfig }        from '$lib/_core/config/app-config';
 // Custom Data Operator model config
 import { keyguide }         from '$lib/module/data-operator/core/config/ui/dfam/keyguide.js';
 import { punchFX }          from '$lib/module/data-operator/core/config/ui/dfam/fx-config.js';
-import { scaleConfig }      from '$lib/module/data-operator/model/cw-193/dfam/config/scale-config.js';
-import { groupConfig }      from '$lib/module/data-operator/model/cw-193/dfam/config/group-config.js';
-import { groupPartPresets } from '$lib/module/data-operator/model/cw-193/dfam/config/part-config.js';
+import { scaleConfig }      from '$src/lib/module/data-operator/sonification/cw-193/dfam/config/scale-config.js';
+import { groupConfig }      from '$src/lib/module/data-operator/sonification/cw-193/dfam/config/group-config.js';
+import { groupPartPresets } from '$src/lib/module/data-operator/sonification/cw-193/dfam/config/part-config.js';
 
 /**
  *  CUSTOM DATA OPERATOR CONFIG & MODEL PROP 

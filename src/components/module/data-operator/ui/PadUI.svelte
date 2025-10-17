@@ -52,7 +52,7 @@
 <!-- HTML COMPONENT MARKUP -->
 <section class = 'interface__container' class:mobile={sonification.state.isMobile}>
     <div class = 'pad__wrapper'>
-        <!-- NON-MOBILE "SIDE COLUMN"-->
+        <!-- NON-MOBILE "SIDE BAR" MULTI-FUNCTION-->
         <div class = 'side-button__wrapper'> </div>
         <div id = "playStop" class = 'button side row-1 col-1' 
             class:active = {heldKeys.has(' ')} 
@@ -71,26 +71,11 @@
             </div>
         </div>
 
-        <!-- CALCULATOR BUTTONS -->
+        <!-- CALCULATOR PAD INTERFACE -->
         {#if !sonification.state.sequencer.ui.isOpen}
         <CalculatorPad {model} />
-        <!-- <div id = "open-sequencer" data-group = 'A'   class = 'sequencer-toggle button side' 
-            style  = 'grid-column: 1; grid-row: 2; display: {sonification.state.isMobile ? 'none' : 'init'}'
-            onpointerdown="{handle.click}" >
-            <div class = 'button__wrapper'>
-                <div class = 'button-label'>SEQ. A</div>
-            </div>
-        </div>
-        <div id = "open-sequencer" data-group = 'B'   class = 'sequencer-toggle  button side' 
-            style  = 'grid-column: 1; grid-row: 3; display: {sonification.state.isMobile ? 'none' : 'init'}'
-            onpointerdown="{handle.click}" >
-            <div class = 'button__wrapper'>
-                <div class = 'button-label'>SEQ. B</div>
-            </div>
-        </div> -->
-
         {:else}
-        <!-- STEP SEQUENCER -->
+        <!-- STEP SEQUENCER PAD INTERFACE-->
         <SequencerPad {model} />
         {/if}
     </div>
@@ -108,7 +93,7 @@
         -webkit-user-select:    none;     
     }
     section.interface__container.mobile{
-        padding:                calc(var(--margin-std) * 1) calc(var(--margin-std) * 3) calc(var(--margin-std) * 2)  calc(var(--margin-std) * 3) ;
+        padding:                calc(var(--margin-std) * 0) calc(var(--margin-std) * 2) calc(var(--margin-std) * 1)  calc(var(--margin-std) * 2) ;
     }
 
     /* 4 x 4 "Calculator pad */
@@ -197,14 +182,5 @@
         color:                  var(--col-light);  
     }
 
-    /*** SEQUENCER BUTTONS */
-    .sequencer-toggle.button  .button__wrapper{
-        background:         var(--col-body);
-    }
-    .sequencer-toggle .button-label{
-        font-size:      1.25vh;
-        color:          var(--col-grad-3);
-        text-align:     center;
-    }
 
 </style>

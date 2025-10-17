@@ -4,18 +4,18 @@
 
 // Classes
 import { App }                          from '$lib/_core/app/App.svelte';
-import { DataSonification }             from '$src/lib/module/data-operator/model/ds-86/operator/DataSonification.svelte.js';
-import { DataModel_IDMC as DataModel}   from '$lib/module/data-operator/data/idmc//DataModel.svelte.js';
+import { DataSonification }             from '$src/lib/module/data-operator/sonification/ds-86/operator/DataSonification.svelte.js';
+import { DataModel_IDMC as DataModel}   from '$src/lib/module/data-operator/data-model/idmc/DataModel.svelte.js';
 
 // Config
 import { appConfig }        from '$lib/_core/config/app-config';
 
 // Custom Data Operator model config
-import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/standard/keyguide.js';
-import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/standard/fx-config.js';
-import { scaleConfig }      from '$src/lib/module/data-operator/model/ds-86/operator/config/scale-config.js';
-import { groupConfig }      from '$src/lib/module/data-operator/model/ds-86/operator/config/group-config.js';
-import { groupPartPresets } from '$src/lib/module/data-operator/model/ds-86/operator/config/part-config.js';
+import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/operator/keyguide.js';
+import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/operator/fx-config.js';
+import { scaleConfig }      from '$src/lib/module/data-operator/sonification/ds-86/operator/config/scale-config.js';
+import { groupConfig }      from '$src/lib/module/data-operator/sonification/ds-86/operator/config/group-config.js';
+import { groupPartPresets } from '$src/lib/module/data-operator/sonification/ds-86/operator/config/part-config.js';
 
 /**
  *  CUSTOM DATA OPERATOR CONFIG & MODEL PROP 
@@ -34,7 +34,7 @@ const operatorConfig = {
     },
     theme:          'ko-ii',        // Specify theme
     ui: {
-        type:       'operator',      // Specify UI
+        type:       'operator',      // Specify UI (matched to keyguide)
         keyguide,
         punchFX
     }

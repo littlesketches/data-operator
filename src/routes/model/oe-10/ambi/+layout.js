@@ -4,19 +4,19 @@
 
 // Classes
 import { App }                      from '$lib/_core/app/App.svelte';
-import { DataSonification }         from '$src/lib/module/data-operator/model/oe-10/ambi/DataSonification.svelte.js';
-import { DataModel_OE as DataModel} from '$lib/module/data-operator/data/open-electricity/DataModel.svelte.js';
+import { DataSonification }         from '$src/lib/module/data-operator/sonification/oe-10/ambi/DataSonification.svelte.js';
+import { DataModel_OE as DataModel} from '$src/lib/module/data-operator/data-model/open-electricity/DataModel.svelte.js';
 
 // Config
 import { appConfig }        from '$lib/_core/config/app-config';
 
 
 // Custom Data Operator model config
-import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/standard/keyguide.js';
-import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/standard/fx-config.js';
-import { scaleConfig }      from '$src/lib/module/data-operator/model/oe-10/ambi/config/scale-config.js';
-import { groupConfig }      from '$src/lib/module/data-operator/model/oe-10/ambi/config/group-config.js';
-import { groupPartPresets } from '$src/lib/module/data-operator/model/oe-10/ambi/config/part-config.js';
+import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/operator/keyguide.js';
+import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/operator/fx-config.js';
+import { scaleConfig }      from '$src/lib/module/data-operator/sonification/oe-10/ambi/config/scale-config.js';
+import { groupConfig }      from '$src/lib/module/data-operator/sonification/oe-10/ambi/config/group-config.js';
+import { groupPartPresets } from '$src/lib/module/data-operator/sonification/oe-10/ambi/config/part-config.js';
 
 /**
  *  CUSTOM DATA OPERATOR CONFIG & MODEL PROP 
@@ -35,7 +35,7 @@ const operatorConfig = {
     },
     theme:          'ambient',        // Specify theme
     ui: {
-        type:       'std',      // Specify UI
+        type:       'operator',          // Specify UI
         keyguide,
         punchFX
     }

@@ -1,4 +1,8 @@
-/* DATA OPERATOR: MODEL HOMEPAGE */
+/** 
+ *  DATA OPERATOR: MODEL HOMEPAGE 
+ */
+
+
 section.do-model-page__container{
     z-index:                1000;
     display:                flex;
