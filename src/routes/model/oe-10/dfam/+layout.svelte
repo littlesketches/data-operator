@@ -15,9 +15,6 @@
         mobileFlag = queryParams.get('mobile') !== null ? true : false,
         apiData = queryParams.get('api') !== null ? true : false
 
-    // iii. Programmatic mobile screen size check (on window resize)
-    sonification.checkScreenSize(mobileFlag)
-
 </script>
 
 <svelte:window

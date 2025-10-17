@@ -293,8 +293,7 @@
             ev.target.releasePointerCapture(ev.pointerId);
             ev.target.parentElement.classList.remove('active')
 
-            console.log('up', activePointers, ev);
-            handle.globalCleanup()
+            // handle.globalCleanup()
 
             const type = this.getAttribute('data-type')
 
