@@ -23,7 +23,7 @@
         }
     }
 
-console.log(operatorConfig)
+
 </script>
 
 <!-- HTML COMPONENT MARKUP-->
@@ -98,10 +98,11 @@ console.log(operatorConfig)
     .button__label span{
         font-size:              8.5vh;
         line-height:            1;
-        border:                 solid 1px rgba(255, 255, 255, 0.5);
+        border:                 solid 1px  var(--col-highlight);
         border-radius:          1vh;
+        border-radius:          50%;
         margin-left:            var(--margin-x2);
-        color:                  var(--col-grad-3);
+        color:                  var(--col-highlight);
 
     }
 
