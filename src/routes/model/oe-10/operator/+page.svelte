@@ -63,6 +63,3 @@
         background-color:  #171616;
     }
 </style>
-
-
-

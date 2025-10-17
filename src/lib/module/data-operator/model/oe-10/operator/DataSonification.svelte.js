@@ -90,7 +90,7 @@ export class DataSonification extends Sonification{
                 x=>x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),     
                 x=>x.s("pulse").pw(0.35).velocity("${this.param.synth.ModelD.mix.osc2}"),          
                 x=>x.s("square").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}"),
-                x=>x.s("white").velocity("${this.param.synth.ModelD.mix.noise}")
+                x=>x.s("white").velocity("${this.param.synth.ModelD.mix.noise}").hush()
             )
             .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
             .adsr("${this.param.synth.ModelD.ampEnv.a}:${this.param.synth.ModelD.ampEnv.d}:${this.param.synth.ModelD.ampEnv.s}:${this.param.synth.ModelD.ampEnv.r}")    // Amp envelope (ADSR)
@@ -98,7 +98,7 @@ export class DataSonification extends Sonification{
                 : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
             .slow(${this.param.B.pitch.clockDivider})    
             .ftype("ladder")
-            .lpf(5000)         // LPF cutoff 
+            .lpf(${this.param.synth.ModelD.filter.cutoff}) 
             .lpq(${this.param.synth.ModelD.filter.Q})              // LPF resonance
             .lpenv(${this.param.synth.ModelD.filter.env.depth})    // filter env: modulation depth
             .lpa(${this.param.synth.ModelD.filter.env.A})          // filter env attack
