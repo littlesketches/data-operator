@@ -26,7 +26,7 @@
     const dimsByType = {
         full:       {width: 1920, height: 1200 * (isMobile ? 0.75 : 1), symbolSize: 2000}, 
         half:       {width: 1920, height: 600,  symbolSize: 1500 }, 
-        quarter:    {width: 1920, height: 400,  symbolSize: 1000 }, 
+        quarter:    {width: 1920, height: 400 * (isMobile ? 0.75 : 1),  symbolSize: 1000 }, 
     }
 
     // ii. Init config obj
