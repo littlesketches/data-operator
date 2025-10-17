@@ -6,6 +6,7 @@
     // Models
     const {sonification, strudel, operatorConfig} = model
 
+    // Handler
     function playStop(ev){
         
         strudel.state.audioWorkletInit = true       // Flag that play/strudel has been correctly started from user button interaction
@@ -13,18 +14,16 @@
         if(sonification.state.sequencer.ui.isOpen){
             sonification.handle.closePulseSequencer();
         } else {
-
             switch(strudel.state.transport){
                 case "stopped":
                     sonification.handle.start();  break
                 case "playing":
                     sonification.handle.stop();   break
             }   
-
         }
-
     }
 
+console.log(operatorConfig)
 </script>
 
 <!-- HTML COMPONENT MARKUP-->
@@ -44,7 +43,7 @@
     </div>
     <div class = 'title__container'>
         <div class = 'title__wrapper'>
-            <h1 class = 'title'>{operatorConfig.modelName}</h1>
+            <h1 class = 'title'>{operatorConfig.model.name}</h1>
             <h2 class = 'subtitle'>データオペレーター</h2>
         </div>
     </div>

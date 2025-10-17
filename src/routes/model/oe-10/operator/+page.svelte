@@ -17,8 +17,9 @@
 
     const app          = data.app,
         operatorConfig = data.operatorConfig, 
-        sonification   = app.module['data-operator'][operatorConfig.modelName],
-        dataModel      = app.module.data[operatorConfig.modelName],
+        modelName      = `${operatorConfig.model.name}-${operatorConfig.model.edition}`,
+        sonification   = app.module['data-operator'][modelName],
+        dataModel      = app.module.data[modelName],
         strudel        = app.module.strudel = new StrudelUtility(app)
 
     // Add handler methods (requires strudel to be instantiated)

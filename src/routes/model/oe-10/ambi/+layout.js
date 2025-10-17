@@ -23,11 +23,16 @@ import { groupPartPresets } from '$src/lib/module/data-operator/model/oe-10/ambi
  */
 
 // 1. Data operator model name (matched to route)
-const modelName = 'oe-10-ambi'       
+const model     = 'oe-10',
+    edition     = 'ambi',
+    modelName   = `${model}-${edition}`
 
 // 2. Operator config object 
 const operatorConfig = {
-    modelName,
+    model: {
+        name:       model,
+        edition:    edition
+    },
     theme:          'ambient',        // Specify theme
     ui: {
         type:       'std',      // Specify UI

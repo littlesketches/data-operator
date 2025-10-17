@@ -23,11 +23,16 @@ import { groupPartPresets } from '$lib/module/data-operator/model/oe-10/dfam/con
  */
 
 // 1. Data operator model name (matched to model/route-edition)
-const modelName = 'oe-10-dfam'     
+const model     = 'oe-10',
+    edition     = 'dfam',
+    modelName   = `${model}-${edition}`
 
 // 2. Operator config object 
 const operatorConfig = {
-    modelName,
+    model: {
+        name:       model,
+        edition:    edition
+    },
     theme:          'dfam',              // Specify theme
     ui: {
         type:       'custom-dfam',        // Specify UI

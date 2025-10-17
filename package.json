@@ -21,10 +21,6 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
-		"@strudel/core": "^1.2.4",
-		"@strudel/hydra": "^1.2.4",
-		"@strudel/repl": "^1.2.6",
-		"@strudel/soundfonts": "^1.2.5",
 		"@strudel/web": "^1.2.5",
 		"d3": "^7.9.0",
 		"d3-time": "^3.1.0",
