@@ -90,7 +90,7 @@ export class DataSonification extends Sonification{
                 x=>x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),     
                 x=>x.s("pulse").pw(0.35).velocity("${this.param.synth.ModelD.mix.osc2}"),          
                 x=>x.s("square").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}"),
-                x=>x.s("white").velocity("${this.param.synth.ModelD.mix.noise}").hush()
+                x=>x.s("white").velocity("${this.param.synth.ModelD.mix.noise}")
             )
             .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
             .adsr("${this.param.synth.ModelD.ampEnv.a}:${this.param.synth.ModelD.ampEnv.d}:${this.param.synth.ModelD.ampEnv.s}:${this.param.synth.ModelD.ampEnv.r}")    // Amp envelope (ADSR)
