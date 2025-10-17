@@ -159,6 +159,11 @@ export class Sonification{
         }
     }
 
+    checkScreenSize(mobileFlag){
+        const width = this.app.state.global.device.screen.width ?? typeof window !== 'undefined' ? window.innerWidth : null
+        this.state.isMobile = width < 600  || mobileFlag 
+    }
+
     addHandlers(strudel, editorUI){
         // Bind this to variable for use when methods are bound touch button-bound keys
         const sonification = this   
@@ -171,7 +176,7 @@ export class Sonification{
                 this.updateParameterMap()
                 this.handle.updateREPL(strudel.state.transport === "playing")
             },
-            exportCode: (toConsole = true, toFile = false, toLink = true, toClipboard = true) => {
+            exportCode: async (toConsole = true, toFile = false, toLink = true, toClipboard = true) => {
                 // i. Clean up code for export
                 let blanksSeen = 0;
                 const keepFirst = 3;    // number of blank lines to keep
@@ -182,11 +187,11 @@ export class Sonification{
                         if (line.trim() === "") {
                             if (blanksSeen < keepFirst) {
                                 blanksSeen++;
-                                return true;  // keep this blank
+                                return true;        // keep this blank
                             }
-                            return false;   // drop extra blanks
+                            return false;       // drop extra blanks
                         }
-                        return true; // keep non-blank lines
+                        return true;        // keep non-blank lines
                     })                    
                     .map((line) => line.replace(/^ {0,8}/, "")) // remove up to 8 leading spaces from each line
                     .join("\n");
@@ -217,7 +222,8 @@ export class Sonification{
 
                 // Copy to clipboard
                 if(toClipboard){
-                    navigator.clipboard.writeText(link)
+
+                    await navigator.clipboard?.writeText(link)
                     sonification.state.userMessage.overlay.link = link
                     sonification.state.userMessage.overlay.type = 'link'
                 }
@@ -779,6 +785,9 @@ export class Sonification{
                 sonification.state.userMessage.overlay.isShown = false
             }
         }
+
+        // Check screenSize
+        this.checkScreenSize()
     };
 
     // Placeholder methods: defined in extended DataSonification classes

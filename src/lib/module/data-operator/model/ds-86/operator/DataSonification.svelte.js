@@ -39,7 +39,7 @@ export class DataSonification extends Sonification{
         /* 
          @title IDMC Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
          @by Data Operator DS-86
-         @details Sonification of Internal discplacemet tdata (from IDMC)
+         @details Sonification of Internal discplacement data (from IDMC)
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */
@@ -57,14 +57,14 @@ export class DataSonification extends Sonification{
                 .s("${this.param.synth.TB303.oscType}")               // Sound source
                 .velocity("${this.param.A.velocity.pattern}")
                 .adsr("${this.param.synth.TB303.ampEnv.a}:${this.param.synth.TB303.ampEnv.d}:${this.param.synth.TB303.ampEnv.s}:${this.param.synth.TB303.ampEnv.r}")                             // Amp envelope (ADSR)
+                .ftype("24db")                                        // LPF type
                 .lpf(${this.param.synth.TB303.filter.cutoff})         // LPF cutoff follows sine wave whose range is determined by "${this.state.selection.group.A.pitchPattern}" data at "4n" intervals
                 .lpq(${this.param.synth.TB303.filter.Q})              // LPF resonance
-                .ftype("24db")                                        // LPF type
                 .lpenv(${this.param.synth.TB303.filter.env.depth})    // filter env: modulation depth
                 .lpa(${this.param.synth.TB303.filter.env.A})          // filter env attack
                 .lpd(${this.param.synth.TB303.filter.env.D})          // filter env decay
                 .lps(${this.param.synth.TB303.filter.env.S})          // filter env sustain
-                .swingBy(${this.param.A.swing.level}, 8)              // - swing applied on 1/8 notes
+                .swingBy(${this.param.A.swing.level}, 8)              
                 ${this.param.A.fx.juxRev       ? `${this.param.global.fx.juxRev}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.juxPress     ? `${this.param.global.fx.juxPress}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.crusher      ? this.param.global.fx.crusher : ''}
@@ -81,29 +81,28 @@ export class DataSonification extends Sonification{
                 ${this.param.A.mute            ? this.param.global.fx.mute : `.gain(${this.param.A.gain})`}  
                 .color("${this.param.visual.color.A}")
             ,
-            // Group B. "Moog-ish bass"  
+            // Group B. "Model D-ish bass" 
             n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
             .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
             .scaleTranspose(${this.param.B.pitch.scaleTranspose})
-            .layer(
-                x=>x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),
-                x=>x.s("pulse").pw(0.35).velocity("${this.param.synth.ModelD.mix.osc2}"),
-                x=>x.s("square").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}") ,
+            .layer( 
+                x=>x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),  
+                x=>x.s("pulse").pw(0.35).velocity("${this.param.synth.ModelD.mix.osc2}"),        
+                x=>x.s("square").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}"),
                 x=>x.s("white").velocity("${this.param.synth.ModelD.mix.noise}")
             )
             .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
             .adsr("${this.param.synth.ModelD.ampEnv.a}:${this.param.synth.ModelD.ampEnv.d}:${this.param.synth.ModelD.ampEnv.s}:${this.param.synth.ModelD.ampEnv.r}")    // Amp envelope (ADSR)
-            ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
-                : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
+             ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
+                 : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
             .slow(${this.param.B.pitch.clockDivider})    
-            .ftype("ladder")
-            .lpf(${this.param.synth.ModelD.filter.cutoff})         // LPF cutoff 
-            .lpq(${this.param.synth.ModelD.filter.Q})              // LPF resonance
-            .lpenv(${this.param.synth.ModelD.filter.env.depth})    // filter env: modulation depth
-            .lpa(${this.param.synth.ModelD.filter.env.A})          // filter env attack
-            .lpd(${this.param.synth.ModelD.filter.env.D})          // filter env decay
-            .lps(${this.param.synth.ModelD.filter.env.S})          // filter env sustain
-            .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
+            .lpf(${this.param.synth.ModelD.filter.cutoff})        
+            .lpq(${this.param.synth.ModelD.filter.Q})              
+            .lpenv(${this.param.synth.ModelD.filter.env.depth})    
+            .lpa(${this.param.synth.ModelD.filter.env.A})          
+            .lpd(${this.param.synth.ModelD.filter.env.D})
+            .lps(${this.param.synth.ModelD.filter.env.S})        
+            .swingBy(${this.param.B.swing.level}, 8)     
             ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
             ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
             ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}

@@ -15,11 +15,11 @@
      *  I. GET APP AND SONIFICATION INSTANCES (+layout.js) + INIT STRUDEL MODULE (client-side only)
      */
 
-    const app           = data.app,
-        operatorConfig  = data.operatorConfig, 
-        sonification    = app.module['data-operator'][operatorConfig.modelName],
-        dataModel       = app.module.data[operatorConfig.modelName],
-        strudel         = app.module.strudel = new StrudelUtility(app)
+    const app          = data.app,
+        operatorConfig = data.operatorConfig, 
+        sonification   = app.module['data-operator'][operatorConfig.modelName],
+        dataModel      = app.module.data[operatorConfig.modelName],
+        strudel        = app.module.strudel = new StrudelUtility(app)
 
     // Add handler methods (requires strudel to be instantiated)
     sonification.addHandlers(strudel)

@@ -26,6 +26,8 @@
     sonification.addHandlers(strudel)           // Base class handlers
     sonification.addCustomHandlers()            // "Edition-specfic" handlers
 
+    console.log('HELLOI')
+    sonification.checkScreenSize()
 
     /**
      *  II. SONIFICATION COMPOSITION composition associated with sonification
@@ -47,6 +49,11 @@
 
 </script>
 
+<svelte:window
+    bind:innerWidth  = {app.state.global.device.screen.width} 
+    bind:innerHeight = {app.state.global.device.screen.height}
+    on:resize        = {sonification.checkScreenSize}
+/>
 
 <!-- HTML COMPONENT MARKUP-->
 <div class = 'wrapper'>

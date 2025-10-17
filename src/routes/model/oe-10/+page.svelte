@@ -1,8 +1,10 @@
-<!-- DATA OPERATOR "MODEL" HOMEPAGE CW-193-->
+<!-- DATA OPERATOR "MODEL" HOMEPAGE OE-10 -->
 <script>
-    import OperatorDataDisclaimer from "$src/components/module/data-operator/docs/OperatorDataDisclaimer.svelte";
+    import OperatorDataDisclaimer   from "$src/components/module/data-operator/docs/OperatorDataDisclaimer.svelte";
 </script>
 
+
+<!-- HTML COMPONENT MARKUP -->
 <section class = 'do-model-page__container'>
     <div class = 'do-model-page__wrapper'>
         <div class = 'do-model-page__title-block'>
@@ -14,7 +16,8 @@
         </div>
 
         <div class = 'do-model-page__content'>
-            <p><strong>Data Operator OE-10</strong> is a collection of data sonification instruments that explore electricity data from Australia's National Energy Market (NEM), published by <a href = 'https://openelectricity.org.au/' target = "_blank">Open Electricity</a>. There are <strong>three editions</strong> of the OE-10 available, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every OE-10 is designed to be <i>played with</i>, in a musical way.</p>
+            <p><strong>Data Operator OE-10</strong> is a collection of data sonification instruments that explore electricity data from Australia's National Energy Market (NEM), published by <a href = 'https://openelectricity.org.au/' target = "_blank">Open Electricity</a>. There are <strong>three editions</strong> of the OE-10 available, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every OE-10 is designed to be <i>played with</i>, in a musical way.
+            </p>
         </div>
 
         <ul class = 'do_model-page__menu'>
@@ -31,6 +34,7 @@
                     </div>
                 </li>
             </a>
+
             <a href = "/model/oe-10/dfam">
                 <li class ='dfam'>
                     <div class = 'wrapper'>
@@ -44,6 +48,7 @@
                     </div>
                 </li>
             </a> 
+
             <a href = "/model/oe-10/ambi">
                 <li class = 'ambi'>
                     <div class = 'wrapper'>
@@ -62,16 +67,19 @@
 
         <div class = 'do-model-page__content'>
             <h2>_Data bits</h2>
-            <p><strong><a href = 'https://openelectricity.org.au/' target = "_blank">Open Electricity</a></strong> is a great resource and <i>platform for tracking Australia's electricity transition</i>. The OE-10 uses data published via the <a href = 'https://explore.openelectricity.org.au/energy/nem/' target = "_blank"> NEM tracker</a> and focuses on a curated set of ten data series that track generation sources and electricity market price. Open Electricity do important work that provides insights into a very serious, complex issue. Please visit their <a href = 'https://openelectricity.org.au/' target = "_blank">website</a> to find out more.</p>
 
-             <OperatorDataDisclaimer/>
-            <p class = 'note'>Data for this project was extracted in Sep-Oct, 2025: a connection to their open API is planned</p>
+            <p><strong><a href = 'https://openelectricity.org.au/' target = "_blank">Open Electricity</a></strong> is a great resource and <i>platform for tracking Australia's electricity transition</i>. The OE-10 uses data published via the <a href = 'https://explore.openelectricity.org.au/energy/nem/' target = "_blank"> NEM tracker</a> and focuses on a curated set of ten data series that track generation sources and electricity market price. Open Electricity do important work that provides insights into a very serious, complex issue. Please visit their <a href = 'https://openelectricity.org.au/' target = "_blank">website</a> to find out more.
+            </p>
+
+            <OperatorDataDisclaimer/>
+            
+            <p class = 'note'>Data for this project was extracted in Sep-Oct, 2025: a connection to their open API is planned.</p>
         </div>
     </div>
-
 </section>
+
 
 <!--STYLE-->
 <svelte:head>
-    <link  rel='stylesheet' href='/css/module/data-operator/model-home.css'>
+    <link rel='stylesheet' href='/css/module/data-operator/model-home.css'>
 </svelte:head>

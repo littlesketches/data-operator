@@ -3,9 +3,10 @@
  *  - Custom data load/parse and transformation: model, schema and output for strudel
  *  - Strudel 'code' template with parameters and data sonification input strings
  */
+
 // Libs and utils
 import * as d3                      from 'd3'
-import { getPattern}                from 'euclidean-rhythms';
+import { getPattern }               from 'euclidean-rhythms';
 import { randomItem,
     cycleFromValue, 
     rotateArray }                   from '$lib/module/data-operator/core/js/utils';
@@ -15,7 +16,7 @@ import { Sonification }             from '$lib/module/data-operator/core/js/Soni
 
 // Config
 import { timingConfig, 
-    clockDividerMap }             from '$lib/module/data-operator/core/config/global/timing-config';
+    clockDividerMap }               from '$lib/module/data-operator/core/config/global/timing-config';
 import { musicalScales }            from '$lib/module/data-operator/core/config/global/music-scale-config';
 import { paramInit }                from './parameter-map';
 
@@ -57,9 +58,9 @@ export class DataSonification extends Sonification{
                 .s("${this.param.synth.TB303.oscType}")               // Sound source
                 .velocity("${this.param.A.velocity.pattern}")
                 .adsr("${this.param.synth.TB303.ampEnv.a}:${this.param.synth.TB303.ampEnv.d}:${this.param.synth.TB303.ampEnv.s}:${this.param.synth.TB303.ampEnv.r}")                             // Amp envelope (ADSR)
+                .ftype("24db")                                        // LPF type
                 .lpf(${this.param.synth.TB303.filter.cutoff})         // LPF cutoff follows sine wave whose range is determined by "${this.state.selection.group.A.pitchPattern}" data at "4n" intervals
                 .lpq(${this.param.synth.TB303.filter.Q})              // LPF resonance
-                .ftype("24db")                                        // LPF type
                 .lpenv(${this.param.synth.TB303.filter.env.depth})    // filter env: modulation depth
                 .lpa(${this.param.synth.TB303.filter.env.A})          // filter env attack
                 .lpd(${this.param.synth.TB303.filter.env.D})          // filter env decay
@@ -86,9 +87,9 @@ export class DataSonification extends Sonification{
             .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
             .scaleTranspose(${this.param.B.pitch.scaleTranspose})
             .layer(
-                x=>x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),
-                x=>x.s("pulse").pw(0.35).velocity("${this.param.synth.ModelD.mix.osc2}"),
-                x=>x.s("square").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}") ,
+                x=>x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.ModelD.mix.osc1}"),     
+                x=>x.s("pulse").pw(0.35).velocity("${this.param.synth.ModelD.mix.osc2}"),          
+                x=>x.s("square").add(note(-12)).velocity("${this.param.synth.ModelD.mix.sub}"),
                 x=>x.s("white").velocity("${this.param.synth.ModelD.mix.noise}")
             )
             .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
@@ -97,7 +98,7 @@ export class DataSonification extends Sonification{
                 : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
             .slow(${this.param.B.pitch.clockDivider})    
             .ftype("ladder")
-            .lpf(${this.param.synth.ModelD.filter.cutoff})         // LPF cutoff 
+            .lpf(5000)         // LPF cutoff 
             .lpq(${this.param.synth.ModelD.filter.Q})              // LPF resonance
             .lpenv(${this.param.synth.ModelD.filter.env.depth})    // filter env: modulation depth
             .lpa(${this.param.synth.ModelD.filter.env.A})          // filter env attack

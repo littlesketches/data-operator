@@ -43,8 +43,6 @@
 		"src/routes/+layout.js"
 	],
 	"/model": [
-		"src/routes/model/+page.server.js",
-		"src/routes/+layout.js",
 		"src/routes/+layout.js"
 	],
 	"/model/cw-193": [

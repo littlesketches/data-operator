@@ -16,17 +16,15 @@
         apiData = queryParams.get('api') !== null ? true : false
 
     // iii. Programmatic mobile screen size check (on window resize)
-    const checkScreenSize = () => {
-        sonification.state.isMobile = data.app.state.global.device.screen.width < 600 || mobileFlag 
-    }
+    sonification.checkScreenSize(mobileFlag)
+
 </script>
 
-<svelte:window 
-    bind:innerWidth={data.app.state.global.device.screen.width} 
-    bind:innerHeight={data.app.state.global.device.screen.height}
-    on:resize={checkScreenSize}
- />
-
+<svelte:window
+    bind:innerWidth  = {data.app.state.global.device.screen.width} 
+    bind:innerHeight = {data.app.state.global.device.screen.height}
+    on:resize        = {() => sonification.checkScreenSize(mobileFlag)}
+/>
 
 <!-- LAYOUT-->
 {@render children?.()}

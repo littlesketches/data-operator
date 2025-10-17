@@ -33,8 +33,7 @@ export const nodes = [
 	() => import('./nodes/29'),
 	() => import('./nodes/30'),
 	() => import('./nodes/31'),
-	() => import('./nodes/32'),
-	() => import('./nodes/33')
+	() => import('./nodes/32')
 ];
 
 export const server_loads = [];
@@ -52,17 +51,16 @@ export const dictionary = {
 		"/docs/sonification/oe-10-dfam": [21,[2]],
 		"/docs/sonification/oe-10": [19,[2]],
 		"/docs/user-manual": [22,[2]],
-		"/model": [~23,[3]],
-		"/model/cw-193": [24,[3]],
-		"/model/cw-193/ambi": [25,[3,4]],
-		"/model/cw-193/dfam": [26,[3,5]],
-		"/model/cw-193/operator": [27,[3,6]],
-		"/model/ds-86": [28,[3]],
-		"/model/ds-86/operator": [29,[3,7]],
-		"/model/oe-10": [30,[3]],
-		"/model/oe-10/ambi": [31,[3,8]],
-		"/model/oe-10/dfam": [32,[3,9]],
-		"/model/oe-10/operator": [33,[3,10]]
+		"/model/cw-193": [23,[3]],
+		"/model/cw-193/ambi": [24,[3,4]],
+		"/model/cw-193/dfam": [25,[3,5]],
+		"/model/cw-193/operator": [26,[3,6]],
+		"/model/ds-86": [27,[3]],
+		"/model/ds-86/operator": [28,[3,7]],
+		"/model/oe-10": [29,[3]],
+		"/model/oe-10/ambi": [30,[3,8]],
+		"/model/oe-10/dfam": [31,[3,9]],
+		"/model/oe-10/operator": [32,[3,10]]
 	};
 
 export const hooks = {
