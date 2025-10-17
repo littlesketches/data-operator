@@ -3,6 +3,7 @@
     // Libs and utils
 	import { fade }         from 'svelte/transition';
     import { onMount }      from 'svelte';
+
     // Components
     import TopPanel         from "./ui/TopPanel.svelte";
     import Display          from "./display/Display.svelte";
@@ -25,7 +26,7 @@
     let viewGuide = $derived(false)
     let guideType = $derived(undefined)
 
-    // Handler
+    // Handlers
     const handle = {
         toggleGuide: function(){
             const type =  this.getAttribute('data-type')
@@ -41,16 +42,23 @@
                     viewGuide = !viewGuide
                 }
             }
+        },
+        lastTouchEnd: 0,
+        disableDoubleTapZoom: function(e){
+            const now = Date.now();
+            if (now - handle.lastTouchEnd <= 300) {
+                e.preventDefault(); 
+            }
+            handle.lastTouchEnd = now;
         }
     }
 
-    // Fade out
+    // Show guidance labels => fade out
     onMount( () => {
         setTimeout(() => {
             const buttons = document.querySelectorAll('.info-button');
-
             buttons.forEach(button =>  button.classList.add('fade') );
-        }, 2500);
+        }, 5000);
     })
 </script>
 
@@ -59,7 +67,8 @@
 <KeyboardUI {model}/>
 
 <div class = 'data-operator__container theme={operatorConfig.theme}'
-    class:mobile={sonification.state.isMobile} in:fade>
+    class:mobile={sonification.state.isMobile} 
+    ontouchend={handle.disableDoubleTapZoom} in:fade>
     <div class = 'interface__wrapper'>
         <TopPanel {model}/>
         <Display {model}/>
@@ -78,7 +87,6 @@
 </div>
 
 
-
 <!-- STYLES-->
 <style>
     .data-operator__container, 
@@ -95,6 +103,9 @@
         aspect-ratio:           12 / 19.5;
         position:               relative;
         touch-action:           none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
     }
 
     .guidance__container{

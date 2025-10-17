@@ -38,9 +38,9 @@
                 y:      ev.clientY,
                 target: ev.target
             });
-
+            ev.preventDefault()
             ev.target.setPointerCapture(ev.pointerId);
-            ev.target.parentElement.classList.add('active')
+            ev.target.classList.add('active')
 
             // Get attributes
             const type = this.getAttribute('data-type'),           // Button type    
@@ -291,10 +291,9 @@
 
             activePointers.delete(ev.pointerId);
             ev.target.releasePointerCapture(ev.pointerId);
-            ev.target.parentElement.classList.remove('active')
+            ev.target.classList.remove('active')
 
-            // handle.globalCleanup()
-
+            // Get attributes
             const type = this.getAttribute('data-type')
 
             switch(type){
@@ -308,8 +307,6 @@
                     // Turn off all punch FX
                     Object.keys(sonification.param[group].fx).forEach(key =>  sonification.param[group].fx[key] = false)
                     sonification.handle.updateREPL(strudel.state.transport === "playing")
-
-                    console.log('TURN OFF PUNCH!')
                     break
 
                 case 'numpad':
@@ -350,13 +347,12 @@
             }
         }, 
         globalCleanup(ev) {
-        for (const [id, data] of activePointers) {
-            data.target.classList.remove('active');
-        }
-        activePointers.clear();
+            for (const [id, data] of activePointers) {
+                data.target.classList.remove('active');
+            }
+            activePointers.clear();
         }
     }
-
 </script>
 
 
@@ -714,6 +710,7 @@
         height:                 100%;
         transition:             all 0.2s;
         border-radius:          50%;
+        pointer-events:         none;
         box-sizing:             border-box; /* include border in dimensions */
         background:             linear-gradient(145deg, #e8e8e8, var(--color-grad-0));
         box-shadow:              2.5px  2.5px 5px #8e8d8d,
