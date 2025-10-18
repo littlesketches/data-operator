@@ -1,1 +1,3 @@
-export { default as component } from "../../../../src/routes/model/ds-86/+page.svelte";
+import * as universal from "../../../../src/routes/model/cw-193/dfam/+page.js";
+export { universal };
+export { default as component } from "../../../../src/routes/model/cw-193/dfam/+page.svelte";

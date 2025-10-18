@@ -1,6 +1,6 @@
 <!-- DATA OPERATOR "MODEL" HOMEPAGE CW-193-->
 <script>
-    import OperatorDataDisclaimer   from "$src/components/module/data-operator/docs/OperatorDataDisclaimer.svelte";
+    import OperatorDataDisclaimer   from "$src/components/module/data-operator/docs/model-page/OperatorDataDisclaimer.svelte";
 </script>
 
 <section class = 'do-model-page__container'>
@@ -14,7 +14,7 @@
         </div>
 
         <div class = 'do-model-page__content'>
-            <p><strong>Data Operator DS-86</strong> is a collection of data sonification <i>instruments</i> that explores data on internally displaced people that have been collated and published by the <a href = 'https://www.internal-displacement.org/' target = "_blank">Internal Displacement Monitoring Center (IDMC)</a>. There are <strong>three editions</strong> of the DS-86 available in the collection, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every DS-87 is designed to be <i>played with</i> in a musical way.</p>
+            <p><strong>Data Operator DS-86</strong> is a collection of data sonification <i>instruments</i> that explores data on internally displaced people that have been collated and published by the <a href = 'https://www.internal-displacement.org/' target = "_blank">Internal Displacement Monitoring Center (IDMC)</a>. There are <strong>three editions</strong> of the DS-86 available in the collection, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every DS-86 is designed to be <i>played with</i> in a musical way.</p>
         </div>
 
         <ul class = 'do_model-page__menu'>
@@ -31,16 +31,33 @@
                     </div>
                 </li>
             </a>
-            <!-- <a href = "/model/cw-193/dfam">
-                <li class ='dfam'>
-                    <h3 class = 'menu-title'>Data From Another Mother</h3> 
+            <a href = "/model/ds-86/dfam">
+                <li class = 'dfam'>
+                    <div class = 'wrapper'>
+                        <div>
+                            <h2>DS-86</h2>
+                             <h3 class = 'menu-title'>+ Data From Another Mother</h3> 
+                        </div>
+                        <div class = 'arrow'>
+                            &rarr;
+                        </div>
+                    </div>
                 </li>
-            </a> 
-            <a href = "/model/cw-193/ambi">
+            </a>
+
+            <a href = "/model/ds-86/ambi">
                 <li class = 'ambi'>
-                    <h3 class = 'menu-title'>Ambient</h3> 
+                    <div class = 'wrapper'>
+                        <div>
+                            <h2>DS-86</h2>
+                             <h3 class = 'menu-title'>+ Ambient</h3> 
+                        </div>
+                        <div class = 'arrow'>
+                            &rarr;
+                        </div>
+                    </div>
                 </li>
-            </a> -->
+            </a>
         </ul>
 
         <div class = 'do-model-page__content'>

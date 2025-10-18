@@ -65,3 +65,7 @@ export function weightedBins(data, numBins) {
 
     return result;
 }
+
+export function deltaArray(arr) {
+  return arr.map((v, i, a) => (i === 0 ? 1 : v === a[i - 1] ? 0 : 1));
+}

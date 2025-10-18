@@ -1,6 +1,6 @@
 <!-- DATA OPERATOR "MODEL" HOMEPAGE OE-10 -->
 <script>
-    import OperatorDataDisclaimer   from "$src/components/module/data-operator/docs/OperatorDataDisclaimer.svelte";
+    import OperatorDataDisclaimer   from "$src/components/module/data-operator/docs/model-page/OperatorDataDisclaimer.svelte";
 </script>
 
 
@@ -83,3 +83,4 @@
 <svelte:head>
     <link rel='stylesheet' href='/css/module/data-operator/model-home.css'>
 </svelte:head>
+

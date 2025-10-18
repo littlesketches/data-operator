@@ -35,7 +35,7 @@ const operatorConfig = {
     },
     theme:          'dfam',              // Specify theme
     ui: {
-        type:       'custom-dfam',        // Specify UI
+        type:       'dfam',        // Specify UI
         keyguide,
         punchFX
     }

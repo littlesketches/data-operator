@@ -53,7 +53,7 @@
         <div class = 'data-vis__container'>
             {#if sonification.state.selection.group.active === 'master'}
             <div class = 'mix-vis__container'>
-                {#if ui == 'custom-dfam'}
+                {#if ui == 'dfam'}
                 <ChartPitchVelocity  {model} paramNameA={sonification.state.selection.group.A.chart} paramNameB = {sonification.state.selection.group.B.chart} chartType={'threeQ'} /> 
                 {:else}
                 <ChartPitch {model} group={'A'}  paramName = {sonification.state.selection.group.A.chart} chartType ={'quarter'} />
@@ -63,7 +63,7 @@
             </div>
             {:else}
                 {@const type = sonification.schema.group[sonification.state.selection.group.active].type }
-                {#if ui === 'custom-dfam'}
+                {#if ui === 'dfam'}
                     {#if type === 'pattern'}     
                     <ChartPattern {model} {group}  chartType={'full'} />
                     {:else}

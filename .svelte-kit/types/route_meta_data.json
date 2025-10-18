@@ -72,6 +72,20 @@
 	"/model/ds-86": [
 		"src/routes/+layout.js"
 	],
+	"/model/ds-86/ambi": [
+		"src/routes/model/ds-86/ambi/+page.js",
+		"src/routes/model/ds-86/ambi/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/ds-86/ambi/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/model/ds-86/dfam": [
+		"src/routes/model/ds-86/dfam/+page.js",
+		"src/routes/model/ds-86/dfam/+layout.js",
+		"src/routes/+layout.js",
+		"src/routes/model/ds-86/dfam/+layout.js",
+		"src/routes/+layout.js"
+	],
 	"/model/ds-86/operator": [
 		"src/routes/model/ds-86/operator/+page.js",
 		"src/routes/model/ds-86/operator/+layout.js",

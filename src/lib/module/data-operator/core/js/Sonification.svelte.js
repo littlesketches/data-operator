@@ -26,9 +26,8 @@ export class Sonification{
     userMessageTimeout = 1500
     state = $state()
     mode  = $derived({})
-    // param   // Placeholder for derived parameter map 
-    
-    // code  = ''  // Placeholder for Strudel code derived from state and params
+    // param        // Placeholder for derived parameter map 
+    // code  = ''   // Placeholder for Strudel code derived from state and params
     
     /////////////////////
     //// CONSTRUCTOR ////
@@ -58,8 +57,8 @@ export class Sonification{
                     isOpen:     false,          // Flag for UI
                     group:      undefined
                 },
-                A:  { active: false, array: [] },       // "active" flags use over euclidean rhythm
-                B:  { active: false, array: [] }        // "array" is a store for support visuals
+                A:  { active: false, onDelta: false, array: [] },       // "active" flags use over euclidean rhythm. "onDelta" flags whether to apply an 'onDelta' pulse algorithm
+                B:  { active: false, onDelta: false, array: [] }        // "array" is a store for support visuals
             },
             mode: {         // Active Mode 'button state': tracks the active mode (i.e. singular)
                 fx:             false,
@@ -552,11 +551,13 @@ export class Sonification{
             },
             // Euclidean rhythm and pulse sequencer 
             adjustEuclideanRhythm(pulseChange, rotationChange, group, part){
-                // 1. Check and return if on track with no euclidean rhythm on master group
+                // i. Check and return if on track with no euclidean rhythm on master group
                 if(group === 'master') return 
-                // 2. Update euclidean rhythm by group 'type' 
+
+                // ii. Update euclidean rhythm by group 'type' 
                 const groupType = sonification.schema.group[group].type
                 let patternLength, minPulse = 1, maxPulse, minRotation = 0, maxRotation
+
                 switch(groupType){        
                     case 'pitch':
                     case 'velocity':
@@ -603,47 +604,56 @@ export class Sonification{
                         sonification.state.userMessage.text = pulseChange ? `Part ${group}.${part} euclidean pulse is ${sonification.param[group].part[part].sound.pulse}` :  `Group ${group} euclidean rotation is ${sonification.param[group].part[part].sound.rotation}`
                         break
                 }
-                // 3. Make euclidean rhythm 'active' by clearing the pulse sequencer
+
+                // iii. Make euclidean rhythm 'active' by clearing the pulse sequencer
                 sonification.state.sequencer[group].active = false
+                sonification.state.sequencer[group].onDelta = false
                 sonification.state.sequencer[group].array = []
-                // 4. Handle user message
+
+                // iv. Handle user message
                 sonification.handle.userMessage()
 
                 // => Evaluate strudel code
                 this.updateREPL(strudel.state.transport === "playing")           
             }, 
             randomEuclideanRhythm(group, part, message = true, update = true, minPulse = 5, maxPulse = 15){
-                // 1. Set clamping variables
+                // i. Set clamping variables
                 const patternLength = 16, 
                     minRotation = 0, maxRotation = 15
                 const groupType = sonification.schema.group[group].type
 
-                // 2. Generate random (clamped) pulse and rotation
+                // ii. Generate random (clamped) pulse and rotation
                 const newPulse =  Math.floor(Math.random() * (maxPulse - minPulse + 1)) + minPulse
                 const newRotation =  Math.floor(Math.random() * (maxRotation - minRotation + 1)) + minRotation
 
-                // 3. Update euclidean rhythm by group 'type' 
+                // iv. Turn off onDelta
+                sonification.state.sequencer[group].onDelta = false
+                sonification.state.sequencer[group].active = false
+
+                // iii. Update euclidean rhythm by group 'type' 
                 switch(typeof part){  
                     case undefined:
-                        // i. Update sonificaiton params for part
+                        // a. Update sonificaiton params for part
                         sonification.param[group].part[part].sound.pulse = newPulse
                         sonification.param[group].part[part].sound.rotation = newRotation
-                        // ii. Store euclidean array (for visualisation)
+                        // b. Store euclidean array (for visualisation)
                         sonification.state.selection.group[group].part[part].euclideanArray = rotateArray(getPattern(sonification.param[group].part[part].sound.pulse , patternLength ), sonification.param[group].part[part].sound.rotation)
-                        // iii. Create user message
+                        // c. Create user message
                         sonification.state.userMessage.text = `${group}.${part}> random rhythm!`
                         break
                     default:
-                        // i. Update sonificaiton params for group
+                        // a. Update sonificaiton params for group
                         sonification.param[group][groupType].pulse = newPulse
                         sonification.param[group][groupType].rotation = newRotation
-                        // iii. Store euclidean array (for visualisation)
+                        // b. Store euclidean array (for visualisation)
                         sonification.state.selection.group[group].euclideanArray = rotateArray(getPattern(sonification.param[group][groupType].pulse , patternLength ), sonification.param[group][groupType].rotation)
-                        // iii. Create user message
+                        // c. Create user message
                         sonification.state.userMessage.text = `${group} > random rhythm!`
                 }
 
-                // 4. Handle user message
+
+
+                // v. Handle user message
                 if(message) sonification.handle.userMessage()
 
                 // => Evaluate strudel code
@@ -694,7 +704,10 @@ export class Sonification{
                 sonification.param[group][type].struct = array.map(n => n && 'x' || '-').join(' ')   
                 sonification.param[group][type].structLegato = legatoStruct(array)
 
-                // iii. Handle user message
+                // iii. Toggle off onDelta
+                sonification.state.sequencer[group].onDelta = false
+
+                // iv. Handle user message
                 sonification.state.userMessage.text = `${group}> pulse seq. updated`
                 sonification.handle.userMessage()
 
@@ -798,6 +811,7 @@ export class Sonification{
 
         // Check screenSize
         this.checkScreenSize()
+
     };
 
     // Placeholder methods: defined in extended DataSonification classes

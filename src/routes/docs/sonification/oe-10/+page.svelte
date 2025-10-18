@@ -1,5 +1,5 @@
 <script>
-    import OE10 from "$src/components/module/data-operator/docs/sonifcation-notes/OE-10.svelte";
+    import OE10 from "$src/components/module/data-operator/docs/sonifcation-notes/OE-10-Operator.svelte";
 </script>
 
 <!-- HTML MARKUP-->

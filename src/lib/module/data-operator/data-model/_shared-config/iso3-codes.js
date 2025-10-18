@@ -855,7 +855,7 @@ export const iso3map = {
         "subregion": "Micronesia"
     },
     "PSE": {
-        "name": "Palestine, State of",
+        "name": "Palestine",
         "region": "Asia",
         "subregion": "Western Asia"
     },

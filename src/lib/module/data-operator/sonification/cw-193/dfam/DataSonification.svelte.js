@@ -35,9 +35,9 @@ export class DataSonification extends Sonification{
     // Strudel code derived from state and params
     code = $derived(`
         /* 
-         @title Open Electricity Data Jam: ${d3.timeFormat("%d-%m-%y")(this.data.scene[this.state.selection.sceneIndex].day)}   
-         @by Data Operator OE-10:DFAM
-         @details Sonification of Open Electricity (NEM) data 
+         @title Climate Watch Data Jam: ${d3.timeFormat("%d-%m-%y")(this.data.scene[this.state.selection.sceneIndex].day)}   
+         @by Data Operator CW-193:DFAM
+         @details Sonification of Climate Watch data 
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */

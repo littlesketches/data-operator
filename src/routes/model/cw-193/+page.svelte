@@ -1,6 +1,6 @@
 <!-- DATA OPERATOR "MODEL" HOMEPAGE CW-193-->
 <script>
-    import OperatorDataDisclaimer   from "$src/components/module/data-operator/docs/OperatorDataDisclaimer.svelte";
+    import OperatorDataDisclaimer   from "$src/components/module/data-operator/docs/model-page/OperatorDataDisclaimer.svelte";
 </script>
 
 <section class = 'do-model-page__container'>

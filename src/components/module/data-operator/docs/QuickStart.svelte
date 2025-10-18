@@ -27,7 +27,7 @@
                 </li>
 
                 <li>
-                    <p><strong>Use <span class = 'key'>&plus;</span> and <span class = 'key'>&minus;</span>  to adjust the volume to your taste</strong>: notice that on the top left of the display, the "MIX" track is highlighted &mdash; this means it is selected. The volume you're controlling here is for that MIX track<label for="sn-002" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-002" class="margin-toggle"/><span class="sidenote">The mix track is also called the 'master', so this is the master volume. Once you learn to select individual track (groups), you can use these controls to adjust their levels to your taste, similar to how an audio mixer works.</span>.
+                    <p><strong>Use <span class = 'key'>&minus;</span> and <span class = 'key'>&plus;</span> to adjust the volume to your taste</strong>: notice that on the top left of the display, the "MIX" track is highlighted &mdash; this means it is selected. The volume you're controlling here is for that MIX track<label for="sn-002" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-002" class="margin-toggle"/><span class="sidenote">The mix track is also called the 'master', so this is the master volume. Once you learn to select individual track (groups), you can use these controls to adjust their levels to your taste, similar to how an audio mixer works.</span>.
                     </p>
                 </li>
 

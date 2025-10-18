@@ -1,0 +1,5 @@
+<section>
+    <h2>DS86: Data from the IDMC</h2>
+    <p>Data for this sonification comes from  the <a href='https://www.internal-displacement.org/' target="_blank">Internal Displacement Monitoring Centre</a>. It contains annual data about the volume of people displaced inside their own countries, by conflict and disasters. Data is reported for a total of 86 countries, from 2008 to 2024. The equates to a (maximum) history for each country of 17 years. Data not reported in for some countries, in some years, is assumed to be zero. This assumption allows for all countries to represented on the same timeframe/timeline for comparison. Data recorded on the volumes of annual displacement, cumulative 'stock' and number of disasters (by year) are used in the data model/sonification. For suitable use with musical timing, data has been rolled up to a maximum division of 16 steps/sixteenth notes (using a weighted binning algorithm).
+    </p>
+</section>

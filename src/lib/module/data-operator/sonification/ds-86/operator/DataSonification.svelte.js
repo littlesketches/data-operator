@@ -9,7 +9,9 @@ import * as d3                      from 'd3'
 import { getPattern}                from 'euclidean-rhythms';
 import { randomItem,
     cycleFromValue, 
-    rotateArray}                   from '$lib/module/data-operator/core/js/utils';
+    rotateArray, 
+    legatoStruct, 
+    deltaArray }                   from '$lib/module/data-operator/core/js/utils';
 
 // Classes
 import { Sonification }             from '$lib/module/data-operator/core/js/Sonification.svelte';
@@ -212,6 +214,10 @@ export class DataSonification extends Sonification{
             this.state.selection.group.B.euclideanArray = rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
             this.state.selection.group.C.part["1"].euclideanArray = rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)
             this.state.selection.group.C.part["2"].euclideanArray = rotateArray(getPattern(this.param.C.part["2"].sound.pulse, this.param.C.part["2"].sound.length), this.param.C.part["2"].sound.rotation)
+
+            // iii. Apply the onDelta pulse for A and B as the default
+            this.state.sequencer.A.onDelta = true
+            this.state.sequencer.B.onDelta = true
         }
 
         /**
@@ -254,7 +260,6 @@ export class DataSonification extends Sonification{
                 C:  this.schema.pattern.C    //  Percussion and chord part presets           
             }
 
-
         /**
          *  GROUP A: Melodic "synth"
          */ 
@@ -263,8 +268,15 @@ export class DataSonification extends Sonification{
         group.A.pitch.array         = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => { return d[scaleLock]})
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
+        if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for B 
+            this.state.sequencer.A.active   = true 
+            this.state.sequencer.A.array    = deltaArray( group.A.pitch.array)
+            this.param.A.pitch.struct       = this.state.sequencer.A.array.map(n => n && 'x' || '-').join(' ')   
+            this.param.A.pitch.structLegato = legatoStruct(this.state.sequencer.A.array )
+        }
+
         // ii. Velocity: constructed from selected data => update params
-        group.A.velocity.array        = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => { return d.value})
+        group.A.velocity.array      = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => { return d.value})
         this.param.A.velocity.pattern = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
         // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
@@ -285,6 +297,13 @@ export class DataSonification extends Sonification{
         // i. Pitch: constructed from selected data => update params
         group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B.pitch[group.B.pitch.series].map(d => d[scaleLock])
         this.param.B.pitch.pattern  = `${JSON.stringify(group.B.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
+
+        if(this.state.sequencer.B.onDelta){  // Create a custom onchange pulse pattern for B 
+            this.state.sequencer.B.active   = true 
+            this.state.sequencer.B.array    = deltaArray( group.B.pitch.array)
+            this.param.B.pitch.struct       = this.state.sequencer.B.array.map(n => n && 'x' || '-').join(' ')   
+            this.param.B.pitch.structLegato = legatoStruct(this.state.sequencer.B.array)
+        }
 
         // ii. Noise part level "velocity": constructed from data 
         const noiseRange = 1 ?? sceneData.scaledData["1m"].B.noise[0][group.B.noise.series].value

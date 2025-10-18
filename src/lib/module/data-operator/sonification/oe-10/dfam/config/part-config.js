@@ -1,5 +1,5 @@
 /**
- *   PRESET PERCUSSION PATTERNS: OE-DFAM
+ *   PRESET PERCUSSION PATTERNS: OE-10-OPERATOR
  *   - Strudel sound (drum kit) patterns with manually defined event arrays use with visuals
  *   - "vis" arrays are in a format matched to the VisPattern chart component = > used for synced charts and visuals
  */
@@ -7,60 +7,21 @@ import { beatConfig as beat } from "../../../_shared/beat-config"
 import { percConfig as perc } from "../../../_shared/perc-config"
 
 export const groupPartPresets =  {
-    1: {
+    1: { // Part 1. Percussion patters: "membrane" layer
         sound: {
-            0:      {
-                pattern: {
-                    ducked: 'bd bd bd bd',
-                    normal:  '~ ~ ~ ~'
-                },
-                vis: [
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                ]
-            },
-            1:  {
-                pattern: {
-                    ducked: 'bd bd bd bd',
-                    normal:  '~ sd ~ sd'
-                },
-                vis: [
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd', 'sd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['bd', 'sd'], ['-'], ['-'], ['-'],
-                ]
-            },
-            2: {
-                pattern: {
-                    ducked: 'bd - [bd bd] -',
-                    normal:  '- sd - cp'
-                },
-                vis: [
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['sd'], ['-'], ['-'], ['-'],
-                    ['bd'], ['-'], ['-'], ['-'],
-                    ['cp'], ['-'], ['-'], ['-'],
-                ]
-            },
-            3:      {
-                pattern: {
-                    ducked: '<bd - - -  [bd, -] - - -   bd - - -  - - - - >*16',
-                    normal: '<- - cp -  [-, sd] - lt -  - - mt -  sd - ht - >*16',
-                },
-                
-                vis: [
-                    ['bd'], ['-'], ['cp'], ['-'],
-                    ['bd', 'sd'], ['-'], ['lt'], ['-'],
-                    ['bd'], ['-'], ['mt'], ['-'],
-                    ['sd'], ['-'], ['ht'], ['-'],
-                ]
-            }
+            // A. On the beat:
+            0:  beat.four_on_the_floor,
+            1:  beat.back_beat,
+            2:  beat.electro_1a,
+            3:  beat.hip_hop_1,
+            4:  beat.hip_hop_3,
+            5:  beat.amen_break_1,
+            6:  beat.groove_b,
+            7:  beat.gahu,
+            8:  beat.soukous,          
         }
     },
-    2: {
+    2: { // Part 2. Percussion patterns: "metal and misc" layer
         sound: {
             0:  perc.hats_open_4,
             1:  perc.hats_closed_8,
@@ -82,35 +43,36 @@ export const groupPartPresets =  {
         },
         sound: {
             0: {
+                label:      'Supersaw synth',
+                gain:       0.6,
+                code:      `.s("supersaw").lpf(2500).lpq(8).lpenv(3)`,
+                ampEnv:     `0.5:0.1:0.8:1`
+            },
+            2: {
                 label:      'Vibraphone',
                 code:      `.s("vibraphone")`,
                 gain:       0.65,
             },
-            1: {
-                label:      'Supersaw synth',
-                gain:       0.6,
-                code:      `.s("supersaw").lpf(2500).lpq(8).lpenv(3).adsr("0.5:0.1:0.8:1").clip(0.85)`,
-            },
-            2: {
+            3: {
                 label:      'Piano',
                 code:      `.s("piano")`,
                 gain:       3,
             },
-            3: {
+            4: {
                 label:      'Harp',
                 code:      `.s("folkharp")`,
                 gain:       2,
             },
-            4: {
+            5: {
                 label:      'Wine glass',
                 code:      `.s("wineglass")`,
                 gain:       2,
             },
-            5: {
+            6: {
                 label:      'Pipe organ',
                 code:      `.s("pipeorgan_loud_pedal")`,
                 gain:       0.6,
             }
         }
     }
-}             
+}

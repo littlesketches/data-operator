@@ -76,7 +76,11 @@ export class DataModel_IDMC extends DataModel{
         // i. Init schema obj
         const schema = {
             list: {
-                countryCodes:   [...new Set(inputData.idp_volumes.map(d => d.ISO3))].sort(),     // Scene index
+                countryCodes:  [...new Set(inputData.idp_volumes.map(d => d.ISO3))]       // Scene index
+                                .map( ISO3 => { return { ISO3, name: iso3map[ISO3].name}})
+                                .sort((a, b) =>  a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+                                .map(d => d.ISO3)
+            ,   
                 availableYears: [...new Set(inputData.disaster_events.map(d => d.Year).concat(inputData.idp_volumes.map(d => d.Year)))].sort(),
             }, 
             map: {
@@ -103,7 +107,7 @@ export class DataModel_IDMC extends DataModel{
     }
 
     #transformData(inputData){
-        // 1. Group input data into countries 
+        // Group input data into countries 
         const modelData = this.schema.list.countryCodes.map(ISO3 => { 
             const name = this.schema.map.countryMeta[ISO3]?.name, 
                 eventData = d3.group(inputData.disaster_events, d => d.ISO3).get(ISO3),
@@ -150,7 +154,7 @@ export class DataModel_IDMC extends DataModel{
     }
 
     #createDataScenes(modelData){
-        console.log({modelData, scaleConfig, timingConfig, schema: this.schema})
+
         // i. Init sceneData array
         const sceneData = []
 
@@ -160,7 +164,7 @@ export class DataModel_IDMC extends DataModel{
             '1m': 1,    '2n': 2,    '4n': 4,   '8n': 8,     '16n': 16,     
         }
 
-        // 2. Transform data into scenes
+        // iii. Transform data into scenes
         const model = modelData.map( d => {
 
             const ISO3 = d.ISO3
@@ -185,22 +189,20 @@ export class DataModel_IDMC extends DataModel{
                 disasterCount
             }
 
-
             // iii. Transform data into timing intervals
             Object.entries(timingInterval).forEach( ([interval, bins]) => {
 
-                // i. Interval data (weighted bins)
+                // a. Interval data (weighted bins)
                 intervalData[interval] = {}
                 Object.entries(seriesData).forEach( ([seriesName, array]) => {
                     intervalData[interval][seriesName] = weightedBins(array, bins)    
                 })
 
-                // ii. Create data scales and scaled data
+                // b. Create data scales and scaled data
                 scale[interval] = {}    
                 scaledData[interval] = {}
 
                 for( let [group, obj] of Object.entries(scaleConfig)){
-
                     scale[interval][group] = {}
                     scaledData[interval][group] = {}
 
@@ -264,29 +266,20 @@ export class DataModel_IDMC extends DataModel{
                             break
                     }
                 }
-
             })
 
-console.log(this.schema.map.countryMeta[ISO3], {
-                meta:        this.schema.map.countryMeta[ISO3],
-                intervalData,
-                scale,
-                scaledData,
-            })
             // => Return model object 
             return  {
+                ISO3,
                 meta:        this.schema.map.countryMeta[ISO3],
                 intervalData,
                 scale,
                 scaledData,
             }
-
         })
-
 
         // => Return model object
         return model
-
     }
 
 

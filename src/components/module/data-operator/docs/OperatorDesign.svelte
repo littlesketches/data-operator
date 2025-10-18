@@ -2,7 +2,7 @@
 <script>
     // Libs and utils
 	import { fade } from 'svelte/transition';
-    import SonificationCanvasDO1 from './SonificationCanvasDO1.svelte';
+    import SonificationCanvasDO1 from './sonifcation-notes/SonificationCanvasDO1.svelte';
     
     // Props
     let {isSideGuide = false} = $props()

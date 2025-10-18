@@ -33,34 +33,40 @@ export const nodes = [
 	() => import('./nodes/29'),
 	() => import('./nodes/30'),
 	() => import('./nodes/31'),
-	() => import('./nodes/32')
+	() => import('./nodes/32'),
+	() => import('./nodes/33'),
+	() => import('./nodes/34'),
+	() => import('./nodes/35'),
+	() => import('./nodes/36')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
-		"/": [11],
-		"/_data/open-electricity": [12],
-		"/docs": [13,[2]],
-		"/docs/model/oe-10": [14,[2]],
-		"/docs/model/oe-dfam": [15,[2]],
-		"/docs/operator-design": [16,[2]],
-		"/docs/quick-start": [17,[2]],
-		"/docs/sonification": [18,[2]],
-		"/docs/sonification/oe-10-ambi": [20,[2]],
-		"/docs/sonification/oe-10-dfam": [21,[2]],
-		"/docs/sonification/oe-10": [19,[2]],
-		"/docs/user-manual": [22,[2]],
-		"/model/cw-193": [23,[3]],
-		"/model/cw-193/ambi": [24,[3,4]],
-		"/model/cw-193/dfam": [25,[3,5]],
-		"/model/cw-193/operator": [26,[3,6]],
-		"/model/ds-86": [27,[3]],
-		"/model/ds-86/operator": [28,[3,7]],
-		"/model/oe-10": [29,[3]],
-		"/model/oe-10/ambi": [30,[3,8]],
-		"/model/oe-10/dfam": [31,[3,9]],
-		"/model/oe-10/operator": [32,[3,10]]
+		"/": [13],
+		"/_data/open-electricity": [14],
+		"/docs": [15,[2]],
+		"/docs/model/oe-10": [16,[2]],
+		"/docs/model/oe-dfam": [17,[2]],
+		"/docs/operator-design": [18,[2]],
+		"/docs/quick-start": [19,[2]],
+		"/docs/sonification": [20,[2]],
+		"/docs/sonification/oe-10-ambi": [22,[2]],
+		"/docs/sonification/oe-10-dfam": [23,[2]],
+		"/docs/sonification/oe-10": [21,[2]],
+		"/docs/user-manual": [24,[2]],
+		"/model/cw-193": [25,[3]],
+		"/model/cw-193/ambi": [26,[3,4]],
+		"/model/cw-193/dfam": [27,[3,5]],
+		"/model/cw-193/operator": [28,[3,6]],
+		"/model/ds-86": [29,[3]],
+		"/model/ds-86/ambi": [30,[3,7]],
+		"/model/ds-86/dfam": [31,[3,8]],
+		"/model/ds-86/operator": [32,[3,9]],
+		"/model/oe-10": [33,[3]],
+		"/model/oe-10/ambi": [34,[3,10]],
+		"/model/oe-10/dfam": [35,[3,11]],
+		"/model/oe-10/operator": [36,[3,12]]
 	};
 
 export const hooks = {
