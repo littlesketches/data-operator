@@ -96,7 +96,7 @@
 
                     <ul style = 'list-style:none; padding-inline-start: 1rem; margin-top: 1rem'>
                         <li>
-                            <span class = 'key'><span class = "material-symbols-outlined">play_arrow</span></span> on startup and when the <i>Data Operator</i> has been stopped.
+                            <span class = 'key'><span class = "material-symbols-outlined">play_arrow</span></span> on startup or when the <i>Data Operator</i> has been stopped.
                         </li>
                         <li>
                             <span class = 'key'><span class = "material-symbols-outlined">stop</span></span> when the <i>Data Operator</i> is playing.

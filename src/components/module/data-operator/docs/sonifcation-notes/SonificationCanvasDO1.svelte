@@ -284,8 +284,8 @@
                 </p>
                 <ul>
                     <li>Mapping to note frequency (pitch) is also scaled to musical scale degrees, which are then transformed by a (user selected) musical scale (that can also be transposed).</li>
-                    <li>Mapping to other note parameters (e.g. velocity) is unquantized but scaled to the appropriate range</li>
-                    <li>More subtle data representations can include using data to set modulation ranges (i.e. for LFOs controlling parameters like filter cutoff, resonance etc.), at slower clock rates to introduce subtle and smooth timbral changes.</li>
+                    <li>Mapping to other note parameters (e.g. velocity) is un-quantized but scaled to the appropriate range</li>
+                    <li>More subtle data representations can include using data to set modulation ranges (i.e. for LFOs controlling parameters like filter cutoff, resonance etc.), at slower clock speeds to introduce subtle and smooth timbral changes.</li>
                 </ul>
             </div>
         </foreignObject>
@@ -294,7 +294,7 @@
             <div class="content narrative"  xmlns="http://www.w3.org/1999/xhtml">
                 <p>The (explicit) narrative element of (basic) Data Operator is limited. This is expected to be extended by a narrative-focused "Composition" component that would be narrative focused. </p>
 
-                <p>NOTE: The initial of the Data Operator does not fit particularly well on a "Analytical-Narrative" spectrum. This is somewhat 'by design' as seperate extensions or 'plug-ins' to cater for these focuses are planned. </p>
+                <p>NOTE: The initial of the Data Operator does not fit particularly well on a "Analytical-Narrative" spectrum. This is somewhat 'by design' as separate extensions or 'plug-ins' to cater for these focuses are planned. </p>
             </div>
         </foreignObject>
     </g>

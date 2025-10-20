@@ -47,13 +47,15 @@
             <hr>
             <h3>An brief aside: finding controls</h3>
             <ButtonControls {isSideGuide}/>
+            <hr>
         </section>
-    <hr>
+
+
         <section>
-            <p>Back to the guide...</p>
+            <p><i>Back to the guide...</i></p>
             <ol start="4">
                 <li>
-                    <p><strong>Hold down each of the four (performance) "mode" buttons, one at a time, and see what happens</strong>: these mode buttons are distinguished by an inner circle around their label and wrap around bottom and lower right of the number pad. Notice that when you hold them down, labels telling you what the other buttons do will appear. This is how we get deeper into the features and controls in the Data Operator. The details can be found in the <a href ='/docs/user-manual' target = '_blank'>user manual</a> but very quickly:</p>
+                    <p><strong>Hold down each of the four (performance) "mode" buttons, one at a time, and see what happens</strong>: these mode buttons are distinguished by a circle around their label. Notice that when you hold them down, labels telling you what the other buttons do will appear. This is how we get deeper into the features and controls in the Data Operator. The details can be found in the <a href ='/docs/user-manual' target = '_blank'>user manual</a> but very quickly:</p>
                     <ul style="list-style:none">
                         <li><span class = 'key'>&times;</span> is the <span class = 'mode-label'>Select</span> mode: this lets you select the tracks and configure the musical scale to applies to all tonal tracks (to keep things in harmony).</li>
                         <li><span class = 'key'>&sdot;</span> is the <span class = 'mode-label'>Modify</span> mode: this lets you mute tracks and provides access to control 'rhythms', either via track sequencers or euclidean rhythm controls </li>
@@ -61,10 +63,10 @@
                         <li><span class = 'key'><span class="material-symbols-outlined">function</span></span> is the <span class = 'mode-label'>FX</span> mode: this lets you "punch-in" different audio effects, to the selected track.</li>
                     </ul>
                     <p>The key takeaway for using modes is that you're only in a mode when that mode button is being held down. Let's practice...</p>
-                </li>
+                </li>x
 
                 <li>
-                    <p><strong>Hold <span class = 'key'><span class="material-symbols-outlined">function</span></span> and then any of the number keys</strong>. Notice how the sound is affected?! Try some other keys. And then try holding down more than one number key at a time. Maybe try <span class = 'key'>&plus;</span> or <span class = 'key'>&minus;</span><label for="sn-005" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-005" class="margin-toggle"/><span class="sidenote">These have tempo-related punch-in FX tied to them, so you'll only want to use one at a time.</span>. Having fun yet? Try to to time your punch-in FX to make the beat drop. Go wild.
+                    <p><strong>Hold <span class = 'key'><span class="material-symbols-outlined">function</span></span> and then any of the number keys</strong>. Notice how the sound is affected?! Try some other keys. If you're using a keyboard, try holding down more than one number key at a time to use multi-FX. Try the FX on  <span class = 'key'>&plus;</span> or <span class = 'key'>&minus;</span><label for="sn-006" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-006" class="margin-toggle"/><span class="sidenote">These have tempo-related punch-in FX tied to them, so you'll only want to use one at a time.</span>. Having fun yet? Use punch-in FX when you want to. Go wild and drop some happy beats!
                     </p>
 
                     <p>The <span class = 'key'><span class="material-symbols-outlined">function</span></span> mode is arguably the most 'performance' orientated mode, but all other modes work very similarly. The main difference is that you'll just need to tap the number key to make a change, rather than holding onto an FX for as long as you like.
@@ -74,7 +76,7 @@
         </section>
 
         <section>
-            <p>That's all you need to gets started!<label for="sn-006" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-006" class="margin-toggle"/><span class="sidenote">Obviously there's more to explore inside each mode. All is revealed in the <a href ='/docs/user-manual' target = '_blank'>user manual</a>.</span> But just to end this quick start guide: what might have noticed is that is the you'll need two fingers to access a the mode &mdash; one to hold the mode button, and another to active an 'action' &mdash; to really get the most out of the Data Operator. <strong>The Data Operator wants to you to play with it. And it wants to reward you for learning <i>how</i> to play it.</strong>
+            <p>That's all you need to gets started!<label for="sn-006" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-006" class="margin-toggle"/><span class="sidenote">Obviously there's more to explore inside each mode. All is revealed in the <a href ='/docs/user-manual' target = '_blank'>user manual</a>.</span> But just to end this quick start guide: what you might have noticed is that is the you'll need two fingers to activate a <strong>mode action</strong> &mdash; one to hold the mode button, and another to choose an 'action'. Learning these musical actions is the key <i>playing</i> the <i>Data Operator</i> like an instrument.
             </p>
         </section>
 
@@ -116,5 +118,8 @@
     .mode-label{
         text-transform:     uppercase;
         font-style:         italic;
+    }
+    li{
+        margin-bottom:      1rem;
     }
 </style>
