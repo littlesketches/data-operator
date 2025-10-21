@@ -4,20 +4,17 @@
  *  - Strudel 'code' template with parameters and data sonification input strings
  */
 // Libs and utils
-import * as d3                      from 'd3'
-import { getPattern}                from 'euclidean-rhythms';
-import {
-    randomItem,
-    cycleFromValue, 
-    rotateArray }                   from '$lib/module/data-operator/core/js/utils';
+import * as d3              from 'd3'
+import { getPattern}        from 'euclidean-rhythms';
+import { util }             from '$lib/module/data-operator/core/js/utils';
 
 // Classes
-import { Sonification }             from '$lib/module/data-operator/core/js/Sonification.svelte';
+import { Sonification }     from '$lib/module/data-operator/core/js/Sonification.svelte';
 
 // Config
-import { timingConfig }             from '$lib/module/data-operator/core/config/global/timing-config';
-import { musicalScales }            from '$lib/module/data-operator/core/config/global/music-scale-config';
-import { paramInit }                from './parameter-map';
+import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config';
+import { musicalScales }    from '$lib/module/data-operator/core/config/global/music-scale-config';
+import { paramInit }        from './parameter-map';
 
 // const base = `${window?.location.origin}/sounds/`
 
@@ -189,15 +186,16 @@ export class DataSonification extends Sonification{
          *  I. ON INIT ACTIONS
          */
         if(init){
+
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern = randomItem(this.schema.group.A.pitch.series)
-            this.state.selection.group.B.pitchPattern = randomItem(this.schema.group.B.pitch.series)
+            this.state.selection.group.A.pitchPattern = util.randomItem(this.schema.group.A.series)
+            this.state.selection.group.B.pitchPattern = util.randomItem(this.schema.group.B.series)
 
             // i. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
-            this.state.selection.group.A.euclideanArray = rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
-            this.state.selection.group.B.euclideanArray = rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
-            this.state.selection.group.C.part["1"].euclideanArray = rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)
-            this.state.selection.group.C.part["2"].euclideanArray = rotateArray(getPattern(this.param.C.part["2"].sound.pulse, this.param.C.part["2"].sound.length), this.param.C.part["2"].sound.rotation)
+            this.state.selection.group.A.euclideanArray = util.rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
+            this.state.selection.group.B.euclideanArray = util.rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
+            this.state.selection.group.C.part["1"].euclideanArray = util.rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)
+            this.state.selection.group.C.part["2"].euclideanArray = util.rotateArray(getPattern(this.param.C.part["2"].sound.pulse, this.param.C.part["2"].sound.length), this.param.C.part["2"].sound.rotation)
         }
 
         /**
@@ -209,36 +207,27 @@ export class DataSonification extends Sonification{
             scaleLock       = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
-                    pitch: {
-                        interval:   this.schema.group.A.pitch.interval,          
-                        series:     this.state.selection.group.A.pitchPattern,
-                    }, 
-                    velocity: {
-                        interval:   this.schema.group.A.velocity.interval,         
-                        series:     this.state.selection.group.A.pitchPattern,
-                    }, 
-                    lpf: {
-                        interval:   '4n',               // Fix
-                        series:     this.state.selection.group.A.pitchPattern,    // Tied to pitch pattern 
-                    },
-                    lpq: {
-                        interval:   '4n',               // Static/config interval
-                        series:     this.state.selection.group.A.pitchPattern,     // Tied to pitch pattern 
-                    }
+                    pitch:    { interval: this.schema.group.A.map.pitch.interval    }, 
+                    velocity: { interval: this.schema.group.A.map.velocity.interval }, 
+                    lpf:      { interval: this.schema.group.A.map.lpf.interval      },
+                    lpq:      { interval: this.schema.group.A.map.lpq.interval      }
                 },
                 B: {
-                    pitch: {
-                        interval:   this.schema.group.B.pitch.interval,          // Static/config interval
-                        series:     this.state.selection.group.B.pitchPattern,
-                    }, 
-                    noise: {
-                        interval:   this.schema.group.B.pitch.interval,          // Follows pitch
-                        series:     'ratio-fossil',          // Static/config interval
-
-                    }
+                    pitch:    { interval: this.schema.group.B.map.pitch.interval    }, 
+                    noise:    { interval: this.schema.group.B.map.pitch.interval    }
                 },
                 C:  this.schema.pattern.C    //  Percussion and chord part presets           
             }
+
+        // ii. Add velocity to group C
+        group.C["2"].velocity = { interval: this.schema.group.B.map.pitch.interval }      
+        group.C["3"].interval =  this.schema.group.C.part["3"].interval  
+
+        /// iii. Set primary (pitch) pattern series
+        group.A.pitch.series = group.A.velocity.series = group.A.lpf.series = group.A.lpq.series =  this.state.selection.group.A.pitchPattern
+        group.B.pitch.series = group.B.noise.series =  group.C["2"].velocity.series = group.C["3"].series = this.state.selection.group.B.pitchPattern
+
+
 
         /**
          *  GROUP A: Melodic "synth"
@@ -247,6 +236,13 @@ export class DataSonification extends Sonification{
         // i. Pitch: constructed from selected data => update params
         group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => d[scaleLock])
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
+
+        if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for A
+            this.state.sequencer.A.active   = true 
+            this.state.sequencer.A.array    = util.deltaArray( group.A.pitch.array)
+            this.param.A.pitch.struct       = this.state.sequencer.A.array.map(n => n && 'x' || '-').join(' ')   
+            this.param.A.pitch.structLegato = util.legatoStruct(this.state.sequencer.A.array )
+        }
 
         // ii. Velocity: constructed from selected data => update params
         group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value )
@@ -270,6 +266,13 @@ export class DataSonification extends Sonification{
         // i. Pitch: constructed from selected data => update params
         group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B.pitch[group.B.pitch.series].map(d => d[scaleLock])
         this.param.B.pitch.pattern  = `${JSON.stringify(group.B.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
+
+        if(this.state.sequencer.B.onDelta){  // Create a custom onchange pulse pattern for B 
+            this.state.sequencer.B.active   = true 
+            this.state.sequencer.B.array    = util.deltaArray( group.B.pitch.array)
+            this.param.B.pitch.struct       = this.state.sequencer.B.array.map(n => n && 'x' || '-').join(' ')   
+            this.param.B.pitch.structLegato = util.legatoStruct(this.state.sequencer.B.array)
+        }
 
         // // ii. Noise part level "velocity": constructed from data 
         // const noiseRange = 1 ?? sceneData.scaledData["1m"].B.noise[0][group.B.noise.series].value

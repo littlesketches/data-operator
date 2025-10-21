@@ -8,14 +8,14 @@ import { DataSonification }             from '$src/lib/module/data-operator/soni
 import { DataModel_CW as DataModel }    from '$src/lib/module/data-operator/data-model/climate-watch/DataModel.svelte.js';
 
 // Config
-import { appConfig }        from '$lib/_core/config/app-config';
+import { appConfig }                    from '$lib/_core/config/app-config';
 
 // Custom Data Operator model config
-import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/operator/keyguide.js';
-import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/operator/fx-config.js';
-import { scaleConfig }      from '$src/lib/module/data-operator/sonification/cw-193/operator/config/scale-config.js';
-import { groupConfig }      from '$src/lib/module/data-operator/sonification/cw-193/operator/config/group-config.js';
-import { groupPartPresets } from '$src/lib/module/data-operator/sonification/cw-193/operator/config/part-config.js';
+import { keyguide }                     from '$src/lib/module/data-operator/core/config/ui/operator/keyguide.js';
+import { punchFX }                      from '$src/lib/module/data-operator/core/config/ui/operator/fx-config.js';
+import { scaleConfig }                  from '$src/lib/module/data-operator/sonification/cw-193/operator/config/scale-config.js';
+import { groupConfig }                  from '$src/lib/module/data-operator/sonification/cw-193/operator/config/group-config.js';
+import { groupPartPresets }             from '$src/lib/module/data-operator/sonification/cw-193/operator/config/part-config.js';
 
 
 /**

@@ -20,6 +20,7 @@
     import ShiftSwing           from './mode-keys/ShiftSwing.svelte';
     import FxPunchIn            from './mode-keys/FxPunchIn.svelte';
     import TrackShortcuts       from './mode-keys/TrackShortcuts.svelte';
+    import ModifyPulseDelta from './mode-keys/ModifyPulseDelta.svelte';
 
     // Props
     let {isSideGuide = false} = $props()
@@ -216,10 +217,13 @@
             <h3>d. Legato notes (for tracks A and B)</h3>
             <ModifyLegato/>
 
-            <h3>e. Euclidean Rhythms (for selected track)</h3>
+            <h3>e. Euclidean Rhythm (for selected track)</h3>
             <ModifyEuclideanRhythm/>
 
-            <h3>f. Clock divider (for selected tracks)</h3>
+            <h3>f. Pulse on delta  (for selected track)</h3>
+            <ModifyPulseDelta/>
+
+            <h3>g. Clock divider (for selected tracks)</h3>
             <ModifyClock/>
         </section>
 

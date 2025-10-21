@@ -80,8 +80,8 @@
      */
 
     // i. Get pitch data
-    const leadDataInterval = sonification.schema.group.A.pitch.interval,
-        bassDataInterval = sonification.schema.group.B.pitch?.interval
+    const leadDataInterval = sonification.schema.group.A.map.pitch.interval,
+        bassDataInterval = sonification.schema.group.B.map.pitch?.interval
 
     let sceneIndex = $derived(sonification.state.selection.sceneIndex),
         data     = $derived(dataModel.scene[sceneIndex])       // Modelled data for selected day

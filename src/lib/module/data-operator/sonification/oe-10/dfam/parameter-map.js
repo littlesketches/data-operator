@@ -52,19 +52,19 @@ export const paramInit = {
         pitch: {       
             pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap
             pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
+            rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             transpose:          24,             // OSC 2 transpose
-            scaleTranspose:     0,               // Transpose along the scale
+            scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,      // Legato version of pulse sequencer pattern
             clockDivider:       1               // Clock divider
         },
     },
     // Group B: [melodic] bass (and/or chord/drone) 
     B: {
-        gain:           0.7,            // Group level gain
-        mute:           false,          // Mute available at group level
+        gain:                   0.7,            // Group level gain
+        mute:                   false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level

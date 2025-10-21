@@ -69,3 +69,14 @@ export function weightedBins(data, numBins) {
 export function deltaArray(arr) {
   return arr.map((v, i, a) => (i === 0 ? 1 : v === a[i - 1] ? 0 : 1));
 }
+
+
+// Export as util obj
+export const util = {
+    cycleFromValue,
+    randomItem, 
+    randomInteger,
+    rotateArray,
+    deltaArray,
+    legatoStruct
+}

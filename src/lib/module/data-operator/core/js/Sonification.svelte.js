@@ -6,9 +6,10 @@
 // Libs and utils
 import * as d3              from 'd3'
 import { getPattern}        from 'euclidean-rhythms';
-import {  
+import { util,
     cycleFromValue, 
-    rotateArray, 
+    rotateArray,
+    deltaArray, 
     legatoStruct }          from './utils';
 
 // Config
@@ -135,11 +136,16 @@ export class Sonification{
     //////////////////////////
 
     initParam(punchFX){
-        // i. Add group-level parameter mapped series lengths: called after custom groupConfig is added, but beore hte init paramMa
-        if(this.param.A.pitch)      this.param.A.pitch.length       = +this.schema.group.A.pitch.interval.slice(0, -1)
-        if(this.param.A.velocity)   this.param.A.velocity.length    = +this.schema.group.A.velocity.interval.slice(0, -1)
-        if(this.param.B.pitch)      this.param.B.pitch.length       = +this.schema.group.B.pitch.interval.slice(0, -1)
-        if(this.param.B.velocity)   this.param.B.velocity.length    = +this.schema.group.B.velocity.interval.slice(0, -1)
+        // i. Add group-level parameter mapped series lengths: called after custom groupConfig is added, but before the init paramMa
+        if(this.param.A.pitch)      this.param.A.pitch.length       = +this.schema.group.A.map.pitch.interval.slice(0, -1)
+        if(this.param.A.velocity)   this.param.A.velocity.length    = +this.schema.group.A.map.velocity.interval.slice(0, -1)
+        if(this.param.A.lpf)        this.param.A.lpf.length         = +this.schema.group.A.map.lpf.interval.slice(0, -1)
+        if(this.param.A.lpq)        this.param.A.lpq.length         = +this.schema.group.A.map.lpq.interval.slice(0, -1)
+
+        if(this.param.B.pitch)      this.param.B.pitch.length       = +this.schema.group.B.map.pitch.interval.slice(0, -1)
+        if(this.param.B.velocity)   this.param.B.velocity.length    = +this.schema.group.B.map.velocity.interval.slice(0, -1)
+        if(this.param.B.lpf)        this.param.B.lpf.length         = +this.schema.group.B.map.lpf.interval.slice(0, -1)
+        if(this.param.B.lpq)        this.param.B.lpq.length         = +this.schema.group.B.map.lpq.interval.slice(0, -1)
 
         // ii. Add fx toggle object to params for master and each group
         this.param.A.fx = Object.fromEntries( Object.keys(punchFX).map(key => [key, false]) )       
@@ -285,7 +291,7 @@ export class Sonification{
                 // i. Get "current" closet and new bpm
                 const closest = (arr, num) => arr.reduce((a, b) => Math.abs(b - num) < Math.abs(a - num) ? b : a);
                 const currentClosest = closest(presets, sonification?.param.global.bpm)
-                const newBPM = cycleFromValue(presets, currentClosest, 1)
+                const newBPM = util.cycleFromValue(presets, currentClosest, 1)
 
                 // ii. Update param
                 sonification.param.global.bpm = newBPM
@@ -326,10 +332,10 @@ export class Sonification{
 
                 // ii. Update param
                 if(!part){
-                    sonification.param[group][type].clockDivider = cycleFromValue(divisionArray, sonification.param[group][type].clockDivider, direction)
+                    sonification.param[group][type].clockDivider = util.cycleFromValue(divisionArray, sonification.param[group][type].clockDivider, direction)
                     sonification.state.userMessage.text = `${group} > Clock divider set to ${sonification.param[group][type].clockDivider} `
                 } else {
-                    sonification.param[group].part[part][type].clockDivider = cycleFromValue(divisionArray, sonification.param[group].part[part][type].clockDivider, direction)
+                    sonification.param[group].part[part][type].clockDivider = util.cycleFromValue(divisionArray, sonification.param[group].part[part][type].clockDivider, direction)
                     sonification.state.userMessage.text = `${group}.${part} > Clock divider set to ${sonification.param[group].part[part][type].clockDivider } `
                 }
 
@@ -362,7 +368,7 @@ export class Sonification{
                     case 'pitch':
                     case 'velocity':
                     default:
-                        this.state.selection.group[group][`${type}Pattern`] = this.schema.group[group][type].series[index]             
+                        this.state.selection.group[group][`${type}Pattern`] = this.schema.group[group].series[index]             
                         const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? param.label
 
                         sonification.state.userMessage.text = `${group} > ${label}` //  Create user message
@@ -384,7 +390,7 @@ export class Sonification{
 
                 switch(type){
                     case 'pattern': // Cycle pattern part (index), where sign indicates direction)  
-                        const patternIndex = this.state.selection.group[group].part[partId].series = cycleFromValue(this.schema.group[group].part[partId].series, this.state.selection.group[group].part[partId].series , Math.sign(directionIndex) )
+                        const patternIndex = this.state.selection.group[group].part[partId].series = util.cycleFromValue(this.schema.group[group].part[partId].series, this.state.selection.group[group].part[partId].series , Math.sign(directionIndex) )
                         const pattenLabel = sonification.schema.pattern[group][part]?.sound[patternIndex].label ?? `#${patternIndex}`
 
                         sonification.state.userMessage.text = `${group}.${part} > ${pattenLabel}`
@@ -400,7 +406,7 @@ export class Sonification{
                     case 'pitch':
                     case 'velocity':
                     default: // Cycle the group data
-                        this.state.selection.group[group][`${type}Pattern`] = cycleFromValue(this.schema.group[group][type].series, this.state.selection.group[group][`${type}Pattern`] , directionIndex ) 
+                        this.state.selection.group[group][`${type}Pattern`] = util.cycleFromValue(this.schema.group[group].series, this.state.selection.group[group][`${type}Pattern`] , directionIndex ) 
                         const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? this.param.label
                         sonification.state.userMessage.text = `${group} > ${label}`
                 }
@@ -416,7 +422,7 @@ export class Sonification{
             },
             cycleScene: (dataChange) => {
                 // i. Update sceneIndex
-                this.state.selection.sceneIndex =  cycleFromValue(this.schema.sceneIndex, this.state.selection.sceneIndex , dataChange)       
+                this.state.selection.sceneIndex =  util.cycleFromValue(this.schema.sceneIndex, this.state.selection.sceneIndex , dataChange)       
                 /// ii. Handle user message
                 sonification.state.userMessage.text = `> ${sonification.data.getSceneLabel(this.state.selection.sceneIndex)}`
                 sonification.handle.userMessage()
@@ -450,7 +456,7 @@ export class Sonification{
                 } else if (this.state.selection.group.active === 'C' && groupChange < 0 && this.state.selection.group.C.activePart > 1){
                      this.state.selection.group.C.activePart-- 
                 } else { // Change group
-                    this.state.selection.group.active = cycleFromValue(groups, this.state.selection.group.active , groupChange) 
+                    this.state.selection.group.active = util.cycleFromValue(groups, this.state.selection.group.active , groupChange) 
                     this.state.selection.group.C.activePart = groupChange < 0 ? 3 : 1
                 }                                        
             },
@@ -569,9 +575,9 @@ export class Sonification{
                         if(pulseChange !== 0){
                             sonification.param[group][groupType].pulse = Math.min(Math.max(sonification.param[group][groupType].pulse + pulseChange, minPulse), maxPulse)
                         }
-                        // ii. Update rotation param
+                        // ii. Update rotation param: disabled until offset/vis synch is resolved
                         if(rotationChange !== 0){
-                            sonification.param[group][groupType].rotation =  Math.min(Math.max(sonification.param[group][groupType].rotation + rotationChange, minRotation), maxRotation) 
+                            // sonification.param[group][groupType].rotation =  Math.min(Math.max(sonification.param[group][groupType].rotation + rotationChange, minRotation), maxRotation) 
                         }
                         // iii. Store euclidean array (for visualisation)
                         sonification.state.selection.group[group].euclideanArray = rotateArray(getPattern(sonification.param[group][groupType].pulse , patternLength ), sonification.param[group][groupType].rotation)
@@ -579,8 +585,6 @@ export class Sonification{
                         sonification.state.sequencer[group].active  = false 
                         // v. Handle user message
                         sonification.state.userMessage.text = pulseChange ? `Group ${group} euclidean pulse is ${sonification.param[group][groupType].pulse}` :  `Group ${group} euclid. rotation is ${sonification.param[group][groupType].rotation}`
-
-
                         break
 
                     case 'pattern': // "Parts only"
@@ -592,14 +596,14 @@ export class Sonification{
                         if(pulseChange !== 0){
                             sonification.param[group].part[part].sound.pulse = Math.min(Math.max(sonification.param[group].part[part].sound.pulse + pulseChange, minPulse), maxPulse)
                         }
-                        // ii. Update rotation param
+                        // ii. Update rotation param: disabled until offset/vis synch is resolved
                         if(rotationChange !== 0){
-                            sonification.param[group].part[part].sound.rotation =  Math.min(Math.max(sonification.param[group].part[part].sound.rotation + rotationChange, minRotation), maxRotation) 
+                            // sonification.param[group].part[part].sound.rotation =  Math.min(Math.max(sonification.param[group].part[part].sound.rotation + rotationChange, minRotation), maxRotation) 
                         }
                         // iii. Store euclidean array (for visualisation)
                         sonification.state.selection.group[group].part[part].euclideanArray = rotateArray(getPattern(sonification.param[group].part[part].sound.pulse , patternLength ), sonification.param[group].part[part].sound.rotation)
                         // iv. Switch off corresponding pulse sequencer: ensures euclidean rhythm is 'active'
-                         sonification.state.sequencer[group][part].active  = false 
+                        sonification.state.sequencer[group][part].active  = false 
                         // iv. Handle user message
                         sonification.state.userMessage.text = pulseChange ? `Part ${group}.${part} euclidean pulse is ${sonification.param[group].part[part].sound.pulse}` :  `Group ${group} euclidean rotation is ${sonification.param[group].part[part].sound.rotation}`
                         break
@@ -613,6 +617,7 @@ export class Sonification{
                 // iv. Handle user message
                 sonification.handle.userMessage()
 
+                sonification.updateParameterMap()
                 // => Evaluate strudel code
                 this.updateREPL(strudel.state.transport === "playing")           
             }, 
@@ -676,6 +681,7 @@ export class Sonification{
                 this.updateREPL(strudel.state.transport === "playing")        
             },
             openPulseSequencer(group, type = 'pitch'){    // Potentially move to UI or have UI depend on state change
+
                 // i. Update state for pulse sequencer (UI)
                 sonification.state.sequencer.ui.isOpen = true
                 sonification.state.sequencer.ui.group = group
@@ -708,20 +714,31 @@ export class Sonification{
                 sonification.state.sequencer[group].onDelta = false
 
                 // iv. Handle user message
-                sonification.state.userMessage.text = `${group}> pulse seq. updated`
+                sonification.state.userMessage.text = `${group}> Pulse seq. updated`
                 sonification.handle.userMessage()
 
                 // => Update strudel code
                 this.updateREPL(strudel.state.transport === "playing")     
             },
-            pulseOnDeltaSequence(array, group, type = 'pitch'){
-                console.log(array, group)
+            pulseOnDeltaSequence(group){
                 // i. Turn input array into pulse array
-                const pulseArray = array
+                const sceneData = sonification.data.scene[sonification.state.selection.sceneIndex],
+                    series      = sonification.state.selection.group.A.pitchPattern, 
+                    interval    = sonification.schema.group[group].map.pitch.interval, 
+                    pitchArray = sceneData.scaledData[interval][group].pitch[series].map(d => d.quantized)
 
-                //  ii. Activate the pulse sequencer
-                sonification.state.sequencer[group].active = true 
+                sonification.state.sequencer[group].onDelta = true
+                sonification.state.sequencer[group].active   = true 
+                sonification.state.sequencer[group].array    = deltaArray(pitchArray)
+                sonification.param[group].pitch.struct       = sonification.state.sequencer[group].array.map(n => n && 'x' || '-').join(' ')   
+                sonification.param[group].pitch.structLegato = legatoStruct(sonification.state.sequencer[group].array )
+        
+                // iv. Handle user message
+                sonification.state.userMessage.text = `${group}> Pulse on note change`
+                sonification.handle.userMessage()
 
+                // => Update REPL
+                sonification.handle.updateREPL(strudel.state.transport === "playing")
             },
 
             // Scale and transposition
@@ -745,7 +762,7 @@ export class Sonification{
                 this.param[group].pitch.scaleTranspose = newDegree
 
                 // iii. Handle user message
-                sonification.state.userMessage.text = `Group ${group} transposed +${newDegree} deg.`
+                sonification.state.userMessage.text = `${group}> Transposed +${newDegree} deg.`
                 sonification.handle.userMessage()
 
                 // => Update REPL
@@ -754,7 +771,7 @@ export class Sonification{
             cycleScaleRootPitch(direction){
                 const rootPitches = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] // Major key root notes
                 // i. Update param
-                sonification.param.global.scale.root = cycleFromValue(rootPitches,  sonification.param.global.scale.root, direction)                                          
+                sonification.param.global.scale.root = util.cycleFromValue(rootPitches,  sonification.param.global.scale.root, direction)                                          
 
                 // ii. Handle user message
                 sonification.state.userMessage.text = `Scale: ${sonification.param.global.scale.root}:${sonification.param.global.scale.type}`
@@ -765,7 +782,7 @@ export class Sonification{
             },
             cycleScaleType(direction){
                 // i. Update param
-                sonification.param.global.scale.type= cycleFromValue(Object.keys(musicalScales),  sonification.param.global.scale.type, direction)                                          
+                sonification.param.global.scale.type = util.cycleFromValue(Object.keys(musicalScales),  sonification.param.global.scale.type, direction)                                          
 
                 // ii. Handle user message
                 sonification.state.userMessage.text = `Scale: ${sonification.param.global.scale.root}:${sonification.param.global.scale.type}`

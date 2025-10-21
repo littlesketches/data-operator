@@ -124,16 +124,17 @@ export const keyguide = {
         5: {
             master: 'Open<br>bass<br>sequencer',
             group:  {
-                A: '<span class = "group">Lead euclidean rotation<br>-</span>',
-                B: '<span class = "group">Bass euclidean rotation<br>-</span>',
+                A: '<span class = "group">Pulse lead on delta</span>',
+                B: '<span class = "group">Pulse bass on delta</span>',
                 C: ' '
             }
         },
         6: {
             master: 'Bass<br>legato<br>notes',
             group:  {
-                A: '<span class = "group">Lead euclidean rotation<br>+</span>',
-                B: '<span class = "group">Bass euclidean rotation<br>+</span>',
+
+                A:  '<span class = "group">Open<br>lead<br>sequencer</span>',
+                B:  '<span class = "group">Open<br>bass<br>sequencer</span>',  
                 C: ' '
             }
         },

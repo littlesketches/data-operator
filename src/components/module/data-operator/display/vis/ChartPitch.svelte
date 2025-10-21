@@ -61,7 +61,7 @@
      */
 
     // i. Selections and params
-    const dataInterval = sonification.schema.group[group][paramName].interval,
+    const dataInterval = sonification.schema.group[group].map[paramName].interval,
         type          = sonification.schema.group[group].type
 
     let sceneIndex      = $derived(sonification.state.selection.sceneIndex),
@@ -101,9 +101,13 @@
         <g class = 'grid__container'>
             {#each scaleArrayY as scaleDegree}
             {#each seriesData[scaleType] as d, i}   
+            {@const cycleIndex = strudel.state.time.cycle - 1}
+            {@const divAdd = cycleIndex % clockDivider * config.steps}
             {#if chartType === 'quarter' ? scale.y.domain()[1] > 5 ? scaleDegree % 2 === 0 : true : true}
             <g class = 'grid-marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(scaleDegree)})">
-                <path class = 'grid-marker' d = {config.symbol[group]()}/>
+                <path class = 'grid-marker' d = {config.symbol[group]()}
+                    class:active={(strudel.state.time.step + divAdd  ) === ( i  * clockDivider) && strudel.state.transport === 'playing'} 
+                />
             </g> 
             {/if}
             {/each}
@@ -137,9 +141,14 @@
     }
     .grid-marker{
         fill:           var(--pixel-0);
+        transition:     all 100ms;
         opacity:        0.5;
         scale:          0.2;
     }
+    .grid-marker.active{
+        opacity:        1;
+    }
+
     .marker__wrapper{
         transition: all 500ms;
     }

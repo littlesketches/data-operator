@@ -125,16 +125,16 @@ export const keyguide = {
         5: {
             master: 'Noise<br>type',  
             group:  {
-                A:  'Euclidean rotation<br>-',
-                B:  'Euclidean rotation<br>-',
-                C: ' '
+                A: '<span class = "group">Pulse on delta</span>',
+                B: '<span class = "group">Pulse on delta</span>',
+                C:  ' '
             }
         },
         6: {
             master: 'Toggle<br>sidechain',
             group:  {
-                A:  'Euclidean rotation<br>+',
-                B:  'Euclidean rotation<br>+',
+                A:  '<span class = "group">Open<br>pulse<br>sequencer</span>',
+                B:  '<span class = "group">Open<br>pulse<br>sequencer</span>',  
                 C:  ' ',
             }
         },
@@ -146,15 +146,17 @@ export const keyguide = {
             master: 'Open<br>pulse<br>sequencer',
             group:  {
                 A:  'Euclidean pulse<br>-',
-                B:  'Euclidean pulse<br>-',  
-                C: ' '
+                B:  'Euclidean pulse<br>-',   
+
+                C:  ' '
             }
         },
         9: {
             master: 'Toggle<br>legato<br>notes',
             group:  {
                 A:  'Euclidean pulse<br>+',
-                B:  'Euclidean pulse<br>+',      
+                B:  'Euclidean pulse<br>+',    
+ 
                 C:  ' ',
             }
         },

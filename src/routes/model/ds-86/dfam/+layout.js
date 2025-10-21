@@ -8,14 +8,14 @@ import { DataSonification }             from '$src/lib/module/data-operator/soni
 import { DataModel_IDMC as DataModel}   from '$src/lib/module/data-operator/data-model/idmc/DataModel.svelte.js';
 
 // Config
-import { appConfig }        from '$lib/_core/config/app-config';
+import { appConfig }                    from '$lib/_core/config/app-config';
 
 // Custom Data Operator model config
-import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/operator/keyguide.js';
-import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/operator/fx-config.js';
-import { scaleConfig }      from '$src/lib/module/data-operator/sonification/ds-86/dfam/config/scale-config.js';
-import { groupConfig }      from '$src/lib/module/data-operator/sonification/ds-86/dfam/config/group-config.js';
-import { groupPartPresets } from '$src/lib/module/data-operator/sonification/ds-86/dfam/config/part-config.js';
+import { keyguide }                     from '$src/lib/module/data-operator/core/config/ui/dfam/keyguide.js';
+import { punchFX }                      from '$src/lib/module/data-operator/core/config/ui/dfam/fx-config.js';
+import { scaleConfig }                  from '$src/lib/module/data-operator/sonification/ds-86/dfam/config/scale-config.js';
+import { groupConfig }                  from '$src/lib/module/data-operator/sonification/ds-86/dfam/config/group-config.js';
+import { groupPartPresets }             from '$src/lib/module/data-operator/sonification/ds-86/dfam/config/part-config.js';
 
 /**
  *  CUSTOM DATA OPERATOR CONFIG & MODEL PROP 

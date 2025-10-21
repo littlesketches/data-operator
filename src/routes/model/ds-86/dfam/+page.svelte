@@ -24,6 +24,7 @@
 
     // Add handler methods (requires strudel to be instantiated)
     sonification.addHandlers(strudel)
+    sonification.addCustomHandlers()            // "Edition-specfic" handlers
 
 
     /**

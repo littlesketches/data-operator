@@ -1,7 +1,7 @@
-<!-- DATA OPERATOR +LAYOUT.SVELTE -->
+<!-- DATA OPERATOR: CLIENT SIDE SETUP -->
 <script>
     // Layout props
-	let { children, data } = $props();
+	let { data } = $props();
 
     // i. Models
     const app = data.app, 
@@ -22,5 +22,3 @@
  />
 
 
-<!-- LAYOUT-->
-{@render children?.()}

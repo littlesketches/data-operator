@@ -6,19 +6,18 @@
 <!-- HTML COMPONENT MARKUP -->
 <p><strong>Available when a melodic track is selected</strong></p>
 
-<p>A Euclidean Rhythm feature is available for melodic tracks<label for="sn-A" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-A" class="margin-toggle"/><span class="sidenote">Melodic tracks are Group A, and in most cases Group B depending on the instrument configuration.</span>.
-This will generate a pulse sequence that is applied to the 16-step data-driven melodies (i.e. a 'rhythm'), using the Euclidean Rhythm algorithm<label for="sn-B" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-B" class="margin-toggle"/><span class="sidenote">Based on Godfried Toussiant's seminal work and paper <a href = 'https://cgm.cs.mcgill.ca/~godfried/publications/banff.pdf' target = '_blank'>The Euclidean Algorithm Generates Traditional Musical Rhythms</a></span>. The Euclidean Rhythm algorithm control for the number of pulses is an quick way to explore how rhythms can change the feel or a melody<label for="sn-C" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-C" class="margin-toggle"/><span class="sidenote">Remember that fine grain control of these rhythms is available through the <i>pulse sequencer</i> feature.</span>. 
+<p>"Pulse on Delta" applies a pulse rhythm that plays notes when there is a change in data that affects the pitch in a sequence. This will replace the current pulse rhythm (i.e. if a euclidean rhythm or pulse sequencer has been applied), and will adjust to match any new data series or scene selection.  
 </p>
 
 <div class = 'pad__container'>
     <div class = 'numpad pad'>
         <div class = 'pad-button inactive'>7</div>
-        <div class = 'pad-button '>8</div>
-        <div class = 'pad-button '>9</div>
+        <div class = 'pad-button inactive'>8</div>
+        <div class = 'pad-button inactive'>9</div>
         <div class = 'pad-button inactive'>-</div>
 
         <div class = 'pad-button inactive'>4</div>
-        <div class = 'pad-button inactive'>5</div>
+        <div class = 'pad-button '>5</div>
         <div class = 'pad-button inactive'>6</div>
         <div class = 'pad-button inactive'>+</div>
 
@@ -35,7 +34,7 @@ This will generate a pulse sequence that is applied to the 16-step data-driven m
 
     <div class = 'pad-aside'>
         <div class = 'aside-left'>
-            <p>&larr; Hold down the modify key <span class = 'key'>&times;</span>  and use these keys to adjust the number of pulses with <span class = 'key'>8</span> / <span class = 'key'>9</span>.
+            <p>&larr; Hold down the modify key <span class = 'key'>&times;</span> and press <span class = 'key'>5</span> to activate the 'pulse on delta' sequence.
             </p>
         </div>
     </div>

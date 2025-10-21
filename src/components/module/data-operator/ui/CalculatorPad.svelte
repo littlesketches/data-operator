@@ -52,7 +52,6 @@
                 groupSelect,        // Group to select but not activate
                 activatePart        // Flag part to select
 
-
             // 2. On screen key event methods
             switch(type){
                 case 'shift':
@@ -99,9 +98,6 @@
 
             // X. Numkey & navkey handlers: replicated in/from KeyboardUI
             function numkeyAction(mode, numkey, keyGroup, direction){
-                 sonification.state.selection.heldKeys.add(mode);
-                 sonification.state.selection.heldKeys.add(numkey);
-
                 switch(mode){
                     case 'fx':      // Numkey activates punch-in FX for 0-9, for selected group
                         sonification.handle.punchInFX(group, fxNames[numkey], true) 
@@ -137,39 +133,46 @@
                                 switch(group){
                                     case 'master':
                                         switch(ui){
-                                            case 'custom-dfam':     // Fixed to Group A
+                                            case 'dfam':     // Fixed to Group A
                                                 if(numkey === 5) sonification.handle.cycleNoiseType()
                                                 if(numkey === 6) sonification.handle.toggleSidechain()
                                                 break   
                                             default:
-                                                if(numkey === 5) sonification.handle.openPulseSequencer('A')
-                                                if(numkey === 6) sonification.handle.toggleLegato(group)
+                                                if(numkey === 5) sonification.handle.openPulseSequencer(keyGroup)
+                                                if(numkey === 6) sonification.handle.toggleLegato(keyGroup)
                                         }
-
                                         break
+
                                     case 'A': case 'B':
                                         switch(ui){
-                                            case 'custom-dfam':     // Fixed to Group A
-                                                sonification.handle.adjustEuclideanRhythm(0, direction, 'A'); break   
+                                            case 'dfam':     // Fixed to Group A
+                                                if(numkey === 5) sonification.handle.pulseOnDeltaSequence('A')
+                                                if(numkey === 6) sonification.handle.openPulseSequencer('A')
+                                                break   
                                             default:
-                                                sonification.handle.adjustEuclideanRhythm(0, direction, group); break
+                                                if(numkey === 5) sonification.handle.pulseOnDeltaSequence(group)
+                                                if(numkey === 6) sonification.handle.openPulseSequencer(group)
                                         }
+                                        break
                                 }
                                 break
+
                             case 8: case 9:
                                 switch(group){
                                     case 'master':
                                         if(numkey === 8) sonification.handle.openPulseSequencer('A')
                                         if(numkey === 9) sonification.handle.toggleLegato('A')
                                         break
+
                                     case 'A': case 'B':
                                         switch(ui){
-                                            case 'custom-dfam':     // Fixed to Group A
-                                                sonification.handle.adjustEuclideanRhythm(direction, 0, 'A');   break   
+                                            case 'dfam':     // Fixed to Group A
+                                                sonification.handle.adjustEuclideanRhythm(direction, 0, 'A');   
+                                                break   
                                             default:
                                                 sonification.handle.adjustEuclideanRhythm(direction, 0, group);
                                         }
-                                        break
+                                        break                                                                                            
                                 }
                                 break
                         }
@@ -186,15 +189,15 @@
                                 break
                             case 5: case 6:
                                 switch(ui){
-                                    case 'custom-dfam': // Adjust noise
+                                    case 'dfam': // Adjust noise
                                         sonification.handle.adjustNoiseLevel(0.05 * direction)                                    
                                         break           
                                     default:            // Transpose group B
-                                        sonification.handle.transposePatternDegree(direction, 'B') 
+                                        sonification.handle.transposePatternDegree(direction, keyGroup) 
                                 }
                                 break       
                             case 8: case 9: // Transpose group A
-                                sonification.handle.transposePatternDegree(direction, 'B') 
+                                sonification.handle.transposePatternDegree(direction, keyGroup) 
                                 break
                             }
                         break
@@ -251,7 +254,7 @@
                                 sonification.handle.adjustBPM(direction)  
                                 break   
                             case 'A': case 'B':
-                                group = ui === 'custom-dfam' ? 'A' : group
+                                group = ui === 'dfam' ? 'A' : group
                                 type = sonification.schema.group[group].type
                                 part = undefined    
                                 sonification.handle.cycleClock(group, part, type, direction)
@@ -363,8 +366,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('7') || heldKeys.has('&') || heldKeys.has('q') || heldKeys.has('Q')}  
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 7 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 7 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 7 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 7 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 7 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 7 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 7 - 1
@@ -386,8 +389,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('8') || (heldKeys.has('*') && shift) || heldKeys.has('w') || heldKeys.has('W')}  
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 8 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 8 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 8 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 8 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 8 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 8 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 8 - 1
@@ -409,8 +412,8 @@
     class:modeguide={mode}  
     class:active = {heldKeys.has('9') || heldKeys.has('(') || heldKeys.has('e') || heldKeys.has('E')} 
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 9 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 9 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 9 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 9 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 9 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 9 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 9 - 1
@@ -450,8 +453,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('4') || heldKeys.has('$') || heldKeys.has('a') || heldKeys.has('A')} 
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 4 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 4 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 4 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 4 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 4 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 4 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 4 - 1
@@ -473,8 +476,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('5') || heldKeys.has('%') || heldKeys.has('s') || heldKeys.has('S')} 
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 5 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 5 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 5 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 5 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 5 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 5 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 5 - 1
@@ -496,8 +499,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('6') || heldKeys.has('^') || heldKeys.has('d') || heldKeys.has('D')} 
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 6 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 6 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 6 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 6 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 6 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 6 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 6 - 1
@@ -536,8 +539,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('1') || heldKeys.has('!') || heldKeys.has('z') || heldKeys.has('Z')} 
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 1 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 1 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 1 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 1 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 1 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 1 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 1 - 1
@@ -564,8 +567,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('2') || heldKeys.has('@') || heldKeys.has('x') || heldKeys.has('X')} 
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 2 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 2 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 2 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 2 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 2 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 2 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 2 - 1
@@ -592,8 +595,8 @@
     class:modeguide={mode}
     class:active = {heldKeys.has('3') || heldKeys.has('#') || heldKeys.has('c') || heldKeys.has('C')}
     class:pattern-select = { group === 'master' ? false
-        : group === 'A' ? sonification.schema.group.A[groupA_type].series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 3 - 1
-            : group === 'B' ? sonification.schema.group.B[groupB_type].series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 3 - 1
+        : group === 'A' ? sonification.schema.group.A.series.indexOf(sonification.state.selection.group.A[`${groupA_type}Pattern`]) === 3 - 1
+            : group === 'B' ? sonification.schema.group.B.series.indexOf(sonification.state.selection.group.B[`${groupB_type}Pattern`]) === 3 - 1
                 : part === 1 ? sonification.schema.group.C.part["1"].series.indexOf(sonification.state.selection.group.C.part["1"].series) === 3 - 1
                     : part === 2 ? sonification.schema.group.C.part["2"].series.indexOf(sonification.state.selection.group.C.part["2"].series) === 3 - 1
                         : sonification.schema.group.C.part["3"].series.indexOf(sonification.state.selection.group.C.part["3"].series) === 3 - 1

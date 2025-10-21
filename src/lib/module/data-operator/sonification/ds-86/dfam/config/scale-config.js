@@ -9,13 +9,21 @@
 export const scaleConfig = {
     A: {
         pitch: { 
-            min: 0,     max:  10     // scale degree 2 octave range (pentatonic)
+            min: 0,     max:  10     
         },
+        lpf: { 
+            min: 300,     max:  800    
+        },
+        lpq: { 
+            min: 12,     max:  24    
+        },
+
     },
     B: {
         velocity: { 
-            min: 0,     max:  1     //
-        }
+            min: 0.5,     max:  1     //
+        },
+
     },
     C: {
         3: {

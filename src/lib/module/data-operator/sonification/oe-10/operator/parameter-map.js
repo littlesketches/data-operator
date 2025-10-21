@@ -58,12 +58,12 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              16,             // Euclidean pulse: default to all pitchs
-            rotation:           0,              // Euclidean rotation
+            pulse:              16,             // Euclidean pulse: default to all pulses
+            rotation:           0,              // Euclidean rotation fixed until offset/sync with visual can be resolved
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,      // Legato version of pulse sequencer pattern
             clockDivider:       1               // Clock divider
         },
         velocity: {
@@ -80,9 +80,9 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
-            legato:             false,           // Switch for euclidean pitch
+            pulse:              undefined,    // Euclidean pulse (default on load)
+            rotation:           0,              // Euclidean rotation fixed until offset/sync with visual can be resolved
+            legato:             false,          // Switch for euclidean pitch
             transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern

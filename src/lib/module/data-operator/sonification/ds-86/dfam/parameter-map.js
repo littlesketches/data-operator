@@ -10,33 +10,33 @@ export const paramInit = {
     synth: {
         DFAM: {
             duck:           false,
-            orbit:          2,          // 1 = no d=ucking; 2 = duckOrbit
+            orbit:          1,          // 1 = no ducking; 2 = duckOrbit
             // VCO / PITCH ENVELOPE
             vcoAttack:      0,          // Does not seem to work
-            vcoMax:         12,         // [VCO Decay] Pitch env "range" (in semitones) shared between VCO1+2 
+            vcoMax:         6,         // [VCO Decay] Pitch env "range" (in semitones) shared between VCO1+2 
             vcoDecay:       3,          // Base decay level shared between VCO1+2 and multiplied with vco1EG and vco2EG to apply pitch env.
             /*OSC1*/  
             vco1pitched:    true,
             vco1wave:       "square",   // [VCO 1 Wave] Waveshape switch: "square' or "triangle"
-            vco1EG:         "<0 0.15 0.3 0.5>",        // [VCO 1 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay  x velocity (negative to invert the envelope)
+            vco1EG:         "<1 1 1 1>",        // [VCO 1 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay  x velocity (negative to invert the envelope)
             /*OSC2*/  
             vco2pitched:    true,
             vco2wave:       "triangle", // [VCO 2 Wave] Waveshape switch: "square' or "triangle"
-            vco2EG:         0.75,       // [VCO 2 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay velocity (negative to invert the envelope)
-            FM1_2Amt:       50,         // 0 to 50,
+            vco2EG:         0.25,       // [VCO 2 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay velocity (negative to invert the envelope)
+            FM1_2Amt:       0,         // 0 to 50,
             /*NOISE*/ 
-            noiseType:     "white",      // Noise source type switch: "white", "pink", "brown"
-            noiseLvl:       0.5,       // [Noise Level] 0 to 1: gain multiplier to control Noise source volume
+            noiseType:     "pink",      // Noise source type switch: "white", "pink", "brown"
+            noiseLvl:       0.75,       // [Noise Level] 0 to 1: gain multiplier to control Noise source volume
             /*FILTER*/
-            vcfCutoff:      "<200 400 600 800>",    // [Cutoff]  filter cutoff frequency: can be sequenced
-            vcfResonance:   "<6 22 14 20>",           // [Resonance] Filter resonance level: can be sequenced
+            vcfCutoff:      "<1000 1000 300 1000>",    // [Cutoff]  filter cutoff frequency: can be sequenced
+            vcfResonance:   "<12 12 12 12>",           // [Resonance] Filter resonance level: can be sequenced
             vcfEnv:         4,          // Sets the max modulation depth (semitone?) the filter envelope
             vcfDecay:       5,          // Sets max decay length: applied with vcfEG and velocity
             vcfEG:          0.75,        // [VCF EG AMOUNT] 0 to 1: controls amount of filter envelope decay x velocity  (negative to invert the envelope?)
             /*ENV*/   
             vcaAttack:      0,          // Default to zero
-            vcaDecay:       5,          // Sets max decay length: applied with vcfEG and velocity
-            vcaEG:          "<0.05 0.1 0.25 0.5>*4",   // [VCA Decay] 0 to 1, VCA env. x (velocity on each step) =< can sequence
+            vcaDecay:       4,          // Sets max decay length: applied with vcfEG and velocity
+            vcaEG:          "<0.5 0.5 0.75 0.5>*4",   // [VCA Decay] 0 to 1, VCA env. x (velocity on each step) =< can sequence
             vcaSustain:     0,          // Set to zero fo AD envelope
             vcaRelease:     0,          // Set to zero fo AD envelope
         }
@@ -52,7 +52,7 @@ export const paramInit = {
         pitch: {       
             pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap
             pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
+            rotation:           1,          // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             transpose:          24,             // OSC 2 transpose
             scaleTranspose:     0,               // Transpose along the scale
@@ -60,6 +60,12 @@ export const paramInit = {
             structLegato:       undefined,       // Legato version of pulse sequencer pattern
             clockDivider:       1               // Clock divider
         },
+        lpf: {
+            pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap            
+        },
+        lpq: {
+            pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap            
+        }
     },
     // Group B: [melodic] bass (and/or chord/drone) 
     B: {
@@ -86,7 +92,7 @@ export const paramInit = {
                 mute:               false,
                 sound: {
                     pattern:        {},      // sound part pattern
-                    bank:           'RolandTR909',  // Sound bank alias 
+                    bank:           'BossDR220',  // Sound bank alias 
                     length:         16,             // 
                     pulse:          16,             // Euclidean pulse
                     rotation:       0,              // Euclidean rotation
@@ -100,11 +106,11 @@ export const paramInit = {
                 }
             },
             2: { // "Hats"
-                gain:               1,
+                gain:               0.7,
                 mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           'RolandTR909',  // Sound bank alias 
+                    bank:           'BossDR220',  // Sound bank alias 
                     length:         16,             // 
                     pulse:          16,             // Euclidean pulse
                     rotation:       0,              // Euclidean rotation
@@ -140,12 +146,11 @@ export const paramInit = {
     },
     // Global params: tempo and FX settings
     global: {
-        bpm:                120,          // tempo
+        bpm:                70,          // tempo
         step:               0,
         scale: {
             pitch:           undefined,             // Musical scale
             root:           'C',                    // pitch root
-            octave:         2,                      // octave 
             type:           'minor:pentatonic',     //
         },
         // Punch FX config: params could potentially exposed

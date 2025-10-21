@@ -299,6 +299,7 @@ export class DataModel_IDMC extends DataModel{
 
         // ii. Transform data for sonification
         this.scene = this.#createDataScenes(this.model)
+console.log(this)
     };
 
     getSceneLabel(sceneIndex){

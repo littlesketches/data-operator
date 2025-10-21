@@ -142,9 +142,13 @@
         <g class = 'grid__container'>
         {#each yGrid as yPos}
             {#each drumkitData as d, i}   
+            {@const cycleIndex = strudel.state.time.cycle - 1}
+            {@const divAdd = cycleIndex * config.steps}
                 {#if yPos === Math.floor(yPos) || chartType === 'full' }
                 <g class = 'grid-marker__wrapper' transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(yPos)})">
-                    <path class = 'grid-marker' d = {d3.symbol(d3.symbolCircle).size(symbolSize)()}/>
+                    <path class = 'grid-marker' d = {d3.symbol(d3.symbolCircle).size(symbolSize)()}
+                        class:active={(strudel.state.time.step + divAdd ) ===  i  && strudel.state.transport === 'playing'} 
+                    />
                 </g> 
                 {/if}
             {/each}
@@ -227,9 +231,14 @@
 
     .grid-marker{
         fill:           var(--pixel-0);
+        transition:     all 100ms;
         opacity:        0.5;
         scale:          0.2;
     }
+    .grid-marker.active{
+        opacity:        1;
+    }
+
 
     .marker__wrapper{
         transition:     all 500ms;

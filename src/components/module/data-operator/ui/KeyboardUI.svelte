@@ -96,7 +96,7 @@
                         case "7": case "&": case "q": case "Q":  numkeyAction(mode, 7, 'A'); break
                         case "8": case "w": case "W":            numkeyAction(mode, 8, 'A', -1); break 
                         case "*":  
-                            if(shift)           numkeyAction(mode, 8, 'A', -1);  break
+                            if(shift)           numkeyAction(mode, 8, 'A');  break
                             if(!shift)    break
                         case "9": case "(": case "e": case "E":  numkeyAction(mode, 9, 'A', 1) ; break
                         case "0": case ")": case "Alt": 
@@ -170,39 +170,46 @@
                                         switch(group){
                                             case 'master':
                                                 switch(ui){
-                                                    case 'custom-dfam':     // Fixed to Group A
+                                                    case 'dfam':     // Fixed to Group A
                                                         if(numkey === 5) sonification.handle.cycleNoiseType()
                                                         if(numkey === 6) sonification.handle.toggleSidechain()
                                                         break   
                                                     default:
-                                                        if(numkey === 5) sonification.handle.openPulseSequencer('A')
-                                                        if(numkey === 6) sonification.handle.toggleLegato(group)
+                                                        if(numkey === 5) sonification.handle.openPulseSequencer(keyGroup)
+                                                        if(numkey === 6) sonification.handle.toggleLegato(keyGroup)
                                                 }
-    
                                                 break
+
                                             case 'A': case 'B':
                                                 switch(ui){
-                                                    case 'custom-dfam':     // Fixed to Group A
-                                                        sonification.handle.adjustEuclideanRhythm(0, direction, 'A'); break   
+                                                    case 'dfam':     // Fixed to Group A
+                                                        if(numkey === 5) sonification.handle.pulseOnDeltaSequence('A')
+                                                        if(numkey === 6) sonification.handle.openPulseSequencer('A')
+                                                        break   
                                                     default:
-                                                        sonification.handle.adjustEuclideanRhythm(0, direction, group); break
+                                                        if(numkey === 5) sonification.handle.pulseOnDeltaSequence(group)
+                                                        if(numkey === 6) sonification.handle.openPulseSequencer(group)
                                                 }
+                                                break
                                         }
                                         break
+
                                     case 8: case 9:
                                         switch(group){
                                             case 'master':
                                                 if(numkey === 8) sonification.handle.openPulseSequencer('A')
                                                 if(numkey === 9) sonification.handle.toggleLegato('A')
                                                 break
+
                                             case 'A': case 'B':
                                                 switch(ui){
-                                                    case 'custom-dfam':     // Fixed to Group A
-                                                        sonification.handle.adjustEuclideanRhythm(direction, 0, 'A');   break   
+                                                    case 'dfam':     // Fixed to Group A
+                                                        sonification.handle.adjustEuclideanRhythm(direction, 0, 'A');   
+                                                        break   
                                                     default:
                                                         sonification.handle.adjustEuclideanRhythm(direction, 0, group);
                                                 }
-                                                break
+                                                break                                                                                            
                                         }
                                         break
                                 }
@@ -219,15 +226,15 @@
                                         break
                                     case 5: case 6:
                                         switch(ui){
-                                            case 'custom-dfam': // Adjust noise
+                                            case 'dfam': // Adjust noise
                                                 sonification.handle.adjustNoiseLevel(0.05 * direction)                                    
                                                 break           
                                             default:            // Transpose group B
-                                                sonification.handle.transposePatternDegree(direction, 'B') 
+                                                sonification.handle.transposePatternDegree(direction, keyGroup) 
                                         }
                                         break       
                                     case 8: case 9: // Transpose group A
-                                        sonification.handle.transposePatternDegree(direction, 'B') 
+                                        sonification.handle.transposePatternDegree(direction, keyGroup) 
                                         break
                                  }
                                 break
@@ -284,7 +291,7 @@
                                         sonification.handle.adjustBPM(direction)  
                                         break   
                                     case 'A': case 'B':
-                                        group = ui === 'custom-dfam' ? 'A' : group
+                                        group = ui === 'dfam' ? 'A' : group
                                         type = sonification.schema.group[group].type
                                         part = undefined    
                                         sonification.handle.cycleClock(group, part, type, direction)

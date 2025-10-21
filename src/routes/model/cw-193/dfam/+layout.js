@@ -34,12 +34,12 @@ const operatorConfig = {
     },
     theme:          'dfam',              // Specify theme
     ui: {
-        type:       'custom-dfam',        // Specify UI
+        type:       'dfam',        // Specify UI
         keyguide,
         punchFX
     }
 }
-console.log(groupConfig)
+
 // 3. Model specific config object
 const config = {
     group:      groupConfig,            // Group configuration: choices of preset data series choices

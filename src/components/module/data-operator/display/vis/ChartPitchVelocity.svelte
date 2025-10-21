@@ -58,8 +58,8 @@
      */
 
     // i. Selections and params
-    const dataIntervalA = sonification.schema.group.A[paramNameA].interval,
-        dataIntervalB = sonification.schema.group.B[paramNameB].interval
+    const dataIntervalA = sonification.schema.group.A.map[paramNameA].interval,
+        dataIntervalB = sonification.schema.group.B.map[paramNameB].interval
 
     let sceneIndex    = $derived(sonification.state.selection.sceneIndex),
         data            = $derived(dataModel.scene[sceneIndex]),        // Modelled data for selected day
@@ -96,9 +96,13 @@
         <g class = 'grid__container'>
             {#each scaleArrayY as scaleDegree}
             {#each pitchSeriesData as d, i}   
+            {@const cycleIndex = strudel.state.time.cycle - 1}
+            {@const divAdd = cycleIndex % clockDivider * config.steps}
             {#if chartType === 'quarter' ? scale.y.domain()[1] > 5 ? scaleDegree % 2 === 0 : true : true}
             <g class = 'grid-marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(scaleDegree)})">
-                <path class = 'grid-marker' d = {config.symbol.A()}/>
+                <path class = 'grid-marker' d = {config.symbol.A()}
+                    class:active={(strudel.state.time.step + divAdd ) === ( i  * clockDivider) && strudel.state.transport === 'playing'} 
+                />
             </g> 
             {/if}
             {/each}
@@ -112,7 +116,6 @@
             <g class = 'marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(d)}) scale({scale.r(velocitySeriesData[i])})">
                 <path class = 'marker' 
                     class:active={(strudel.state.time.step + divAdd ) === ( i  * clockDivider) && strudel.state.transport === 'playing'} 
-
                     class:pulse={pulseArray[i]}
                     d = {config.symbol.A()}
                 />
@@ -131,8 +134,12 @@
     }
     .grid-marker{
         fill:           var(--pixel-0);
+        transition:     all 100ms;
         opacity:        0.5;
         scale:          0.2;
+    }
+    .grid-marker.active{
+        opacity:        1;
     }
 
     .marker__wrapper{

@@ -11,7 +11,7 @@ console.log(isSideGuide)
 
     <div class = 'pad__container' class:isSideGuide>
         <div class = 'pad-aside'>
-            Together with the numpad, you can try using the <span class = 'keyboard'>Shift</span> key equivalent to <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the adjacent <span class = 'keyboard'>&rarr;</span> key being <span class = 'key'>&times;</span>.
+            Together with the numpad, you can try using either <span class = 'keyboard'>Shift</span> key for <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the adjacent <span class = 'keyboard'>&rarr;</span> for <span class = 'key'>&times;</span>.
         </div>
         <div class = 'numpad pad'>
             <div class = 'pad-button'>7</div>
@@ -38,7 +38,7 @@ console.log(isSideGuide)
 
     <div class = 'pad__container' class:isSideGuide>
         <div class = 'pad-aside'>
-            With these pad, you can try using the <span class = 'keyboard'>Return</span> keys for <span class = 'key'><span class="material-symbols-outlined">function</span></span>, either <span class = 'keyboard'>Shift</span> keys for <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the keys for <span class = 'keyboard'>,</span> and  <span class = 'key'>&sdot;</span>, respectively.
+            With these pad, you can try using the <span class = 'keyboard'>Return</span> key for <span class = 'key'><span class="material-symbols-outlined">function</span></span>, either <span class = 'keyboard'>Shift</span> key for <span class = 'key'><span class="material-symbols-outlined">shift_lock</span></span> , and the keys for <span class = 'keyboard'>,</span> and  <span class = 'key'>&sdot;</span>, respectively.
         </div>
 
         <div class = 'keypad pad'>
@@ -84,7 +84,7 @@ console.log(isSideGuide)
 
     .isSideGuide .pad-aside,
     .isSideGuide .pad-aside span{
-        font-size:              1.25vh;
+        font-size:              1vh;
     }
 
     .pad{

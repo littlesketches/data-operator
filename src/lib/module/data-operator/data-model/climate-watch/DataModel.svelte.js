@@ -284,8 +284,6 @@ export class DataModel_CW extends DataModel{
     }
 
     #createDataScenes(modelData){
-        console.log({modelData, scaleConfig, timingConfig})
-
         // i. Init sceneData array
         const sceneData = []
 
@@ -424,8 +422,6 @@ export class DataModel_CW extends DataModel{
 
         // iii. Transform data for sonification
         this.scene = this.#createDataScenes(this.model)
-
-        console.log(this)
     };
 
     getSceneLabel(sceneIndex){

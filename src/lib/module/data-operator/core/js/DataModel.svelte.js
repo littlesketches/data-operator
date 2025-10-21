@@ -72,5 +72,4 @@ export class DataModel{
         this.schema = this.#extractSchema(this.input, this.model)
 
     };
-
 };
