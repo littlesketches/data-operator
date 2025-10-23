@@ -11,6 +11,7 @@ export const paramInit = {
         lead: {
             sound:        'piano',
             filter: {
+                type:       "24bd",
                 cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
                 Q:          'sine.range(2,6).slow(2)',  
                 env: {
@@ -21,10 +22,10 @@ export const paramInit = {
                 }
             },
             ampEnv: {
-                a: 0.01, d: 0.1, s: 0.8, r: 0.5
+                A: 0.01, D: 0.1, S: 0.8, R: 0.5
             }
         },
-        ModelD: {
+        bass: {
             mix: {  
                 osc1:   1,
                 osc2:   1,
@@ -35,17 +36,12 @@ export const paramInit = {
                 A: 0.0,     D: 0.1,     S: 0.8,     R: 0.5
             },
             filter: {
+                type:       "ladder",
                 cutoff:     440,    // Default replaced with data-driven ranges
                 Q:          4,  
                 env: {
-                    A: 0,   D: 0.1,     S: 0.2,    depth:  2.5,  
+                    A: 0,   D: 0.1,     S: 0.2,     R: 0.5, depth:  2.5,  
                 }
-            }
-        },
-        bass: {
-            sound:      'piano',
-            noise: {
-                velocity:   '1'
             }
         }
     },
@@ -105,40 +101,30 @@ export const paramInit = {
         },
         part: {     
             1: {  // "Beat":  
-                gain:           0.8,            // Sets group level with group
-                mute:           false,
+                gain:               0.8,            // Sets group level with group
+                mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     bank:           null,           // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
-                },
-                velocity: {     
-                    pattern:    undefined,     // velocity pattern
                 }
             },
             2: { // "Hats"
-                gain:           0.8,            // Sets group level with group
-                mute:           false,
+                gain:               0.8,            // Sets group level with group
+                mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     bank:           null,           // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
                     pattern:        undefined,     // Velocity pattern
-                    length:         16
                 }
             },
             3: {    // Chords
-                gain:           0.35,           // Sets group level with group
-                mute:           false,
-                octave:         3,              // Scale octave
+                gain:               0.35,           // Sets group level with group
+                mute:               false,
+                octave:             3,              // Scale octave
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
@@ -151,10 +137,10 @@ export const paramInit = {
     },
     // Master mix out group
     master: {
-        gain:           0.8,          // Master volume
-        mute:           false,
+        gain:               0.8,          // Master volume
+        mute:               false,
         reverb: {
-            size:       0.5,       // Default global reverb: punch FX reverb is a multiple of this
+            size:           0.5,       // Default global reverb: punch FX reverb is a multiple of this
         }
     },
     // Global params: tempo and FX settings

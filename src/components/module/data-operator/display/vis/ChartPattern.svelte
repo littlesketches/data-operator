@@ -103,10 +103,10 @@
             return { part1, part2 }
         })
     })
-    
+
     // iii. Construct harmony array
     let chordSeries = $derived(sonification.state.selection.group.A.pitchPattern)
-    let chordData = $derived(data.scaledData[groupPartPresets["3"].interval]?.C["3"].chord[chordSeries].map(d => d.quantized)  ) 
+    let chordData = $derived(data.scaledData[groupPartPresets["3"].chord.interval]?.C["3"].chord[chordSeries].map(d => d.quantized)  ) 
 
     const toADSR = str => {
         if(!str) return { A: 0, D: 1, S: 0, R: 0 }
@@ -166,9 +166,9 @@
                     class:solo={sonification.state.snapshot.solo.current?.part === 1 }
                     class:mute={sonification.param[group].part["1"].mute}
                     transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(d.pos)})">
-                    <path class = 'marker' 
+                    <path class = 'marker pulse' 
                         class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length.part1) * clockDivider["1"]) && strudel.state.transport === 'playing'} 
-                        class:pulse={sonification.state.selection.group.C.part["1"].euclideanArray[i]}
+    
                         d = {config.drumkit[drum].symbol()}
                     />
                 </g>
@@ -183,9 +183,8 @@
                 class:solo={sonification.state.snapshot.solo.current?.part === 2 }
                 class:mute={sonification.param[group].part["2"].mute}
                 transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(d.pos)})" >
-                <path class = 'marker' 
+                <path class = 'marker pulse' 
                     class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length.part2) * clockDivider["2"]) && strudel.state.transport === 'playing'} 
-                    class:pulse={sonification.state.selection.group.C.part["2"].euclideanArray[i]}
                     d = {config.drumkit[drum].symbol()}
                 />
             </g>

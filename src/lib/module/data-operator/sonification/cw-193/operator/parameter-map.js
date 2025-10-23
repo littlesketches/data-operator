@@ -9,9 +9,10 @@ import { strudelVisOptions, strudelVisPalette }     from "../../_shared/strudel-
 
 export const paramInit = {
     synth: {
-        TB303: {
+        lead: {
             oscType:        'sawtooth',
             filter: {
+                type:       '24db',
                 cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
                 Q:          'sine.range(8,12).slow(2)',  
                 env: {
@@ -20,9 +21,12 @@ export const paramInit = {
                     S:      'perlin.range(0,.5).slow(3)',  
                     depth:  'perlin.range(1,4).slow(2)',  
                 }
+            },
+            ampEnv: {
+                A: 0.01, D: 0.1, S: 0.8, R: 0.5
             }
         },
-        ModelD: {
+        bass: {
             mix: {  
                 osc1:   1,
                 osc2:   0.4,
@@ -30,15 +34,14 @@ export const paramInit = {
                 noise:  0.1
             },
             ampEnv: {
-                a: 0.0, d: 0.1, s: 0.75, r: 0.5
+                A: 0.0, D: 0.1, S: 0.75, R: 0.5
             },
             filter: {
+                type:       'ladder',
                 cutoff:     220,    // Default replaced with data-driven ranges
                 Q:          12,  
                 env: {
-                    A:      0,     
-                    D:      0.1,     
-                    S:      0.2,  
+                    A: 0,  D: 0.1,  S: 0.2,  R: 0.5,
                     depth:  4,  
                 }
             }
@@ -55,8 +58,8 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([11, 13, 14, 15]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
+            pulse:              16,             // Euclidean pulse (default on load)
+            rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
@@ -77,8 +80,8 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([7, 9, 10, 12, 13]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
+            pulse:              undefined,    // Euclidean pulse (default on load)
+            rotation:           0,          // Euclidean rotation
             legato:             false,           // Switch for euclidean pitch
             transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
@@ -105,9 +108,6 @@ export const paramInit = {
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     bank:           'RolandTR909',  // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
@@ -120,9 +120,6 @@ export const paramInit = {
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     bank:           'RolandTR909',  // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     

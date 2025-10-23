@@ -141,6 +141,12 @@ export class Sonification{
         if(this.param.B.lpf)        this.param.B.lpf.length         = +this.schema.group.B.map.lpf.interval.slice(0, -1)
         if(this.param.B.lpq)        this.param.B.lpq.length         = +this.schema.group.B.map.lpq.interval.slice(0, -1)
 
+        if(this.param.C.part["1"].sound)    this.param.C.part["1"].sound.length     = +this.schema.group.C.part["1"].map.sound.interval.slice(0, -1)
+        if(this.param.C.part["2"].sound)    this.param.C.part["2"].sound.length     = +this.schema.group.C.part["2"].map.sound.interval.slice(0, -1)
+        if(this.param.C.part["3"].sound)    this.param.C.part["3"].sound.length     = +this.schema.group.C.part["3"].map.sound.interval.slice(0, -1)
+
+        if(this.param.C.part["2"].velocity) this.param.C.part["2"].velocity.length  = +this.schema.group.C.part["2"].map.velocity.interval.slice(0, -1)
+
         // ii. Add fx toggle object to params for master and each group
         this.param.A.fx = Object.fromEntries( Object.keys(punchFX).map(key => [key, false]) )       
         this.param.B.fx = Object.fromEntries( Object.keys(punchFX).map(key => [key, false]) )       
@@ -890,7 +896,6 @@ export class Sonification{
             this.handle.update()
         }
     }
-
 
     // Placeholder methods: defined in extended DataSonification classes
     updateParameterMap(){} 

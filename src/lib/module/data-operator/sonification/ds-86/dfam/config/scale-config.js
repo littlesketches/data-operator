@@ -11,6 +11,9 @@ export const scaleConfig = {
         pitch: { 
             min: 0,     max:  10     
         },
+        velocity: { 
+            min: 0.5,   max: 1        // 
+        },
         lpf: { 
             min: 300,     max:  800    
         },
@@ -26,6 +29,11 @@ export const scaleConfig = {
 
     },
     C: {
+        2: {
+            velocity: {
+                min: 0.25,      max: 0.5
+            }
+        }, 
         3: {
             chord: {
                 min: 0,         max: 3     // Mapped to four chords in a progression (note: quantized to floor)

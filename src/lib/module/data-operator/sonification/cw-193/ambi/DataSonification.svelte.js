@@ -42,12 +42,6 @@ export class DataSonification extends Sonification{
          @license CC BY-NC-SA
          */
         
-        // samples({
-        //     bassdrum:   'bd/bd_BT0AADA.wav',
-        //     hihat:      'hh/hh27_000_hh27closedhh.wav',
-        //     snaredrum: ['sd/sd_rytm-01-classic.wav', 'sd/sd_rytm-00-hard.wav'],
-        // }, 'https://raw.githubusercontent.com/littlesketches/data-operator/main/static/samples/');
-
         setcpm(${this.param.global.bpm / timingConfig.beats.perBar})
 
         stack(
@@ -80,13 +74,23 @@ export class DataSonification extends Sonification{
             // Group B. "Bass" 
             n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
                 .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
-                .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
                 .scaleTranspose(${this.param.B.pitch.scaleTranspose})
-                // .adsr("0.0:0.1:0.8:0.5")         
+                .layer(
+                    x => x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.bass.mix.osc1}"),
+                    x => x.s("pulse").pw(0.35).velocity("${this.param.synth.bass.mix.osc2}"),
+                    x => x.s("square").add(note(-12)).velocity("${this.param.synth.bass.mix.sub}"),
+                    x => x.s("white").velocity("${this.param.synth.bass.mix.noise}")
+                )
+                .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
+                .adsr("${this.param.synth.bass.ampEnv.A}:${this.param.synth.bass.ampEnv.D}:${this.param.synth.bass.ampEnv.S}:${this.param.synth.bass.ampEnv.R}")    // Amp envelope (ADSR)
                 ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato : this.param.B.pitch.struct}")`
-                    : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
-                .s("${this.param.synth.bass.sound}")               // Sound source
-                .slow(${this.param.B.pitch.clockDivider})                
+                        : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
+                .slow(${this.param.B.pitch.clockDivider})    
+                .ftype("${this.param.synth.bass.filter.type}")
+                .lpf(${this.param.synth.bass.filter.cutoff}) 
+                .lpq(${this.param.synth.bass.filter.Q})           
+                .lpenv(${this.param.synth.bass.filter.env.depth})   
+                .lpa(${this.param.synth.bass.filter.env.A}).lpd(${this.param.synth.bass.filter.env.D}).lps(${this.param.synth.bass.filter.env.S}).lpr(${this.param.synth.bass.filter.env.R})         
                 .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
                 ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
                 ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
@@ -110,8 +114,7 @@ export class DataSonification extends Sonification{
                 ,  // Part 2: Metal and misc percussion sounds
                 s("${this.param.C.part["2"].sound.pattern}")
                     ${this.param.C.part["2"].sound.bank  ? `.bank("${this.param.C.part["2"].sound.bank}")` : ""}  // Hats
-                    .velocity(perlin.range(.5, 0.75))
-                    .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})   // Euclidean pulse
+                    .velocity("${this.param.C.part["2"].velocity.pattern }")    // Velocity mapped to scaled date for "${this.state.selection.group.B.pitchPattern}" at "${this.schema.group.B.map.pitch.interval}" intervals
                     ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`}                     
                 , // Part 3: Harmony: synth
                 stack( // a. Oscillator
@@ -190,11 +193,13 @@ export class DataSonification extends Sonification{
             this.state.selection.group.A.pitchPattern = util.randomItem(this.schema.group.A.series)
             this.state.selection.group.B.pitchPattern = util.randomItem(this.schema.group.B.series)
 
-            // i. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
+            // ii. Randomise euclidean pulse
+            this.param.A.pitch.pulse = util.randomItem([5, 7, 9, 11, 13])
+            this.param.B.pitch.pulse = util.randomItem([5, 7, 9, 11])
+
+            // iii. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
             this.state.selection.group.A.euclideanArray = util.rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
             this.state.selection.group.B.euclideanArray = util.rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
-            this.state.selection.group.C.part["1"].euclideanArray = util.rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)
-            this.state.selection.group.C.part["2"].euclideanArray = util.rotateArray(getPattern(this.param.C.part["2"].sound.pulse, this.param.C.part["2"].sound.length), this.param.C.part["2"].sound.rotation)
         }
 
         /**
@@ -220,10 +225,10 @@ export class DataSonification extends Sonification{
 
         // ii. Add velocity to group C
         group.C["2"].velocity = { interval: this.schema.group.B.map.pitch.interval }      
-        group.C["3"].interval =  this.schema.group.C.part["3"].interval  
+        group.C["3"].chord    = { interval: this.schema.group.C.part["3"].map.sound.interval }
 
         /// iii. Set primary (pitch) pattern series
-        group.A.pitch.series = group.A.velocity.series = group.A.lpf.series = group.A.lpq.series =  this.state.selection.group.A.pitchPattern
+        group.A.pitch.series = group.A.velocity.series = group.A.lpf.series = group.A.lpq.series = group.C["3"].series = this.state.selection.group.A.pitchPattern
         group.B.pitch.series = group.B.noise.series =  group.C["2"].velocity.series = group.C["3"].series = this.state.selection.group.B.pitchPattern
 
 
@@ -290,24 +295,30 @@ export class DataSonification extends Sonification{
         // i. Update pattern params
         this.param.C.part["2"].sound.pattern = group.C["2"].sound[this.state.selection.group.C.part["2"].series].pattern
 
+        // ii. Velocity 
+        group.C["2"].velocity.array             = sceneData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
+        this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
+
         // Part 3. Chord progression notes and params
-        const musicalScale = this.param.global.scale.type,
-            scaleChords  = this.schema.musicalScale[musicalScale].chordMap,
+        const musicalScale  = this.param.global.scale.type,
+            scaleChords     = this.schema.musicalScale[musicalScale].chordMap,
             chordMap = {
                 0: scaleChords.I,
                 1: scaleChords.IV,
                 2: scaleChords.V,
                 3: scaleChords.VI
-            }
+            },
+            chordInterval   = group.C["3"].chord.interval,
+            chordSeries     = group.C["3"].series,
+            chordSoundIndex = this.state.selection.group.C.part["3"].series,
+            chordConfig     = group.C["3"].sound[chordSoundIndex]
 
-        group.C["3"].patternArray               = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series].map(d => d.quantized).map( d => chordMap[d])
-        this.param.C.part["3"].sound.pattern    = `"<${group.C["3"].patternArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
+        const chordArray = group.C["3"].patternArray = sceneData.scaledData[chordInterval].C["3"].chord[chordSeries].map(d => d.quantized).map( d => chordMap[d])
+        this.param.C.part["3"].sound.pattern    = `"<${chordArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
 
-        const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
-        this.param.C.part["3"].sound.length = group.C["3"].patternArray.length
-        this.param.C.part["3"].sound.code   = c3.code
-        this.param.C.part["3"].sound.ampEnv = c3.ampEnv
-        this.param.C.part["3"].gain         = c3.gain
-
+        this.param.C.part["3"].sound.length = chordArray.length
+        this.param.C.part["3"].sound.code   = chordConfig.code
+        this.param.C.part["3"].sound.ampEnv = chordConfig.ampEnv
+        this.param.C.part["3"].gain         = chordConfig.gain
     };
 }

@@ -43,14 +43,23 @@ export const groupConfig = {
         type:       'pattern',
         part: {         
             1: {
-                series:    Object.keys(groupPartPresets["1"].sound).map(d => +d)
+                series:    Object.keys(groupPartPresets["1"].sound).map(d => +d),
+                map: {
+                    sound:      { interval:  '16n' },
+                }
             },
             2: {
-                series:    Object.keys(groupPartPresets["2"].sound).map(d => +d)
+                series:    Object.keys(groupPartPresets["2"].sound).map(d => +d),
+                map: {
+                    sound:      { interval:  '16n' },
+                    velocity:   { interval:  '16n' }
+                }
             },
             3: {
                 series:    Object.keys(groupPartPresets["3"].sound).map(d => +d),
-                interval:  '4n' 
+                map: {
+                    sound:      { interval:  '4n' }
+                }
             }
         }
     }

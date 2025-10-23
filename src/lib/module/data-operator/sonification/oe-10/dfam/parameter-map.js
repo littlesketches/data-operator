@@ -51,7 +51,7 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap
-            pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
+            pulse:              16,             // Euclidean pulse (default on load)
             rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             transpose:          24,             // OSC 2 transpose
@@ -66,8 +66,8 @@ export const paramInit = {
         gain:                   0.7,            // Group level gain
         mute:                   false,          // Mute available at group level
         swing: {
-            index:      0,              // Min to max swing index
-            level:      0               // calculated swing level
+            index:              0,              // Min to max swing index
+            level:              0               // calculated swing level
         },
         velocity: {       
             pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap
@@ -75,10 +75,10 @@ export const paramInit = {
     },
     // Group C: [pattern] percussion
     C: {
-        gain:           0.5,            // Used for channel mixing
+        gain:                   0.5,            // Used for channel mixing
         swing: {
-            index:      0,              // Min to max swing index
-            level:      0               // calculated swing level
+            index:              0,              // Min to max swing index
+            level:              0               // calculated swing level
         },
         part: {     
             1: {  // "Beat":  mostly set for selected series in updateParameterMap
@@ -87,16 +87,10 @@ export const paramInit = {
                 sound: {
                     pattern:        {},      // sound part pattern
                     bank:           'RolandTR909',  // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
                     pattern:        undefined,      // velocity pattern
-                    length:         16,             // Euclidean pulse
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                 }
             },
             2: { // "Hats"
@@ -105,15 +99,11 @@ export const paramInit = {
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     bank:           'RolandTR909',  // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
 
                 },
                 velocity: {     
                     pattern:        undefined,      // velocity pattern
-                    length:         16,             // 
                 }
             },
             3: {    // Chords
@@ -123,7 +113,6 @@ export const paramInit = {
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
-                    length:         undefined,
                     ampEnv:         undefined,
                     clockDivider:   2               // Clock divider
                 }

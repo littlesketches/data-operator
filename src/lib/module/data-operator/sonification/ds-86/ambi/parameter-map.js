@@ -21,10 +21,10 @@ export const paramInit = {
                 }
             },
             ampEnv: {
-                a: 0.01, d: 0.1, s: 0.8, r: 0.5
+                A: 0.01, D: 0.1, S: 0.8, R: 0.5
             }
         },
-        ModelD: {
+        bass: {
             mix: {  
                 osc1:   1,
                 osc2:   1,
@@ -38,16 +38,11 @@ export const paramInit = {
                 cutoff:     440,    // Default replaced with data-driven ranges
                 Q:          4,  
                 env: {
-                    A: 0,   D: 0.1,     S: 0.2,    depth:  2.5,  
+                    A: 0,   D: 0.1,     S: 0.2,    R: 0.5,
+                    depth:  2.5,  
                 }
             }
         },
-        bass: {
-            sound:      'piano',
-            noise: {
-                velocity:   '1'
-            }
-        }
     },
     // Group A: [melodic] 'synth'    
     A: {

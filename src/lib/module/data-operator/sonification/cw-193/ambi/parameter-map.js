@@ -22,9 +22,22 @@ export const paramInit = {
             }
         },
         bass: {
-            sound:      'piano',
-            noise: {
-                velocity:   '1'
+           mix: {  
+                osc1:   1,
+                osc2:   1,
+                sub:    0.25,
+                noise:  0.25
+            },
+            ampEnv: {
+                A: 0.0,     D: 0.1,     S: 0.8,     R: 0.5
+            },
+            filter: {
+                type:       "ladder",
+                cutoff:     440,    // Default replaced with data-driven ranges
+                Q:          4,  
+                env: {
+                    A: 0,   D: 0.1,     S: 0.2,     R: 0.5, depth:  2.5,  
+                }
             }
         }
     },
@@ -39,7 +52,7 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              16,             // Euclidean pulse: default to all pitchs
+            pulse:              undefined,      // Euclidean pulse (default on load)
             rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
@@ -61,8 +74,8 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
+            pulse:              undefined,      // Euclidean pulse (default on load)
+            rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch
             transpose:          -24,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale

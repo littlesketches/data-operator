@@ -8,9 +8,10 @@ import { strudelVisOptions, strudelVisPalette }         from "../../_shared/stru
 
 export const paramInit = {
     synth: {
-        TB303: {
+        lead: {
             oscType:        'sawtooth',
             filter: {
+                type:       '24db',
                 cutoff:     `sine.range(200,2000).slow(16)`,    // Placeholder updated with data-driven ranges
                 Q:          'sine.range(2,6).slow(2)',          // Placeholder updated with data-driven ranges
                 env: {
@@ -21,26 +22,25 @@ export const paramInit = {
                 }
             },
             ampEnv: {
-                a: 0.01, d: 0.1, s: 0.8, r: 0.5
+                A: 0.01, D: 0.1, S: 0.8, R: 0.5
             }
         },
-        ModelD: {
-            mix: {  
+        bass: {
+            mix: {     
                 osc1:   1,
                 osc2:   1,
                 sub:    0.25,
                 noise:  0.25
             },
             ampEnv: {
-                a: 0.0, d: 0.1, s: 0.8, r: 0.5
+                A: 0.0, D: 0.1, S: 0.8, R: 0.5
             },
             filter: {
+                type:       'ladder',
                 cutoff:     440,        
                 Q:          4,  
                 env: {
-                    A:      0,     
-                    D:      0.1,     
-                    S:      0.2,  
+                    A: 0, D: 0.1, S: 0, R: 0.5,
                     depth:  2.5,  
                 }
             }
@@ -107,9 +107,6 @@ export const paramInit = {
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     bank:           'RolandTR909',  // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
@@ -122,14 +119,10 @@ export const paramInit = {
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     bank:           'RolandTR909',  // Sound bank alias 
-                    length:         16,             // 
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:        undefined,     // Velocity pattern
-                    length:         16,             // 
+                    pattern:        undefined,      // Velocity pattern
                 }
             },
             3: {  // Chords
@@ -139,7 +132,6 @@ export const paramInit = {
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
-                    length:         undefined,
                     ampEnv:         undefined,
                     clockDivider:   2                 // Clock divider
                 },
