@@ -22,7 +22,10 @@ export const groupConfig = {
         type:       'pitch',
         series,
         map: {
-            pitch:      { interval: '16n' }
+            pitch:      { interval: '16n' },
+            velocity:   { interval: '16n' },
+            lpf:        { interval: '4n' },
+            lpq:        { interval: '4n' },
         }
     },
     B: {

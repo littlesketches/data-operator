@@ -19,7 +19,6 @@
     const {operatorConfig} = model
     const doModel = operatorConfig.model
 
-
 </script>
 
 
@@ -30,7 +29,7 @@
     {:else if  guideType === 'sonification'}
         {#if operatorConfig.model.name === 'oe-10'}
             {#if operatorConfig.model.edition === 'operator'}
-            <OE10Operator {model} isSideGuide = {true}/>
+            <OE10Operator isSideGuide = {true}/>
             {:else if  operatorConfig.model.edition === 'dfam'}
             <OE10DFAM isSideGuide = {true}/>
             {:else if  operatorConfig.model.edition === 'ambi'}
@@ -52,7 +51,6 @@
             {:else if  operatorConfig.model.edition === 'ambi'}
             <DS86AMBI isSideGuide = {true}/>
             {/if}
-
         {/if}
     {/if}
 </section>
@@ -73,5 +71,4 @@
         opacity:        1;
         display:        initial;
     }
-
 </style>

@@ -18,25 +18,25 @@ export const paramInit = {
             /*OSC1*/  
             vco1pitched:    true,
             vco1wave:       "square",   // [VCO 1 Wave] Waveshape switch: "square' or "triangle"
-            vco1EG:         "<0 0.15 0.3 0.5>",        // [VCO 1 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay  x velocity (negative to invert the envelope)
+            vco1EG:         0.8,        // [VCO 1 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay  x velocity (negative to invert the envelope)
             /*OSC2*/  
             vco2pitched:    true,
             vco2wave:       "triangle", // [VCO 2 Wave] Waveshape switch: "square' or "triangle"
             vco2EG:         0.75,       // [VCO 2 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay velocity (negative to invert the envelope)
             FM1_2Amt:       50,         // 0 to 50,
             /*NOISE*/ 
-            noiseType:     "white",      // Noise source type switch: "white", "pink", "brown"
+            noiseType:     "pink",      // Noise source type switch: "white", "pink", "brown"
             noiseLvl:       0.5,       // [Noise Level] 0 to 1: gain multiplier to control Noise source volume
             /*FILTER*/
-            vcfCutoff:      "<200 400 600 800>",    // [Cutoff]  filter cutoff frequency: can be sequenced
-            vcfResonance:   "<6 22 14 20>",           // [Resonance] Filter resonance level: can be sequenced
-            vcfEnv:         4,          // Sets the max modulation depth (semitone?) the filter envelope
+            vcfCutoff:      440,    // [Cutoff]  filter cutoff frequency: can be sequenced
+            vcfResonance:   20,           // [Resonance] Filter resonance level: can be sequenced
+            vcfEnv:         3,          // Sets the max modulation depth (semitone?) the filter envelope
             vcfDecay:       5,          // Sets max decay length: applied with vcfEG and velocity
             vcfEG:          0.75,        // [VCF EG AMOUNT] 0 to 1: controls amount of filter envelope decay x velocity  (negative to invert the envelope?)
             /*ENV*/   
             vcaAttack:      0,          // Default to zero
             vcaDecay:       5,          // Sets max decay length: applied with vcfEG and velocity
-            vcaEG:          "<0.05 0.1 0.25 0.5>*4",   // [VCA Decay] 0 to 1, VCA env. x (velocity on each step) =< can sequence
+            vcaEG:          0.5,          // [VCA Decay] 0 to 1, VCA env. x (velocity on each step) =< can sequence
             vcaSustain:     0,          // Set to zero fo AD envelope
             vcaRelease:     0,          // Set to zero fo AD envelope
         }
@@ -59,7 +59,7 @@ export const paramInit = {
             struct:             undefined,      // Pulse sequencer pattern
             structLegato:       undefined,      // Legato version of pulse sequencer pattern
             clockDivider:       1               // Clock divider
-        },
+        }
     },
     // Group B: [melodic] bass (and/or chord/drone) 
     B: {
@@ -113,8 +113,7 @@ export const paramInit = {
                 },
                 velocity: {     
                     pattern:        undefined,      // velocity pattern
-                    pulse:          16,             // Euclidean pulse
-                    rotation:       0,              // Euclidean rotation
+                    length:         16,             // 
                 }
             },
             3: {    // Chords
@@ -125,7 +124,8 @@ export const paramInit = {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
                     length:         undefined,
-                    clockDivider:   1               // Clock divider
+                    ampEnv:         undefined,
+                    clockDivider:   2               // Clock divider
                 }
             }
         }
@@ -140,12 +140,11 @@ export const paramInit = {
     },
     // Global params: tempo and FX settings
     global: {
-        bpm:                120,          // tempo
+        bpm:                114,          // tempo
         step:               0,
         scale: {
             pitch:           undefined,             // Musical scale
-            root:           'C',                    // pitch root
-            octave:         2,                      // octave 
+            root:           'A',                    // pitch root
             type:           'minor:pentatonic',     //
         },
         // Punch FX config: params could potentially exposed

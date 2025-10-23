@@ -1,5 +1,5 @@
 /**
- *  SONIFICATION CLASS 
+ *  OE-10:DFAM DATA SONIFICATION CLASS 
  *  - Custom data load/parse and transformation: model, schema and output for strudel
  *  - Strudel 'code' template with parameters and data sonification input strings
  */
@@ -9,8 +9,9 @@ import * as d3              from 'd3'
 import { getPattern }       from 'euclidean-rhythms';
 import { util }             from '$lib/module/data-operator/core/js/utils';
 
-// Classes
-import { Sonification }     from '$lib/module/data-operator/core/js/Sonification.svelte';
+// Classes and custom handlers
+import { Sonification }          from '$lib/module/data-operator/core/js/Sonification.svelte';
+import { addCustomHandlersDFAM } from '$lib/module/data-operator/core/js/edition/dfam-sonification';
 
 // Config
 import { paramInit }        from './parameter-map';
@@ -30,14 +31,14 @@ export class DataSonification extends Sonification{
     // mode  = $derived({})
     param = $state(paramInit)       // Loads the default template  
 
-    // Custom song code: always derived from 'state' (Ui) and 'params' 
+    // Custom song code: always derived from 'state' (UI) and 'params' 
     // Strudel code derived from state and params
     code = $derived(`
         /* 
-         @title Open Electricity Data Jam: ${d3.timeFormat("%d-%m-%y")(this.data.scene[this.state.selection.sceneIndex].day)}   
+         @title Open Electricity Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)} 
          @by Data Operator OE-10:DFAM
-         @details Sonification of Open Electricity (NEM) data 
-         @url https://data-operator.littlesketch.es
+         @details Sonification of Open Electricity (NEM) data over 24hrs for the date of ${this.data.getSceneLabel(this.state.selection.sceneIndex)} 
+         @url https://data-operator.littlesketch.es/model/oe-10/dfam
          @license CC BY-NC-SA
          */
 
@@ -73,12 +74,12 @@ export class DataSonification extends Sonification{
                 .decay("${this.param.synth.DFAM.vcaDecay}".mul("${this.param.B.velocity.pattern}".mul("${this.param.synth.DFAM.vcaEG}")))
                 .sustain("${this.param.synth.DFAM.vcaSustain}")
                 .release("${this.param.synth.DFAM.vcaRelease}")     
-                .lpf("${this.param.synth.DFAM.vcfCutoff}").ftype("ladder")
+                .lpf("${this.param.synth.DFAM.vcfCutoff}".slow(${this.param.C.part["3"].sound.clockDivider})).ftype("ladder")   // Filter cutoff change tracks chord progression 
                 .lpq("${this.param.synth.DFAM.vcfResonance}")
                 .lpe("${this.param.synth.DFAM.vcfEnv}").lps("0")
                 .lpd("${this.param.B.velocity.pattern}".mul("${this.param.synth.DFAM.vcfDecay}").mul("${this.param.synth.DFAM.vcfEG}"))
                 .swingBy(${this.param.A.swing.level}, 8) 
-                .delay(0.5).delayfb(0.5)
+                .delay(0.5).pan(rand).delayfb(0.5)
                 ${this.param.A.fx.juxRev       ? `${this.param.global.fx.juxRev}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.juxPress     ? `${this.param.global.fx.juxPress}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.crusher      ? this.param.global.fx.crusher : ''}
@@ -101,15 +102,15 @@ export class DataSonification extends Sonification{
                     ${this.param.synth.DFAM.duck  ? `.duckorbit(2).duckattack(0.1).duckdepth(1)` : ''}
                     .slow(${this.param.C.part["1"].sound.clockDivider})                
                     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}
-                    .delay(0.25).delayfb(0.5) 
-                // Beat: "nomrmal" part
+                // Beat: "normal" part
                 ${this.param.C.part["1"].sound.pattern.normal ? `,
                     s("${this.param.C.part["1"].sound.pattern.normal}").bank("${this.param.C.part["1"].sound.bank}")
                     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}
                 `: ''}
                 , // Hats
-                s("${this.param.C.part["2"].sound.pattern}").bank("${this.param.C.part["2"].sound.bank}")  
-                    .velocity(perlin.range(.5, 0.75))
+                s("${this.param.C.part["2"].sound.pattern}")
+                    ${this.param.C.part["2"].sound.bank ? `.bank("${this.param.C.part["2"].sound.bank}")` : ""}  // Hats
+                    .velocity("${this.param.C.part["2"].velocity.pattern }")    // Velocity mapped to scaled date for "${this.state.selection.group.A.pitchPattern}" at "${this.schema.group.A.map.pitch.interval}" intervals
                     .euclidRot(${this.param.C.part["2"].sound.pulse}, ${this.param.C.part["2"].sound.length}, ${this.param.C.part["2"].sound.rotation})  
                     .slow(${this.param.C.part["2"].sound.clockDivider})                
                     ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`} 
@@ -119,6 +120,7 @@ export class DataSonification extends Sonification{
                     .slow(${this.param.C.part["3"].sound.clockDivider})                
                     ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].gain * this.param.C.gain})`}  
                     ${this.param.C.part["3"].sound.code}
+                    ${this.param.C.part["3"].sound.ampEnv ? `.adsr("${this.param.C.part["3"].sound.ampEnv}")` :''}
             )
             .color("${this.param.visual.color.C}")
             .swingBy(${this.param.C.swing.level}, 8)  
@@ -183,65 +185,7 @@ export class DataSonification extends Sonification{
     //////////////////////////
 
     addCustomHandlers(){
-        const sonification = this
-
-        // DFAM
-        this.handle.toggleOscPitch = (oscNo) => {
-            // 1. Toggle pitch sync
-            this.param.synth.DFAM[`osc${oscNo}pitched`] = !this.param.synth.DFAM[`osc${oscNo}pitched`]
-            // 2. Handle user message
-            this.state.userMessage.text = `Oscillator #${oscNo} pitch sync ${this.param.synth.DFAM[`osc${oscNo}pitched`]? 'on' : 'off'}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.cycleOscType = (oscNo) => {
-            // 1. Cycle oscillator type
-            const types = ['square', 'triangle']
-            this.param.synth.DFAM[`vco${oscNo}wave`] = util.cycleFromValue(types, this.param.synth.DFAM[`vco${oscNo}wave`], 1)
-
-            // 2. Handle user message
-            this.state.userMessage.text = `Osc. #${oscNo} changed to ${this.param.synth.DFAM[`vco${oscNo}wave`]}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.cycleNoiseType = () => {
-            // 1. Cycle oscillator type
-            const types = ['white', 'pink', 'brown']
-            this.param.synth.DFAM.noiseType = util.cycleFromValue(types, this.param.synth.DFAM.noiseType, 1)
-            // 2. Handle user message
-            this.state.userMessage.text = `Noise type changed to ${this.param.synth.DFAM.noiseType}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.adjustNoiseLevel = (gainChange) => {
-            // 1. Calculate newGain clamped to min/max
-            const minGain = 0, maxGain = 1
-            const newGain = Math.min(Math.max( this.param.synth.DFAM.noiseLvl + gainChange, minGain), maxGain)
-            // 2. Update param
-            this.param.synth.DFAM.noiseLvl = newGain
-            // 3. Handle user message
-            this.state.userMessage.text = `Noise level changed to ${d3.format('.2f')(this.param.synth.DFAM.noiseLvl)}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.toggleSidechain = () => {
-            // 1. Update orbt (toggle between 1 and 2)
-            this.param.synth.DFAM.duck = !this.param.synth.DFAM.duck
-
-            // 2. Handle user message
-            this.state.userMessage.text = `Ducking is ${this.param.synth.DFAM.orbit === 1 ? 'off' : 'on' }`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
+        addCustomHandlersDFAM(this)     // Handlers specific to DFAM UI
     }
 
     updateParameterMap(init = false){
@@ -250,8 +194,8 @@ export class DataSonification extends Sonification{
          */
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern    = util.randomItem(this.schema.group.A.series)
-            this.state.selection.group.B.velocityPattern = util.randomItem(this.schema.group.B.series)
+            this.state.selection.group.A.pitchPattern    = 'price-per-MWh'
+            this.state.selection.group.B.velocityPattern = 'coal'
 
             // ii. Randomise euclidean pulse (for init) and set to onDelta 
             this.param.A.pitch.pulse = util.randomItem([9, 11, 13, 15])
@@ -267,27 +211,36 @@ export class DataSonification extends Sonification{
          *  II. Set of manual update methods to turns data selections into 'param' updates => (reactive) code   
          */ 
 
-        // Data selected and reference variables
-        const sceneData       = this.data.scene[this.state.selection.sceneIndex],
-            scaleLock       = this.state.selection.scaleLock ? 'quantized' : 'value',
+        // i. Selection and reference variables
+        const sceneData = this.data.scene[this.state.selection.sceneIndex],
+            scaleLock   = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
-                    pitch: {
-                        interval:   this.schema.group.A.map.pitch.interval,          // Static/config interval
-                        series:     this.state.selection.group.A.pitchPattern,
-                    }
+                    pitch:      { interval: this.schema.group.A.map.pitch.interval      },
+                    velocity:   { interval: this.schema.group.A.map.velocity.interval   },
+                    lpf:        { interval: this.schema.group.A.map.lpf.interval   },
+                    lpq:        { interval: this.schema.group.A.map.lpq.interval   }
                 },
                 B: {
-                    velocity: {
-                        interval:   this.schema.group.B.map.velocity.interval,          // Static/config interval
-                        series:     this.state.selection.group.B.velocityPattern,
-                    }
+                    velocity:   { interval: this.schema.group.B.map.velocity.interval }
                 },
                 C:  this.schema.pattern.C    //  Percussion part presets           
             }
 
+        // ii. Add data for group C
+        group.C["2"].velocity = { interval: this.schema.group.A.map.pitch.interval }      
+        group.C["3"].interval = this.schema.group.C.part["3"].interval  
+
+        // iii. Set primary (pitch) pattern series
+        group.A.pitch.series    = group.A.velocity.series = group.A.lpf.series = group.A.lpq.series =  this.state.selection.group.A.pitchPattern
+        group.B.velocity.series = group.C["3"].series = this.state.selection.group.B.velocityPattern
+
+        // iv. Set fixed 'contextual series
+        group.C["2"].velocity.series  = 'fossil'
+
+
         /**
-         *  GROUP A: Lead resonant FM linked "synth"
+         *  GROUP A: Pitch for DFAM synth
          */ 
 
         // i. Pitch: constructed from selected data => update params
@@ -301,11 +254,21 @@ export class DataSonification extends Sonification{
             this.param.A.pitch.structLegato = util.legatoStruct(this.state.sequencer.A.array )
         }
 
+        // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
+        group.A.lpf.array           = sceneData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
+        this.param.synth.DFAM.vcfCutoff  = `${JSON.stringify(group.A.lpf.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}`
+
+        // iii. Filter resonance:  constructed from selected data => update params: set for change on 2n
+        group.A.lpq.array           = sceneData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
+        const resonanceRangeString  = `"[${util.rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
+        this.param.synth.DFAM.vcfResonance = `${JSON.stringify(group.A.lpq.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}`
+
+
         /**
-         *  GROUP B: Percussive "bass + noise" synth
+         *  GROUP B: Velocity for DFAM synth
          */ 
 
-        // i. Pitch: constructed from selected data => update params
+        // i. Velocity: constructed from selected data => update params
         group.B.velocity.array = sceneData.scaledData[group.B.velocity.interval].B.velocity[group.B.velocity.series].map(d => d.value )
         this.param.B.velocity.pattern  = `${JSON.stringify(group.B.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.velocity.length}`
 
@@ -326,20 +289,27 @@ export class DataSonification extends Sonification{
         // Part 2. Hats pattern: "metal" percussion
         // i. Update pattern params
         this.param.C.part["2"].sound.pattern = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
+        group.C["2"].velocity.array             = sceneData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
+        this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
 
         // Part 3. Chord progression notes and params
-        group.C["3"].interval = "4n"
-        group.C["3"].series   = this.state.selection.group.A.pitchPattern
-        group.C["3"].array    = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series]
-                                    .map(d => d.quantized)
-                                    .map( d => group.C["3"].chord[d])
+        const musicalScale = this.param.global.scale.type,
+            scaleChords  = this.schema.musicalScale[musicalScale].chordMap,
+            chordMap = {
+                0: scaleChords.I,
+                1: scaleChords.IV,
+                2: scaleChords.V,
+                3: scaleChords.VI
+            }
 
-        this.param.C.part["3"].sound.pattern = `"<${group.C["3"].array.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
+        group.C["3"].patternArray               = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series].map(d => d.quantized).map( d => chordMap[d])
+        this.param.C.part["3"].sound.pattern    = `"<${group.C["3"].patternArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
 
         const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
-        this.param.C.part["3"].sound.length = group.C["3"].array.length
-        this.param.C.part["3"].sound.code = c3.code
-        this.param.C.part["3"].gain = c3.gain
+        this.param.C.part["3"].sound.length = group.C["3"].patternArray.length
+        this.param.C.part["3"].sound.code   = c3.code
+        this.param.C.part["3"].sound.ampEnv = c3.ampEnv
+        this.param.C.part["3"].gain         = c3.gain
 
     };
 

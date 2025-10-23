@@ -139,6 +139,7 @@ export const paramInit = {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
                     length:         undefined,
+                    ampEnv:         undefined,
                     clockDivider:   2                 // Clock divider
                 },
                 velocity: {     

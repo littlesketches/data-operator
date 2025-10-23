@@ -44,6 +44,28 @@ export const percConfig = {
             ['-'], ['-'], ['oh'], ['-'],
         ]
     },
+
+    xtal:  {
+        label:   'Xtal',
+        pattern: '<hh:1 hh:1 oh -   hh:1 hh:1 oh -   hh:1 hh:1 oh -   hh:1 hh:1 oh - >*16',
+        vis: [
+            ['hh'], ['hh'], ['oh'], ['-'],
+            ['hh'], ['hh'], ['oh'], ['-'],
+            ['hh'], ['hh'], ['oh'], ['-'],
+            ['hh'], ['hh'], ['oh'], ['-'],
+        ]
+    },
+    ageiopolis:  {
+        label:   'Ageisopolis',
+        pattern: '<hh:1 hh:1 hh:1 hh:1   hh:1 hh:1 hh:1 hh:1   hh:1 hh:1 oh:0 -   hh:1 hh:1 hh:1 hh:1 >*16',
+        vis: [
+            ['hh'], ['hh'], ['hh'], ['hh'],
+            ['hh'], ['hh'], ['hh'], ['hh'],
+            ['hh'], ['hh'], ['oh'], ['-'],
+            ['hh'], ['hh'], ['hh'], ['hh'],
+        ]
+    },
+
     unknown_drummer:  {
         label:   'Unknown drummer',
         pattern: '<- hh hh -  hh hh - hh  oh - -  -  - hh oh - >*16',

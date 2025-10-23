@@ -1,9 +1,9 @@
 /**
- *  STRUDEL INSTRUMENT AND PATTERN PARAMS
+ *  OE-10:AMBI STRUDEL INSTRUMENT AND PATTERN PARAMS
  *   - Strudel code parameter template (with defaults)
  *   - Contains default and structure for Sonification 'param' reactive state => derived 'code'
  */
-import { randomItem, randomInteger }                from "../../../core/js/utils"
+
 import { strudelVisOptions, strudelVisPalette }     from "../../_shared/strudel-vis-config"
 
 export const paramInit = {
@@ -51,7 +51,7 @@ export const paramInit = {
     },
     // Group A: [melodic] 'synth'    
     A: {
-        gain:           0.65,            // Group level gain 
+        gain:           0.65,           // Group level gain 
         mute:           false,          // Mute available at group level
         octave:         5,              // Scale octave
         swing: {
@@ -60,13 +60,13 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([5, 7, 9, 11, 13]),             // Euclidean pulse: default to all pitchs
-            rotation:           randomInteger(16),               // Euclidean rotation
+            pulse:              undefined,      // Euclidean pulse (default on load)
+            rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined,       // Legato version of pulse sequencer pattern
-            clockDivider:       2              // Clock divider
+            structLegato:       undefined,      // Legato version of pulse sequencer pattern
+            clockDivider:       2               // Clock divider
         },
         velocity: {
             pattern:            undefined
@@ -74,21 +74,22 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.5,           // Group level gain
+        gain:           0.5,            // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
+        octave:         2,              // Scale octave
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([7, 9, 11, 13]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
+            pulse:              undefined,      // Euclidean pulse (default on load)
+            rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch
             transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,      // Legato version of pulse sequencer pattern
             clockDivider:       4               // Clock divider
         },
         noise: {
@@ -108,7 +109,7 @@ export const paramInit = {
                 mute:           false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           null,  // Sound bank alias 
+                    bank:           null,           // Sound bank alias 
                     length:         16,             // 
                     pulse:          16,             // Euclidean pulse
                     rotation:       0,              // Euclidean rotation
@@ -123,14 +124,15 @@ export const paramInit = {
                 mute:           false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           null,  // Sound bank alias 
-                    length:         16,            // 
-                    pulse:          16,            // Euclidean pulse
-                    rotation:       0,             // Euclidean rotation
+                    bank:           null,           // Sound bank alias 
+                    length:         16,             // 
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:    undefined,     // Velocity pattern
+                    pattern:        undefined,     // Velocity pattern
+                    length:         16
                 }
             },
             3: {    // Chords
@@ -161,7 +163,6 @@ export const paramInit = {
         scale: {
             pitch:           undefined,             // Musical scale
             root:           'C',                    // pitch root
-            octave:         3,                      // octave of lead
             type:           'lydian',       // Default/starting scale type
         },
         // Punch FX config: params could potentially exposed

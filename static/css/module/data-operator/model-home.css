@@ -106,15 +106,15 @@ ul.do_model-page__menu {
 }
 
 .do_model-page__menu li h2{
-    font-size:              1.5vh; 
+    font-size:              medium; 
     margin-block-end:       0.5vh;
 }
 .do_model-page__menu li h3{
-    font-size:              2.75vh; 
+    font-size:              x-large; 
     text-transform:         lowercase;   
 }
 .do_model-page__menu li .arrow{
-    font-size:              3.5vh; 
+    font-size:              xx-large; 
     line-height:            1;
     text-align:             end;
 }

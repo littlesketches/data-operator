@@ -48,7 +48,8 @@ export const groupConfig = {
                 series:    Object.keys(groupPartPresets["2"].sound).map(d => +d)
             },
             3: {
-                series:    Object.keys(groupPartPresets["3"].sound).map(d => +d)
+                series:    Object.keys(groupPartPresets["3"].sound).map(d => +d),
+                interval:  '4n'
             }
         }
     }

@@ -7,12 +7,7 @@
 // Libs and utils
 import * as d3                  from 'd3'
 import { getPattern }           from 'euclidean-rhythms';
-import { util, 
-    randomItem,
-    cycleFromValue, 
-    rotateArray,
-    legatoStruct,
-    deltaArray }               from '$lib/module/data-operator/core/js/utils';
+import { util  }                from '$lib/module/data-operator/core/js/utils';
 // Classes
 import { Sonification }         from '$lib/module/data-operator/core/js/Sonification.svelte';
 
@@ -190,66 +185,6 @@ export class DataSonification extends Sonification{
     ////  PUBLIC METHODS  ////
     //////////////////////////
 
-    addCustomHandlers(){
-        const sonification = this
-
-        // DFAM
-        this.handle.toggleOscPitch = (oscNo) => {
-            // 1. Toggle pitch sync
-            this.param.synth.DFAM[`osc${oscNo}pitched`] = !this.param.synth.DFAM[`osc${oscNo}pitched`]
-            // 2. Handle user message
-            this.state.userMessage.text = `Oscillator #${oscNo} pitch sync ${this.param.synth.DFAM[`osc${oscNo}pitched`]? 'on' : 'off'}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.cycleOscType = (oscNo) => {
-            // 1. Cycle oscillator type
-            const types = ['square', 'triangle']
-            this.param.synth.DFAM[`vco${oscNo}wave`] = util.cycleFromValue(types, this.param.synth.DFAM[`vco${oscNo}wave`], 1)
-            // 2. Handle user message
-            this.state.userMessage.text = `Osc. #${oscNo} changed to ${this.param.synth.DFAM[`vco${oscNo}wave`]}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.cycleNoiseType = () => {
-            // 1. Cycle oscillator type
-            const types = ['white', 'pink', 'brown']
-            this.param.synth.DFAM.noiseType = util.cycleFromValue(types, this.param.synth.DFAM.noiseType, 1)
-            // 2. Handle user message
-            this.state.userMessage.text = `Noise type changed to ${this.param.synth.DFAM.noiseType}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.adjustNoiseLevel = (gainChange) => {
-            // 1. Calculate newGain clamped to min/max
-            const minGain = 0, maxGain = 1
-            const newGain = Math.min(Math.max( this.param.synth.DFAM.noiseLvl + gainChange, minGain), maxGain)
-            // 2. Update param
-            this.param.synth.DFAM.noiseLvl = newGain
-            // 3. Handle user message
-            this.state.userMessage.text = `Noise level changed to ${d3.format('.2f')(this.param.synth.DFAM.noiseLvl)}`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-
-        this.handle.toggleSidechain = () => {
-            // 1. Update orbit (toggle between 1 and 2)
-            this.param.synth.DFAM.duck = !this.param.synth.DFAM.duck
-            // 2. Handle user message
-            this.state.userMessage.text = `Ducking is ${this.param.synth.DFAM.orbit === 1 ? 'off' : 'on' }`
-            this.handle.userMessage()
-            // => Call update
-            this.handle.update()
-        }
-    }
-
     updateParameterMap(init = false){
         /**
          *  I. ON INIT ACTIONS
@@ -274,27 +209,23 @@ export class DataSonification extends Sonification{
             scaleLock       = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
-                    pitch: {
-                        interval:   this.schema.group.A.map.pitch.interval,          // Static/config interval
-                        series:     this.state.selection.group.A.pitchPattern,
-                    }, 
-                    lpf: {
-                        interval:   this.schema.group.A.map.lpf.interval,          // Static/config interval
-                        series:     this.state.selection.group.A.pitchPattern,
-                    },
-                    lpq: {
-                        interval:   this.schema.group.A.map.lpq.interval,          // Static/config interval
-                        series:     this.state.selection.group.B.pitchPattern,          // Link to B
-                    }
+                    pitch:    { interval: this.schema.group.A.map.pitch.interval    }, 
+                    lpf:      { interval: this.schema.group.A.map.lpf.interval      },
+                    lpq:      { interval: this.schema.group.A.map.lpq.interval      }
                 },
                 B: {
-                    velocity: {
-                        interval:   this.schema.group.B.map.velocity.interval,          // Static/config interval
-                        series:     this.state.selection.group.B.velocityPattern,
-                    }
+                    velocity: { interval:   this.schema.group.B.map.velocity.interval }
                 },
                 C:  this.schema.pattern.C    //  Percussion part presets           
             }
+
+        // ii. Add data for group C
+        group.C["2"].velocity = { interval: this.schema.group.A.map.pitch.interval }      
+        group.C["3"].interval =  this.schema.group.C.part["3"].interval  
+
+        // iii. Set primary (pitch) pattern series
+        group.A.pitch.series = group.A.lpf.series = group.A.lpq.series = group.C["3"].series = this.state.selection.group.A.pitchPattern
+        group.B.velocity.series = this.state.selection.group.B.velocityPattern
 
         /**
          *  GROUP A: Lead resonant FM linked "synth"
@@ -334,7 +265,6 @@ export class DataSonification extends Sonification{
         this.param.B.velocity.pattern  = `${JSON.stringify(group.B.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.velocity.length}`
 
 
-
         /**
          *  GROUP C. Pattern "percussion" parts
          */ 
@@ -353,18 +283,23 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
 
         // Part 3. Chord progression notes and params
-        group.C["3"].interval = "4n"
-        group.C["3"].series   = this.state.selection.group.A.pitchPattern
-        group.C["3"].array    = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series]
-                                    .map(d => d.quantized)
-                                    .map( d => group.C["3"].chord[d])
+        const musicalScale = this.param.global.scale.type,
+            scaleChords  = this.schema.musicalScale[musicalScale].chordMap,
+            chordMap = {
+                0: scaleChords.I,
+                1: scaleChords.IV,
+                2: scaleChords.V,
+                3: scaleChords.VI
+            }
 
-        this.param.C.part["3"].sound.pattern = `"<${group.C["3"].array.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
+        group.C["3"].patternArray               = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series].map(d => d.quantized).map( d => chordMap[d])
+        this.param.C.part["3"].sound.pattern    = `"<${group.C["3"].patternArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
 
         const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
-        this.param.C.part["3"].sound.length = group.C["3"].array.length
-        this.param.C.part["3"].sound.code = c3.code
-        this.param.C.part["3"].gain = c3.gain
+        this.param.C.part["3"].sound.length = group.C["3"].patternArray.length
+        this.param.C.part["3"].sound.code   = c3.code
+        this.param.C.part["3"].sound.ampEnv = c3.ampEnv
+        this.param.C.part["3"].gain         = c3.gain
 
     };
 }

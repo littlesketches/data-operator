@@ -35,12 +35,6 @@ export const groupPartPresets =  {
         }
     },
     3: { // Part 3: Chords from synth or sampled sounds)
-        chord: { 
-            0: "[0, 2, 4]",      // I
-            1: "[3, 5, 6]",      // IV
-            2: "[4, 6, 8]",      // V
-            3: "[5, 7, 9]",      // VI
-        },
         sound: {
             0: {
                 label:      'Supersaw synth',

@@ -3,18 +3,15 @@
  *  - Base sonification class 
  *  - Strudel 'code' template with parameters and data sonification input strings
  */
+
 // Libs and utils
 import * as d3              from 'd3'
 import { getPattern}        from 'euclidean-rhythms';
-import { util,
-    cycleFromValue, 
-    rotateArray,
-    deltaArray, 
-    legatoStruct }          from './utils';
+import { util }             from './utils';
 
 // Config
 import { timingConfig }     from '../config/global/timing-config'
-import { musicalScales }    from '../config/global/music-scale-config';
+import { musicalScale }     from '../config/global/music-scale-config';
 
 
 // => Sonification class
@@ -46,16 +43,16 @@ export class Sonification{
             isMobile:           false,                  // Mobile mode flag: dynamic screen size or set by query param
             userMessage:  {
                 text:           null,                   // On screen/display user action feedback message
-                timeoutId:      null,                    // setTimeout ID used to cancel message after use
+                timeoutId:      null,                   // setTimeout ID used to cancel message after use
                 overlay: {
                     isShown:        false,
                     type:           undefined,          // 'type' tepmlate for overlay message
-                    link:           undefined            // generated strudel.cc link 
+                    link:           undefined           // generated strudel.cc link 
                 }
             },
             sequencer: {    // Pulse sequencer: Group A nd B
-                ui: {   // ui state for storing group/part being edited
-                    isOpen:     false,          // Flag for UI
+                ui: {       // ui state for storing group/part being edited
+                    isOpen:     false,                  // Flag used for UI
                     group:      undefined
                 },
                 A:  { active: false, onDelta: false, array: [] },       // "active" flags use over euclidean rhythm. "onDelta" flags whether to apply an 'onDelta' pulse algorithm
@@ -69,16 +66,16 @@ export class Sonification{
                 info:           false,  
             },
             selection: {    // UI Selection
-                shift:          false,                  // Tracks if shift is held
-                heldModes:      new Set(),              // Stores all held modes: used to determine 'last held'
-                activeMode:     undefined,              // Active 'mode' => summarise this.state.mode status
-                numKeyAction:   undefined,   
-                navKeyAction:   undefined,
-                heldKeys:       new Set(),              // Tracks all held keyboard keys / screen buttons
-                sceneIndex:      0,                        // Selector for they sceneIndex of the modelData
-                scaleLock:      true,                   // Locks pitch to  scale ('quantized') or uses raw value ('microtonic')
+                shift:          false,                      // Tracks if shift is held
+                heldModes:      new Set(),                  // Stores all held modes: used to determine 'last held'
+                activeMode:     undefined,                  // Active 'mode' => summarise this.state.mode status
+                numKeyAction:   undefined,                  // Track key action state
+                navKeyAction:   undefined,                  // Track key action state
+                heldKeys:       new Set(),                  // Tracks all held keyboard keys / screen buttons
+                sceneIndex:     0,                          // Selector for they sceneIndex of the modelData
+                scaleLock:      true,                       // Locks pitch to  scale ('quantized') or uses raw value ('microtonic')
                 group: {
-                    active:     'master',               // Active 'mixer' track group
+                    active:     'master',                   // Active 'mixer' track group
                     A: {
                         pitchPattern:       undefined,      // Data series generating pitch pattern: initialised on load
                         velocityPattern:    undefined,      // Data series generating pitch pattern: initialised on load
@@ -88,26 +85,23 @@ export class Sonification{
                     B: {
                         pitchPattern:       undefined,      // Data series generating pitch pattern: initialised on load
                         velocityPattern:    undefined,      // Data series generating pitch pattern: initialised on load
-                        chart:              'pitch',         // Default param to chart
+                        chart:              'pitch',        // Default param to chart
                         sequencer:          undefined       // Pulse sequencer array 
                     }, 
                     C: {
-                        activePart:     1,              // Active part: default to 1
-                        part: {                         // Default each series to first/zero index pattern   
-                            1: { series: 0,     sequencer: undefined },           
-                            2: { series: 0,     sequencer: undefined },           
-                            3: { series: 0,     sequencer: undefined }             
+                        activePart:     1,                  // Active part: default to first
+                        part: {                             // Default each series to first/zero index pattern. Sequencer currently unused
+                            1: { series: 0,  sequencer: undefined },           
+                            2: { series: 0,  sequencer: undefined },           
+                            3: { series: 0,  sequencer: undefined }             
                         }                         
-                    }, 
-                    master: {
-                        mute:   false      // Master mute
                     }
                 }
             },
             snapshot: {
-                solo: {
-                    current:    undefined,
-                    mutedPrior: []
+                solo: {    
+                    current:    undefined,                  // Captures state prior to solo-ing
+                    mutedPrior: []                          // to enable reset 
                 }
             },
             // Associated composition class
@@ -116,7 +110,8 @@ export class Sonification{
 
         // Schema
         this.schema = {
-            mode:           Object.keys(this.state.mode),
+            mode:           Object.keys(this.state.mode),    // Mode list
+            musicalScale
         }
     }
 
@@ -125,10 +120,9 @@ export class Sonification{
     /////////////////////////
 
     async #initREPL(strudel){
-        this.strudel = strudel      // Add reference to strudel instance
-        await strudel.initREPL()    // Init repl
-        // Add update handler to the 
-        this.updateStrudel =  (autoplay = true) => strudel?.repl?.evaluate(this.code, autoplay)
+        this.strudel = strudel              // Add reference to strudel instance
+        await strudel.initREPL()            // Init repl       
+        this.updateStrudel =  (autoplay = true) => strudel?.repl?.evaluate(this.code, autoplay)      // Add update handler to class 
     }
 
     //////////////////////////
@@ -136,7 +130,7 @@ export class Sonification{
     //////////////////////////
 
     initParam(punchFX){
-        // i. Add group-level parameter mapped series lengths: called after custom groupConfig is added, but before the init paramMa
+        // i. Add group-level parameter mapped series lengths (add all possibilities ): called after custom groupConfig is added, but before the init paramMap
         if(this.param.A.pitch)      this.param.A.pitch.length       = +this.schema.group.A.map.pitch.interval.slice(0, -1)
         if(this.param.A.velocity)   this.param.A.velocity.length    = +this.schema.group.A.map.velocity.interval.slice(0, -1)
         if(this.param.A.lpf)        this.param.A.lpf.length         = +this.schema.group.A.map.lpf.interval.slice(0, -1)
@@ -169,6 +163,7 @@ export class Sonification{
         this.state.isMobile = width < 600  || mobileFlag 
     }
 
+    // Standard handerls
     addHandlers(strudel, editorUI){
         // Bind this to variable for use when methods are bound touch button-bound keys
         const sonification = this   
@@ -580,7 +575,7 @@ export class Sonification{
                             // sonification.param[group][groupType].rotation =  Math.min(Math.max(sonification.param[group][groupType].rotation + rotationChange, minRotation), maxRotation) 
                         }
                         // iii. Store euclidean array (for visualisation)
-                        sonification.state.selection.group[group].euclideanArray = rotateArray(getPattern(sonification.param[group][groupType].pulse , patternLength ), sonification.param[group][groupType].rotation)
+                        sonification.state.selection.group[group].euclideanArray = util.rotateArray(getPattern(sonification.param[group][groupType].pulse , patternLength ), sonification.param[group][groupType].rotation)
                         // iv. Switch off corresponding pulse sequencer: ensures euclidean rhythm is 'active'
                         sonification.state.sequencer[group].active  = false 
                         // v. Handle user message
@@ -601,7 +596,7 @@ export class Sonification{
                             // sonification.param[group].part[part].sound.rotation =  Math.min(Math.max(sonification.param[group].part[part].sound.rotation + rotationChange, minRotation), maxRotation) 
                         }
                         // iii. Store euclidean array (for visualisation)
-                        sonification.state.selection.group[group].part[part].euclideanArray = rotateArray(getPattern(sonification.param[group].part[part].sound.pulse , patternLength ), sonification.param[group].part[part].sound.rotation)
+                        sonification.state.selection.group[group].part[part].euclideanArray = util.rotateArray(getPattern(sonification.param[group].part[part].sound.pulse , patternLength ), sonification.param[group].part[part].sound.rotation)
                         // iv. Switch off corresponding pulse sequencer: ensures euclidean rhythm is 'active'
                         sonification.state.sequencer[group][part].active  = false 
                         // iv. Handle user message
@@ -614,10 +609,12 @@ export class Sonification{
                 sonification.state.sequencer[group].onDelta = false
                 sonification.state.sequencer[group].array = []
 
-                // iv. Handle user message
+                // iv. Update parameterMap
+                sonification.updateParameterMap()
+
+                // v. Handle user message
                 sonification.handle.userMessage()
 
-                sonification.updateParameterMap()
                 // => Evaluate strudel code
                 this.updateREPL(strudel.state.transport === "playing")           
             }, 
@@ -642,7 +639,7 @@ export class Sonification{
                         sonification.param[group].part[part].sound.pulse = newPulse
                         sonification.param[group].part[part].sound.rotation = newRotation
                         // b. Store euclidean array (for visualisation)
-                        sonification.state.selection.group[group].part[part].euclideanArray = rotateArray(getPattern(sonification.param[group].part[part].sound.pulse , patternLength ), sonification.param[group].part[part].sound.rotation)
+                        sonification.state.selection.group[group].part[part].euclideanArray = util.rotateArray(getPattern(sonification.param[group].part[part].sound.pulse , patternLength ), sonification.param[group].part[part].sound.rotation)
                         // c. Create user message
                         sonification.state.userMessage.text = `${group}.${part}> random rhythm!`
                         break
@@ -651,7 +648,7 @@ export class Sonification{
                         sonification.param[group][groupType].pulse = newPulse
                         sonification.param[group][groupType].rotation = newRotation
                         // b. Store euclidean array (for visualisation)
-                        sonification.state.selection.group[group].euclideanArray = rotateArray(getPattern(sonification.param[group][groupType].pulse , patternLength ), sonification.param[group][groupType].rotation)
+                        sonification.state.selection.group[group].euclideanArray = util.rotateArray(getPattern(sonification.param[group][groupType].pulse , patternLength ), sonification.param[group][groupType].rotation)
                         // c. Create user message
                         sonification.state.userMessage.text = `${group} > random rhythm!`
                 }
@@ -729,9 +726,9 @@ export class Sonification{
 
                 sonification.state.sequencer[group].onDelta = true
                 sonification.state.sequencer[group].active   = true 
-                sonification.state.sequencer[group].array    = deltaArray(pitchArray)
+                sonification.state.sequencer[group].array    = util.deltaArray(pitchArray)
                 sonification.param[group].pitch.struct       = sonification.state.sequencer[group].array.map(n => n && 'x' || '-').join(' ')   
-                sonification.param[group].pitch.structLegato = legatoStruct(sonification.state.sequencer[group].array )
+                sonification.param[group].pitch.structLegato = util.legatoStruct(sonification.state.sequencer[group].array )
         
                 // iv. Handle user message
                 sonification.state.userMessage.text = `${group}> Pulse on note change`
@@ -781,8 +778,9 @@ export class Sonification{
                 this.updateREPL(strudel.state.transport === "playing")
             },
             cycleScaleType(direction){
-                // i. Update param
-                sonification.param.global.scale.type = util.cycleFromValue(Object.keys(musicalScales),  sonification.param.global.scale.type, direction)                                          
+                // i. Update param and parameterMap (for chord shapes)
+                sonification.param.global.scale.type = util.cycleFromValue(Object.keys(musicalScale),  sonification.param.global.scale.type, direction)
+                sonification.updateParameterMap()
 
                 // ii. Handle user message
                 sonification.state.userMessage.text = `Scale: ${sonification.param.global.scale.root}:${sonification.param.global.scale.type}`
@@ -806,7 +804,6 @@ export class Sonification{
 
                 // => Update strudel code
                 sonification.handle.updateREPL()
-                console.log(`Punch-in ${name}|${group} is ${setOn}`)
             },
             // Misc
             chaos: (group) => {
@@ -831,7 +828,70 @@ export class Sonification{
 
     };
 
+    // Custom handlers
+    addDfamHandlers(){
+        const sonification = this
+
+        // DFAM
+        this.handle.toggleOscPitch = (oscNo) => {
+            // 1. Toggle pitch sync
+            this.param.synth.DFAM[`osc${oscNo}pitched`] = !this.param.synth.DFAM[`osc${oscNo}pitched`]
+            // 2. Handle user message
+            this.state.userMessage.text = `Oscillator #${oscNo} pitch sync ${this.param.synth.DFAM[`osc${oscNo}pitched`]? 'on' : 'off'}`
+            this.handle.userMessage()
+            // => Call update
+            this.handle.update()
+        }
+
+        this.handle.cycleOscType = (oscNo) => {
+            // 1. Cycle oscillator type
+            const types = ['square', 'triangle']
+            this.param.synth.DFAM[`vco${oscNo}wave`] = util.cycleFromValue(types, this.param.synth.DFAM[`vco${oscNo}wave`], 1)
+
+            // 2. Handle user message
+            this.state.userMessage.text = `Osc. #${oscNo} changed to ${this.param.synth.DFAM[`vco${oscNo}wave`]}`
+            this.handle.userMessage()
+            // => Call update
+            this.handle.update()
+        }
+
+        this.handle.cycleNoiseType = () => {
+            // 1. Cycle oscillator type
+            const types = ['white', 'pink', 'brown']
+            this.param.synth.DFAM.noiseType = util.cycleFromValue(types, this.param.synth.DFAM.noiseType, 1)
+            // 2. Handle user message
+            this.state.userMessage.text = `Noise type changed to ${this.param.synth.DFAM.noiseType}`
+            this.handle.userMessage()
+            // => Call update
+            this.handle.update()
+        }
+
+        this.handle.adjustNoiseLevel = (gainChange) => {
+            // 1. Calculate newGain clamped to min/max
+            const minGain = 0, maxGain = 1
+            const newGain = Math.min(Math.max( this.param.synth.DFAM.noiseLvl + gainChange, minGain), maxGain)
+            // 2. Update param
+            this.param.synth.DFAM.noiseLvl = newGain
+            // 3. Handle user message
+            this.state.userMessage.text = `Noise level changed to ${d3.format('.2f')(this.param.synth.DFAM.noiseLvl)}`
+            this.handle.userMessage()
+            // => Call update
+            this.handle.update()
+        }
+
+        this.handle.toggleSidechain = () => {
+            // 1. Update orbt (toggle between 1 and 2)
+            this.param.synth.DFAM.duck = !this.param.synth.DFAM.duck
+
+            // 2. Handle user message
+            this.state.userMessage.text = `Ducking is ${this.param.synth.DFAM.orbit === 1 ? 'off' : 'on' }`
+            this.handle.userMessage()
+            // => Call update
+            this.handle.update()
+        }
+    }
+
+
     // Placeholder methods: defined in extended DataSonification classes
-    addCustomHandlers(){} 
     updateParameterMap(){} 
 }

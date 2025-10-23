@@ -11,7 +11,6 @@
     // Props
     let {data} = $props()
 
-
     /**
      *  I. GET APP AND SONIFICATION INSTANCES (+layout.js) + INIT STRUDEL MODULE (client-side only)
      */
@@ -48,11 +47,6 @@
 
 </script>
 
-<svelte:window
-    bind:innerWidth  = {app.state.global.device.screen.width} 
-    bind:innerHeight = {app.state.global.device.screen.height}
-    on:resize        = {sonification.checkScreenSize}
-/>
 
 <!-- HTML COMPONENT MARKUP-->
 <div class = 'wrapper'>

@@ -13,7 +13,6 @@ import { Sonification }     from '$lib/module/data-operator/core/js/Sonification
 
 // Config
 import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config';
-import { musicalScales }    from '$lib/module/data-operator/core/config/global/music-scale-config';
 import { paramInit }        from './parameter-map';
 
 
@@ -36,7 +35,7 @@ export class DataSonification extends Sonification{
         /* 
          @title Climate Watch Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
          @by Data Operator CW-193
-         @details Sonification of Climate Watch data 
+         @details Sonification of Climate Watch data for ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */
@@ -302,21 +301,23 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
 
         // Part 3. Chord progression notes and params
-        group.C["3"].interval = "4n"
-        group.C["3"].series   = this.state.selection.group.A.pitchPattern
-        group.C["3"].array    = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series]
-                                    .map(d => d.quantized)
-                                    .map( d => group.C["3"].chord[d])
+        const musicalScale = this.param.global.scale.type,
+            scaleChords  = this.schema.musicalScale[musicalScale].chordMap,
+            chordMap = {
+                0: scaleChords.I,
+                1: scaleChords.IV,
+                2: scaleChords.V,
+                3: scaleChords.VI
+            }
 
-        this.param.C.part["3"].sound.pattern = `"<${group.C["3"].array.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
+        group.C["3"].patternArray               = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series].map(d => d.quantized).map( d => chordMap[d])
+        this.param.C.part["3"].sound.pattern    = `"<${group.C["3"].patternArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
 
         const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
-        this.param.C.part["3"].sound.length = group.C["3"].array.length
-        this.param.C.part["3"].sound.code = c3.code
+        this.param.C.part["3"].sound.length = group.C["3"].patternArray.length
+        this.param.C.part["3"].sound.code   = c3.code
         this.param.C.part["3"].sound.ampEnv = c3.ampEnv
-        this.param.C.part["3"].gain = c3.gain
+        this.param.C.part["3"].gain         = c3.gain
 
-
-        console.log('--UPDATE PARAM MAP', {sceneData},)
     };
 }

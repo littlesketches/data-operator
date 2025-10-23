@@ -5,21 +5,16 @@
  */
 
 // Libs and utils
-import * as d3                      from 'd3'
-import { getPattern}                from 'euclidean-rhythms';
-import { randomItem,
-    cycleFromValue, 
-    rotateArray, 
-    legatoStruct, 
-    deltaArray }                   from '$lib/module/data-operator/core/js/utils';
+import * as d3              from 'd3'
+import { getPattern}        from 'euclidean-rhythms';
+import { util }             from '$lib/module/data-operator/core/js/utils';
 
 // Classes
-import { Sonification }             from '$lib/module/data-operator/core/js/Sonification.svelte';
+import { Sonification }     from '$lib/module/data-operator/core/js/Sonification.svelte';
 
 // Config
-import { timingConfig }             from '$lib/module/data-operator/core/config/global/timing-config';
-import { musicalScales }            from '$lib/module/data-operator/core/config/global/music-scale-config';
-import { paramInit }                from './parameter-map';
+import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config';
+import { paramInit }        from './parameter-map';
 
 
 // => DataSonification class
@@ -188,7 +183,7 @@ export class DataSonification extends Sonification{
         this.schema.sceneIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
 
         // Add model-specific state
-        this.state.selection.sceneIndex =  randomItem(this.schema.sceneIndex)       // Randomise scene
+        this.state.selection.sceneIndex =  util.randomItem(this.schema.sceneIndex)       // Randomise scene
         this.state.sequencer.A.onDelta = true        // iii. Apply the onDelta pulse for A and B as the default
         this.state.sequencer.B.onDelta = true
         // Update params with model group and FX config to match data selection
@@ -207,14 +202,14 @@ export class DataSonification extends Sonification{
          */
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern = randomItem(this.schema.group.A.series)
-            this.state.selection.group.B.pitchPattern = randomItem(this.schema.group.B.series)
+            this.state.selection.group.A.pitchPattern = util.randomItem(this.schema.group.A.series)
+            this.state.selection.group.B.pitchPattern = util.randomItem(this.schema.group.B.series)
 
             // ii. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
-            this.state.selection.group.A.euclideanArray = rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
-            this.state.selection.group.B.euclideanArray = rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
-            this.state.selection.group.C.part["1"].euclideanArray = rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)
-            this.state.selection.group.C.part["2"].euclideanArray = rotateArray(getPattern(this.param.C.part["2"].sound.pulse, this.param.C.part["2"].sound.length), this.param.C.part["2"].sound.rotation)
+            this.state.selection.group.A.euclideanArray = util.rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
+            this.state.selection.group.B.euclideanArray = util.rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
+            this.state.selection.group.C.part["1"].euclideanArray = util.rotateArray(getPattern(this.param.C.part["1"].sound.pulse, this.param.C.part["1"].sound.length), this.param.C.part["1"].sound.rotation)
+            this.state.selection.group.C.part["2"].euclideanArray = util.rotateArray(getPattern(this.param.C.part["2"].sound.pulse, this.param.C.part["2"].sound.length), this.param.C.part["2"].sound.rotation)
 
 
         }
@@ -259,9 +254,9 @@ export class DataSonification extends Sonification{
 
         if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for A
             this.state.sequencer.A.active   = true 
-            this.state.sequencer.A.array    = deltaArray( group.A.pitch.array)
+            this.state.sequencer.A.array    = util.deltaArray( group.A.pitch.array)
             this.param.A.pitch.struct       = this.state.sequencer.A.array.map(n => n && 'x' || '-').join(' ')   
-            this.param.A.pitch.structLegato = legatoStruct(this.state.sequencer.A.array )
+            this.param.A.pitch.structLegato = util.legatoStruct(this.state.sequencer.A.array )
         }
 
         // ii. Velocity: constructed from selected data => update params
@@ -270,12 +265,12 @@ export class DataSonification extends Sonification{
 
         // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
         group.A.lpf.array           = sceneData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
-        const cutoffRangeString     = `"[${rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
+        const cutoffRangeString     = `"[${util.rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
         this.param.synth.TB303.filter.cutoff = `sine.range(${cutoffRangeString}).slow(4)`
 
         // iii. Filter resonance:  constructed from selected data => update params: set for change on 2n
         group.A.lpq.array           = sceneData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
-        const resonanceRangeString  = `"[${rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
+        const resonanceRangeString  = `"[${util.rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
         this.param.synth.TB303.filter.resonance = `sine.range(${resonanceRangeString}).slow(8)`
 
 
@@ -289,9 +284,9 @@ export class DataSonification extends Sonification{
 
         if(this.state.sequencer.B.onDelta){  // Create a custom onchange pulse pattern for B 
             this.state.sequencer.B.active   = true 
-            this.state.sequencer.B.array    = deltaArray( group.B.pitch.array)
+            this.state.sequencer.B.array    = util.deltaArray( group.B.pitch.array)
             this.param.B.pitch.struct       = this.state.sequencer.B.array.map(n => n && 'x' || '-').join(' ')   
-            this.param.B.pitch.structLegato = legatoStruct(this.state.sequencer.B.array)
+            this.param.B.pitch.structLegato = util.legatoStruct(this.state.sequencer.B.array)
         }
 
         // ii. Noise part level "velocity": constructed from data 
@@ -313,20 +308,22 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
 
         // Part 3. Chord progression notes and params
-        group.C["3"].interval = "4n"
-        group.C["3"].series   = this.state.selection.group.A.pitchPattern
-        group.C["3"].array    = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series]
-                                    .map(d => d.quantized)
-                                    .map( d => group.C["3"].chord[d])
+        const musicalScale = this.param.global.scale.type,
+            scaleChords  = this.schema.musicalScale[musicalScale].chordMap,
+            chordMap = {
+                0: scaleChords.I,
+                1: scaleChords.IV,
+                2: scaleChords.V,
+                3: scaleChords.VI
+            }
 
-        this.param.C.part["3"].sound.pattern = `"<${group.C["3"].array.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
+        group.C["3"].patternArray               = sceneData.scaledData[group.C["3"].interval].C["3"].chord[group.C["3"].series].map(d => d.quantized).map( d => chordMap[d])
+        this.param.C.part["3"].sound.pattern    = `"<${group.C["3"].patternArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
 
         const c3 = group.C["3"].sound[this.state.selection.group.C.part["3"].series]
-        this.param.C.part["3"].sound.length = group.C["3"].array.length
+        this.param.C.part["3"].sound.length = group.C["3"].patternArray.length
         this.param.C.part["3"].sound.code   = c3.code
         this.param.C.part["3"].sound.ampEnv = c3.ampEnv
         this.param.C.part["3"].gain         = c3.gain
-
-        console.log('--UPDATE PARAM MAP', {sceneData},)
     };
 }

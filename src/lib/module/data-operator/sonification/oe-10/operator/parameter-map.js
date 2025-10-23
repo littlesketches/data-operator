@@ -4,7 +4,6 @@
  *   - Contains default and structure for Sonification 'param' reactive state => derived 'code'
  */
 
-import { randomItem, randomInteger } from "../../../core/js/utils"
 import { strudelVisOptions, strudelVisPalette }         from "../../_shared/strudel-vis-config"
 
 export const paramInit = {
@@ -12,8 +11,8 @@ export const paramInit = {
         TB303: {
             oscType:        'sawtooth',
             filter: {
-                cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
-                Q:          'sine.range(2,6).slow(2)',  
+                cutoff:     `sine.range(200,2000).slow(16)`,    // Placeholder updated with data-driven ranges
+                Q:          'sine.range(2,6).slow(2)',          // Placeholder updated with data-driven ranges
                 env: {
                     A:      '0.005',     
                     D:      'perlin.range(.02,.2)',     
@@ -36,7 +35,7 @@ export const paramInit = {
                 a: 0.0, d: 0.1, s: 0.8, r: 0.5
             },
             filter: {
-                cutoff:     440,    // Default replaced with data-driven ranges
+                cutoff:     440,        
                 Q:          4,  
                 env: {
                     A:      0,     
@@ -80,7 +79,7 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              undefined,    // Euclidean pulse (default on load)
+            pulse:              undefined,      // Euclidean pulse (default on load)
             rotation:           0,              // Euclidean rotation fixed until offset/sync with visual can be resolved
             legato:             false,          // Switch for euclidean pitch
             transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
@@ -134,9 +133,9 @@ export const paramInit = {
                 }
             },
             3: {  // Chords
-                gain:           0.05,           // Sets group level with group
+                gain:           0.05,               // Sets group level with group
                 mute:           false,
-                octave:         3,              // Scale octave
+                octave:         3,                  // Scale octave
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
@@ -160,7 +159,7 @@ export const paramInit = {
     },
     // Global params: tempo and FX settings
     global: {
-        bpm:                90,          // tempo
+        bpm:                89,          // tempo
         scale: {
             pitch:           undefined,             // Musical scale
             root:           'C',                    // pitch root

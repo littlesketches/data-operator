@@ -29,11 +29,6 @@ export const scaleConfig = {
         }
     },
     C: {
-        1: {
-            velocity: {
-                min: 0.85,      max: 1
-            }
-        }, 
         2: {
             velocity: {
                 min: 0.85,      max: 1 
