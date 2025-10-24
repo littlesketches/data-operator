@@ -77,6 +77,20 @@ export const beatConfig = {
             ['sd'], ['-'],  ['-'],   ['-']
         ]
     },
+    blank_space: {
+        label:   'Blank space',
+        pattern: {
+            combined:   '<bd [- bd] sd bd  - - sd -  bd [- bd] [sd -] bd   - bd sd - >*8',
+            ducked:     '<bd -      -  -   - - -  -  bd -      -      -    - - - - >*8',
+            normal:     '<-  [- bd] sd bd  - - sd -  -  [- bd] [sd -] bd   - bd sd - >*8'
+        },
+        vis: [
+            ['bd'], ['-'],  ['-'],  ['bd'],
+            ['sd'], ['-'],  ['bd'],  ['-'],
+            ['-'],  ['-'],  [''],  ['-'],
+            ['sd'], ['-'],  ['-'],   ['-']
+        ]
+    },
     // B. Break beats
     rolling_break_1: {      // Rolling break 1
         label:   'Breakbeat 1',

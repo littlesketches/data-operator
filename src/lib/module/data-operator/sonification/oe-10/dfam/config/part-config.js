@@ -17,10 +17,10 @@ export const groupPartPresets =  {
             0:  beat.four_on_the_floor,
             1:  beat.back_beat,
             2:  beat.electro_1a,
-            3:  beat.hip_hop_1,
+            3:  beat.blank_space,
             4:  beat.hip_hop_3,
             5:  beat.amen_break_1,
-            6:  beat.groove_b,
+            6:  beat.rolling_break_4,
             7:  beat.gahu,
             8:  beat.soukous,          
         }

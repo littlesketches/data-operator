@@ -85,35 +85,35 @@ export const paramInit = {
                 gain:               1,
                 mute:               false,
                 sound: {
-                    pattern:        {},      // sound part pattern
-                    bank:           'RolandTR909',  // Sound bank alias 
+                    pattern:        {},             /// Set in updateParameterMap (ducked + normal)
+                    bank:           'rolandcompurhythm78',  // Sound bank alias 
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:        undefined,      // velocity pattern
+                    pattern:        undefined,      // Set in updateParameterMap
                 }
             },
             2: { // "Hats"
                 gain:               1,
                 mute:               false,
                 sound: {
-                    pattern:        undefined,      // sound part pattern
-                    bank:           'RolandTR909',  // Sound bank alias 
+                    pattern:        undefined,      // Set in updateParameterMap
+                    bank:           'rolandcompurhythm78',  // Sound bank alias 
                     clockDivider:   1               // Clock divider
 
                 },
                 velocity: {     
-                    pattern:        undefined,      // velocity pattern
+                    pattern:        undefined,      // Set in updateParameterMap
                 }
             },
             3: {    // Chords
-                gain:               0.5,            // Sets group level with group
+                gain:               0.35,            // Sets group level with group
                 mute:               false,
-                octave:             3,              // Scale octave
+                octave:             3,              // Scale of chords
                 sound: {
-                    pattern:        undefined,      // sound part pattern
-                    code:           undefined,
-                    ampEnv:         undefined,
+                    pattern:        undefined,      // Set in updateParameterMap
+                    code:           undefined,      // Optional for synth chords
+                    ampEnv:         undefined,      // Optional for synth chords
                     clockDivider:   2               // Clock divider
                 }
             }
@@ -122,9 +122,8 @@ export const paramInit = {
     // Master mix out group
     master: {
         gain:           0.8,          // Master volume
-        mute:           false,
         reverb: {
-            size:       0.55,       // Default global reverb: punch FX reverb is a multiple of this
+            size:       0.75,       // Default global reverb: punch FX reverb is a multiple of this
         }
     },
     // Global params: tempo and FX settings
@@ -132,8 +131,8 @@ export const paramInit = {
         bpm:                114,          // tempo
         step:               0,
         scale: {
-            pitch:           undefined,             // Musical scale
-            root:           'A',                    // pitch root
+            // pitch:           undefined,             // Musical scale
+            root:           'D',                    // pitch root
             type:           'minor:pentatonic',     //
         },
         // Punch FX config: params could potentially exposed

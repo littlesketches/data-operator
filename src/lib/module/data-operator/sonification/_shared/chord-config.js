@@ -9,15 +9,14 @@
 export const chordSoundConfig = {
     supersaw: {
         label:      'Supersaw synth',
-        gain:       0.6,
+        gain:       0.75,
         code:      `.s("supersaw").lpf(2500).lpq(8).lpenv(3)`,
         ampEnv:     `0.5:0.1:0.8:1`
     },
     ambientpad: {
-        label:      'Ambisaw',
+        label:      'Ambient saw',
         gain:       0.6,
         code:      `.s("supersaw")
-                    .adsr("1.5:0.1:0.8:0.25")
                     .lpf(sine.range(1200,1500).slow(4))
                     .phaser(0.25)
                     .tremolo(0.5)
@@ -25,6 +24,7 @@ export const chordSoundConfig = {
                     .tremolosync(1)
                     .tremoloshape("sine")  
                     .delay(0.25)`,
+        ampEnv:     `1.5:0.1:0.8:0.25`
     },
     dfampad: {
         label:      'Pad synth',

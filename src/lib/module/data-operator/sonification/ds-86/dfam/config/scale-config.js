@@ -8,36 +8,22 @@
 
 export const scaleConfig = {
     A: {
-        pitch: { 
-            min: 0,     max:  10     
-        },
-        velocity: { 
-            min: 0.5,   max: 1        // 
-        },
-        lpf: { 
-            min: 300,     max:  800    
-        },
-        lpq: { 
-            min: 12,     max:  24    
-        },
-
+        pitch5:     { min: 0,       max: 10     },
+        pitch6:     { min: 0,       max: 12     },
+        pitch7:     { min: 0,       max: 14     },
+        velocity:   { min: 0.5,     max: 1      },
+        lpf:        { min: 300,     max: 800    },
+        lpq:        { min: 12,      max: 24     }
     },
     B: {
-        velocity: { 
-            min: 0.5,     max:  1     //
-        },
-
+        velocity:   { min: 0.5,     max:  1     }
     },
     C: {
         2: {
-            velocity: {
-                min: 0.25,      max: 0.5
-            }
+            velocity: { min: 0.25,  max: 0.5    }
         }, 
         3: {
-            chord: {
-                min: 0,         max: 3     // Mapped to four chords in a progression (note: quantized to floor)
-            }
+            chord:    { min: 0,     max: 3    }
         }
     }
 }

@@ -7,40 +7,26 @@
 
 export const scaleConfig = {
     A: {
-        pitch: { 
-            min: 0,     max: 10       // scale degree 2 octave range (inclusive)
-        },
-        velocity: { 
-            min: 0.5,   max: 1        // Note velocity
-        },
-        lpf: {  
-            min: 400,   max: 1400     // Cutoff frequency's modulating sine wave range of the LPF
-        },
-        lpq: {  
-            min: 2,     max: 10       // LPFs resonance range for a  modulating sine wave 
-        }
+        pitch5:     { min: 0,       max: 10   },
+        pitch6:     { min: 0,       max: 12   },
+        pitch7:     { min: 0,       max: 14   },
+        velocity:   { min: 0.5,     max: 1    },
+        lpf:        { min: 400,     max: 1400 },
+        lpq:        { min: 2,       max: 10   }
     },
     B: {
-        pitch: { 
-            min: 0,     max:  5       // scale degree: 1 octave pentatonic
-        },
-        noise: { 
-            min: 0.5,   max:  1       // Mapped to noise component of the bass sytnh
-        }, 
-        velocity: { 
-            min: 0.5,   max: 1        //  Velocity used for C2
-        },
+        pitch5:     { min: 0,       max: 5    },
+        pitch6:     { min: 0,       max: 6    },
+        pitch7:     { min: 0,       max: 7    },
+        noise:      { min: 0.5,     max: 1    }, 
+        velocity:   { min: 0.5,     max: 1    },
     },
     C: {
         2: {
-            velocity: {
-                min: 0.25,      max: 0.5
-            }
+            velocity: { min: 0.25,  max: 0.5 }
         }, 
         3: {
-            chord: {
-                min: 0,         max: 3     // Mapped to four chords in a progression (note: quantized to floor)
-            }
+            chord:    { min: 0,    max: 3   }
         }
     }
 }

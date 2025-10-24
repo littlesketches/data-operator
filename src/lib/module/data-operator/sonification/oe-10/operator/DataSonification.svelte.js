@@ -14,6 +14,7 @@ import { Sonification }     from '$lib/module/data-operator/core/js/Sonification
 
 // Config
 import { paramInit }        from './parameter-map';
+import { musicalScale }     from '$lib/module/data-operator/core/config/global/music-scale-config';
 import { timingConfig, 
     clockDividerMap }       from '$lib/module/data-operator/core/config/global/timing-config';
 
@@ -129,7 +130,7 @@ export class DataSonification extends Sonification{
                 n(${ this.param.C.part["3"].sound.pattern })
                     .scale("${this.param.global.scale.root}${this.param.C.part["3"].octave}:${this.param.global.scale.type}")     
                     .slow(${this.param.C.part["3"].sound.clockDivider})       
-                    ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].gain * this.param.C.gain})`}  
+                    ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].sound.gain  *this.param.C.part["3"].gain * this.param.C.gain})`}  
                     ${this.param.C.part["3"].sound.code}
                     ${this.param.C.part["3"].sound.ampEnv ? `.adsr("${this.param.C.part["3"].sound.ampEnv}")` :''}
             )
@@ -177,6 +178,9 @@ export class DataSonification extends Sonification{
         this.app    = app
         this.data   = dataModel
 
+        // Add state
+        this.state.selection.scaleNotes = musicalScale[this.param.global.scale.type].notes
+
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
@@ -214,6 +218,8 @@ export class DataSonification extends Sonification{
 
         // i. Selection and reference variables
         const sceneData = this.data.scene[this.state.selection.sceneIndex],
+            scaleNotes  = this.state.selection.scaleNotes,
+            pitchScale  = `pitch${scaleNotes}`,
             scaleLock   = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
@@ -229,7 +235,7 @@ export class DataSonification extends Sonification{
                 C:  this.schema.pattern.C    //  Import percussion and chord part presets           
             }
 
-        // ii. Add data for group C
+        // ii. Add velocity and chord to group C
         group.C["2"].velocity = { interval: this.schema.group.B.map.pitch.interval }      
         group.C["3"].chord    = { interval: this.schema.group.C.part["3"].map.sound.interval }
 
@@ -240,12 +246,13 @@ export class DataSonification extends Sonification{
         // iv. Set fixed 'contextual series
         group.B.noise.series = group.C["2"].velocity.series  = 'fossil'
 
+
         /**
          *  GROUP A: Lead synth
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array         = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => d[scaleLock])
+        group.A.pitch.array         = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array ).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
         if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for A
@@ -275,7 +282,7 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B.pitch[group.B.pitch.series].map(d => d[scaleLock])
+        group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
         this.param.B.pitch.pattern  = `${JSON.stringify(group.B.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
         if(this.state.sequencer.B.onDelta){  // Create a custom onchange pulse pattern for B 
@@ -326,6 +333,6 @@ export class DataSonification extends Sonification{
         this.param.C.part["3"].sound.length = chordArray.length
         this.param.C.part["3"].sound.code   = chordConfig.code
         this.param.C.part["3"].sound.ampEnv = chordConfig.ampEnv
-        this.param.C.part["3"].gain         = chordConfig.gain
+        this.param.C.part["3"].sound.gain   = chordConfig.gain
     };
 }

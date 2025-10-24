@@ -15,6 +15,7 @@ import { addCustomHandlersDFAM } from '$lib/module/data-operator/core/js/edition
 
 // Config
 import { paramInit }        from './parameter-map';
+import { musicalScale }     from '$lib/module/data-operator/core/config/global/music-scale-config';
 import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config';
 
 
@@ -168,6 +169,7 @@ export class DataSonification extends Sonification{
 
         // Add state
         this.state.selection.group.B.chart = 'velocity'
+        this.state.selection.scaleNotes = musicalScale[this.param.global.scale.type].notes
 
         // Add schema
         this.schema.group       = config.group,
@@ -194,7 +196,7 @@ export class DataSonification extends Sonification{
         if(init){
             // i. Set default pattern selections
             this.state.selection.group.A.pitchPattern    = 'price-per-MWh'
-            this.state.selection.group.B.velocityPattern = 'coal'
+            this.state.selection.group.B.velocityPattern = 'fossil'
 
             // ii. Randomise euclidean pulse (for init) and set to onDelta 
             this.param.A.pitch.pulse = util.randomItem([9, 11, 13, 15])
@@ -210,6 +212,8 @@ export class DataSonification extends Sonification{
 
         // i. Selection and reference variables
         const sceneData = this.data.scene[this.state.selection.sceneIndex],
+            scaleNotes  = this.state.selection.scaleNotes,
+            pitchScale  = `pitch${scaleNotes}`,
             scaleLock   = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
@@ -241,7 +245,7 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => d.quantized)
+        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
         if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for A

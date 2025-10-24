@@ -3,7 +3,6 @@
 	import { fade }                 from 'svelte/transition';
  
     // Components
-    import Intro                    from './Intro.svelte';
     import DataNoteOE10             from './DataNote_OE10.svelte';
     import Acknowledgements         from './Acknowledgements.svelte';
 
@@ -16,20 +15,19 @@
 <!-- HTML MARKUP-->
 <article class:isSideGuide={isSideGuide} in:fade>
     <div class = 'content-wrapper' >
-        <h1 class = 'header'>Sonification summary </h1>
+        <h1 class = 'header'>Sonification</h1>
 
         <DataNoteOE10/>
 
         <section>
-            <h2>Instrumentation &times; mapping</h2>
-            <p>OE-10:Operator uses a conventional set of <i>Data Operator</i> track layers, with: a lead synth (A), a bass synth (B), a two-layer drum kit (C1 and C2) and a chord instrument (C3).</p>
+            <h2>// Instrument parameter mapping</h2>
+            <p>This data instrument uses a conventional set of <i>Data Operator</i> track layers, with: a lead synth (A), a bass synth (B), a two-layer drum kit (C1 and C2) and a chord instrument (C3).</p>
             <ul>
-                <li>Pitch (notes) on lead and bass synths are mapped to user selectable data series, that produce interlocking 16 step note sequences. Each note sequence represents a 24 hours of data (i.e. each scene is a 'day'). All data mapped to pitch is has been quantized to scale degrees (0 to 10 for lead and 0 to 5 for bass), that are subsequently mapped to the user selectable musical scales.
+                <li>Pitch (notes) on lead and bass synths are mapped to user selectable data series, that produce interlocking 16 step note sequences. Each note sequence represents a 24 hours of data (i.e. each scene is a 'day'). All data mapped to pitch is has been quantized to scale degrees (covering two octaves for lead and one octave for bass), that are subsequently mapped to the user selectable musical scales.
                     <ul>
-                        <li>By default, the volume of renewable electricity generated is assigned to the lead melody, with market price assigned to the bassline.</li>
+                        <li>By default, data for the amount of renewable electricity generated is assigned to the lead melody, with market price assigned to the bassline.</li>
                     </ul>
                 </li>
-
 
                 <li>For timbral variation, the lead synths filter envelope settings (for decay, sustain and depth) are allowed to drift within prescribed ranges. The lead synth then uses the selected data series to:
                     <ul>
@@ -61,6 +59,8 @@
         text-align:     end;
         font-family:    'Orbit';
         font-size:      xx-large;
+        text-transform: uppercase;
+        color:          var(--col-highlight);
     }
     h2{
         margin-block-end: 0rem;

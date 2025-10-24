@@ -11,7 +11,8 @@ import { util }             from './utils';
 
 // Config
 import { timingConfig }     from '../config/global/timing-config'
-import { musicalScale }     from '../config/global/music-scale-config';
+import { musicalScale, 
+    rootPitches }           from '../config/global/music-scale-config';
 
 
 // => Sonification class
@@ -74,6 +75,7 @@ export class Sonification{
                 heldKeys:       new Set(),                  // Tracks all held keyboard keys / screen buttons
                 sceneIndex:     0,                          // Selector for they sceneIndex of the modelData
                 scaleLock:      true,                       // Locks pitch to  scale ('quantized') or uses raw value ('microtonic')
+                scaleNotes:     undefined,                  // Set by chosen scale
                 group: {
                     active:     'master',                   // Active 'mixer' track group
                     A: {
@@ -647,7 +649,7 @@ export class Sonification{
                         // b. Store euclidean array (for visualisation)
                         sonification.state.selection.group[group].part[part].euclideanArray = util.rotateArray(getPattern(sonification.param[group].part[part].sound.pulse , patternLength ), sonification.param[group].part[part].sound.rotation)
                         // c. Create user message
-                        sonification.state.userMessage.text = `${group}.${part}> random rhythm!`
+                        sonification.state.userMessage.text = `${group}.${part}> Random rhythm!`
                         break
                     default:
                         // a. Update sonificaiton params for group
@@ -656,10 +658,8 @@ export class Sonification{
                         // b. Store euclidean array (for visualisation)
                         sonification.state.selection.group[group].euclideanArray = util.rotateArray(getPattern(sonification.param[group][groupType].pulse , patternLength ), sonification.param[group][groupType].rotation)
                         // c. Create user message
-                        sonification.state.userMessage.text = `${group} > random rhythm!`
+                        sonification.state.userMessage.text = `${group} > Random rhythm!`
                 }
-
-
 
                 // v. Handle user message
                 if(message) sonification.handle.userMessage()
@@ -772,7 +772,6 @@ export class Sonification{
                 sonification.handle.updateREPL(strudel.state.transport === "playing")
             }, 
             cycleScaleRootPitch(direction){
-                const rootPitches = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] // Major key root notes
                 // i. Update param
                 sonification.param.global.scale.root = util.cycleFromValue(rootPitches,  sonification.param.global.scale.root, direction)                                          
 
@@ -786,13 +785,16 @@ export class Sonification{
             cycleScaleType(direction){
                 // i. Update param and parameterMap (for chord shapes)
                 sonification.param.global.scale.type = util.cycleFromValue(Object.keys(musicalScale),  sonification.param.global.scale.type, direction)
-                sonification.updateParameterMap()
 
-                // ii. Handle user message
+                // ii. Update state for notes in scale
+                sonification.state.selection.scaleNotes = musicalScale[sonification.param.global.scale.type].notes
+
+                // iii. Handle user message
                 sonification.state.userMessage.text = `Scale: ${sonification.param.global.scale.root}:${sonification.param.global.scale.type}`
                 sonification.handle.userMessage()
 
                 // => Update REPL
+                sonification.updateParameterMap()
                 this.updateREPL(strudel.state.transport === "playing")
             },
             // Punch-in FX}

@@ -3,6 +3,14 @@
 ////////////////
 
 export const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+export const twoRandomItems  =  arr => {
+    if (arr.length < 2) throw new Error('Array must have at least two items');
+    const copy = [...arr];
+    const firstIndex = Math.floor(Math.random() * copy.length);
+    const first = copy.splice(firstIndex, 1)[0]; // remove chosen item
+    const second = copy[Math.floor(Math.random() * copy.length)];
+    return [first, second];
+}
 export const randomInteger = max => Math.floor(Math.random()*max)
 
 export function cycleFromValue(arr, current, direction = 1) {
@@ -75,6 +83,7 @@ export function deltaArray(arr) {
 export const util = {
     cycleFromValue,
     randomItem, 
+    twoRandomItems,
     randomInteger,
     rotateArray,
     deltaArray,

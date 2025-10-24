@@ -5,15 +5,16 @@
  */
 
 // Libs and utils
-import * as d3                  from 'd3'
-import { getPattern }           from 'euclidean-rhythms';
-import { util  }                from '$lib/module/data-operator/core/js/utils';
+import * as d3              from 'd3'
+import { getPattern }       from 'euclidean-rhythms';
+import { util  }            from '$lib/module/data-operator/core/js/utils';
 // Classes
-import { Sonification }         from '$lib/module/data-operator/core/js/Sonification.svelte';
+import { Sonification }     from '$lib/module/data-operator/core/js/Sonification.svelte';
 
 // Config
-import { paramInit }            from './parameter-map';
-import { timingConfig }         from '$lib/module/data-operator/core/config/global/timing-config';
+import { paramInit }        from './parameter-map';
+import { musicalScale }     from '$lib/module/data-operator/core/config/global/music-scale-config';
+import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config';
 
 
 // => DataSonification class
@@ -168,9 +169,10 @@ export class DataSonification extends Sonification{
         this.schema.pattern     = { C: config.preset.C }
         this.schema.sceneIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
 
-        // Update state
+        // Add state
         this.state.selection.sceneIndex     = util.randomItem(this.schema.sceneIndex)       // Randomise scene
         this.state.selection.group.B.chart  = 'velocity'
+        this.state.selection.scaleNotes     = musicalScale[this.param.global.scale.type].notes
         this.state.sequencer.A.onDelta      = true  // i. Apply the onDelta pulse for A and B as the default
 
 
@@ -204,8 +206,10 @@ export class DataSonification extends Sonification{
          */ 
 
         // Data selected and reference variables
-        const sceneData       = this.data.scene[this.state.selection.sceneIndex],
-            scaleLock       = this.state.selection.scaleLock ? 'quantized' : 'value',
+        const sceneData = this.data.scene[this.state.selection.sceneIndex],
+            scaleNotes  = this.state.selection.scaleNotes,
+            pitchScale  = `pitch${scaleNotes}`,
+            scaleLock   = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
                     pitch:    { interval: this.schema.group.A.map.pitch.interval    }, 
@@ -231,7 +235,7 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => d.quantized)
+        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
 
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 

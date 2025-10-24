@@ -13,6 +13,7 @@ import { Sonification }     from '$lib/module/data-operator/core/js/Sonification
 
 // Config
 import { timingConfig }     from '$lib/module/data-operator/core/config/global/timing-config';
+import { musicalScale }     from '$lib/module/data-operator/core/config/global/music-scale-config';
 import { paramInit }        from './parameter-map';
 
 // const base = `${window?.location.origin}/sounds/`
@@ -168,6 +169,9 @@ export class DataSonification extends Sonification{
         this.app    = app
         this.data   = dataModel
 
+        // Add state
+        this.state.selection.scaleNotes = musicalScale[this.param.global.scale.type].notes
+
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
@@ -204,6 +208,8 @@ export class DataSonification extends Sonification{
 
         // Data selected and reference variables
         const sceneData       = this.data.scene[this.state.selection.sceneIndex],
+            scaleNotes  = this.state.selection.scaleNotes,
+            pitchScale  = `pitch${scaleNotes}`,
             scaleLock       = this.state.selection.scaleLock ? 'quantized' : 'value',
             group = {
                 A: {
@@ -234,7 +240,7 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A.pitch[group.A.pitch.series].map(d => d[scaleLock])
+        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
         this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
         if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for A
@@ -265,7 +271,7 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B.pitch[group.B.pitch.series].map(d => d[scaleLock])
+        group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
         this.param.B.pitch.pattern  = `${JSON.stringify(group.B.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
         // // ii. Noise part level "velocity": constructed from data 

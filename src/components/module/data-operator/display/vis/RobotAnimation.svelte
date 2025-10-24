@@ -81,15 +81,15 @@
     const leadDataInterval = sonification.schema.group.A.map.pitch.interval,
         bassDataInterval = sonification.schema.group.B.map.pitch?.interval
 
-    let sceneIndex = $derived(sonification.state.selection.sceneIndex),
-        data     = $derived(dataModel.scene[sceneIndex])       // Modelled data for selected day
+    let sceneIndex  = $derived(sonification.state.selection.sceneIndex),
+        pitchScale  = $derived(`pitch${sonification.state.selection.scaleNotes}`),
+        data        = $derived(dataModel.scene[sceneIndex])       // Modelled data for selected day
 
     // ii. Derive lead pitch data with euclidean pulses and mutes
     let leadData = $derived.by( () => {
         const pitchSeries = sonification.state.selection.group.A.pitchPattern,
-            scale      = data.scale[leadDataInterval].A.pitch[pitchSeries].pitchScale,
             euclidean  = sonification.state.selection.group.A.euclideanArray,
-            pitchData   = data.scaledData[leadDataInterval].A.pitch[pitchSeries].map(d => d.quantized),
+            pitchData  = data.scaledData[leadDataInterval].A[pitchScale][pitchSeries].map(d => d.quantized),
             muted      = sonification.param.A.mute
         
         return pitchData.map( (d, i) => euclidean[i] && !muted? d : null ) 
@@ -98,11 +98,9 @@
     // iii. Derive bass pitch data with euclidean pulses and mutes  
     const hasBass = bassDataInterval
     let bassData = $derived.by( () => {
-
         const pitchSeries = sonification.state.selection.group.B.pitchPattern,
-            scale      = data.scale[leadDataInterval].B.pitch[pitchSeries].pitchScale,
             euclidean  = sonification.state.selection.group.B.euclideanArray,
-            pitchData   = data.scaledData[leadDataInterval].B.pitch[pitchSeries].map(d => d.quantized),
+            pitchData  = data.scaledData[leadDataInterval].B[pitchScale][pitchSeries].map(d => d.quantized),
             muted      = sonification.param.B.mute
 
         return pitchData.map( (d, i) => euclidean[i] && !muted ? d : null ) 

@@ -28,16 +28,16 @@ export const paramInit = {
         bass: {
             mix: {  
                 osc1:   1,
-                osc2:   1,
-                sub:    0.25,
-                noise:  0.25
+                osc2:   0.8,
+                sub:    0.5,
+                noise:  0.8
             },
             ampEnv: {
-                A: 0.0,     D: 0.1,     S: 0.8,     R: 0.5
+                A: 0.0,     D: 0.1,     S: 0.9,     R: 0.5
             },
             filter: {
                 type:       "ladder",
-                cutoff:     440,    // Default replaced with data-driven ranges
+                cutoff:     380,    // Default replaced with data-driven ranges
                 Q:          4,  
                 env: {
                     A: 0,   D: 0.1,     S: 0.2,     R: 0.5, depth:  2.5,  
@@ -70,7 +70,7 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.5,            // Group level gain
+        gain:           0.45,            // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
@@ -94,27 +94,27 @@ export const paramInit = {
     },
     // Group C: [pattern] percussion
     C: {
-        gain:           0.25,            // Used for group level and mute
+        gain:           0.5,            // Used for group level and mute
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
         part: {     
             1: {  // "Beat":  
-                gain:               0.8,            // Sets group level with group
+                gain:               0.25,            // Sets group level with group
                 mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           null,           // Sound bank alias 
+                    bank:           'ViscoSpaceDrum',           // Sound bank alias 
                     clockDivider:   1               // Clock divider
                 }
             },
             2: { // "Hats"
-                gain:               0.8,            // Sets group level with group
+                gain:               0.25,            // Sets group level with group
                 mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           null,           // Sound bank alias 
+                    bank:           'ViscoSpaceDrum',           // Sound bank alias 
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
@@ -122,7 +122,7 @@ export const paramInit = {
                 }
             },
             3: {    // Chords
-                gain:               0.35,           // Sets group level with group
+                gain:               0.9,           // Sets group level with group
                 mute:               false,
                 octave:             3,              // Scale octave
                 sound: {

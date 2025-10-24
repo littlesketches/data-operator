@@ -35,7 +35,8 @@ export const groupConfig = {
         series,
         map: {
             pitch:    { interval: '16n' },
-            noise:    { interval: '16n' }
+            noise:    { interval: '16n' },
+            sub:      { interval: '16n' }
         }
     },
     C: {

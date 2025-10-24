@@ -2,53 +2,25 @@
  *  Set of musical scales available in the Data Operator
  */ 
 
+const rootPitches = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#',' G',  'G#', 'A',  'A#', 'B'] // Major key root notes
+
 
 const musicalScale = {     
-    // Pentatonic 
-    'major:pentatonic': {
-        notes:          5
-    },
-    'minor:pentatonic': {
-        notes:          5,
-    },
-    // Hexatonic
-    'major:blues': {
-        notes:          6,
-    },
-    'minor:blues': {
-        notes:          6,
-    },
-    // Heptatonic Modes
-    'ionian':{          // major
-        notes:          7,
-        chordMap: { 
-            I:      "[0, 2, 4]",      
-            IV:     "[3, 5, 6]",      
-            V:      "[4, 6, 7]",    
-            VI:     "[5, 7, 8]",    
-        },
-    },
-    'aeolian':{          // minor
-        notes:          7,
-    },
-    'phrygian':{         
-        notes:          7,
-    },
-    'mixolydian': {
-        notes:          7,
-    },
-    'dorian': {
-        notes:          7,
-    },
-    'lydian': {
-        notes:          7,
-    },
-    'locrian': {
-        notes:          7,
-    },
-    'harmonic:minor': {
-        notes:          7,
-    }
+    // Pentatonic scals
+    'major:pentatonic': { notes: 5 },
+    'minor:pentatonic': { notes: 5 },
+    // Hexatonic scals
+    'major:blues':      { notes: 6 },
+    'minor:blues':      { notes: 6 },
+    // Heptatonic scals:  modes
+    'ionian':           { notes: 7 },  // Major
+    'aeolian':          { notes: 7 },  // minor
+    'phrygian':         { notes: 7 },
+    'mixolydian':       { notes: 7 },
+    'dorian':           { notes: 7 },
+    'lydian':           { notes: 7 },
+    'locrian':          { notes: 7 },
+    'harmonic:minor':   { notes: 7 }
 }
 
 
@@ -60,6 +32,7 @@ const chordMap = {
         IV:     "[3, 5, 6]",      
         V:      "[4, 6, 7]",    
         VI:     "[5, 7, 9]",    
+        VII:    "[6, 8, 10]",    
     },
     6: { 
         I:      "[0, 2, 4]",    
@@ -68,6 +41,7 @@ const chordMap = {
         IV:     "[3, 5, 6]",      
         V:      "[4, 6, 7]",    
         VI:     "[5, 7, 8]",    
+        VII:    "[6, 8, 10]",    
     },
     7: { 
         I:      "[0, 2, 4]",      
@@ -87,4 +61,4 @@ Object.entries(musicalScale).forEach( ([scale, obj]) => {
 
 
 // => Export 
-export { musicalScale}
+export { musicalScale, rootPitches}
