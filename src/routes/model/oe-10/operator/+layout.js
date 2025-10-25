@@ -33,6 +33,10 @@ const operatorConfig = {
     theme:          'ko-ii',            // Specify theme
     ui: {
         type:       'operator',         // Specify UI
+        animation:  {
+            group:  'band',
+            type:   'unicorse',
+        },
         keyguide,
         punchFX
     }

@@ -36,6 +36,10 @@ const operatorConfig = {
     theme:          'dfam',              // Specify theme
     ui: {
         type:       'dfam',        // Specify UI
+        animation:  {
+            group:  'band',
+            type:   'panda',
+        },
         keyguide,
         punchFX
     }

@@ -35,6 +35,10 @@ const operatorConfig = {
     theme:          'ambient',        // Specify theme
     ui: {
         type:       'operator',      // Specify UI (matched to keyguide)
+        animation:  {
+            group:  'band',
+            type:   'unicorse',
+        },
         keyguide,
         punchFX
     }

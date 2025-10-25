@@ -47,6 +47,7 @@ export function legatoStruct(arr) {
             i++;
         }
     }
+
     return out.join(' ');
 }
 

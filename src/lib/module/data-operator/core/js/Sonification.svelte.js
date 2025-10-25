@@ -693,7 +693,7 @@ export class Sonification{
                 // ii. Init the pulse array and param (struct) with the current pulse array (if available) or the euclidean array 
                 const arr = sonification.state.sequencer[group].array = sonification.state.sequencer[group].array.length === 0 ? sonification.state.selection.group[group].euclideanArray : sonification.state.sequencer[group].array
                 sonification.param[group][type].struct = arr.map(n => n && 'x' || '-').join(' ')
-                sonification.param[group][type].structLegato = legatoStruct(arr)
+                sonification.param[group][type].structLegato = util.legatoStruct(arr)
 
                 // iii. Handle user message
                 sonification.state.userMessage.text = `Opened pulse seq. ${group}`
@@ -711,7 +711,7 @@ export class Sonification{
                 // ii. Update pulse rhythm to array
                 sonification.state.sequencer[group].array = array 
                 sonification.param[group][type].struct = array.map(n => n && 'x' || '-').join(' ')   
-                sonification.param[group][type].structLegato = legatoStruct(array)
+                sonification.param[group][type].structLegato = util.legatoStruct(array)
 
                 // iii. Toggle off onDelta
                 sonification.state.sequencer[group].onDelta = false

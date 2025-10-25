@@ -35,7 +35,11 @@ const operatorConfig = {
     },
     theme:          'ko-ii',        // Specify theme
     ui: {
-        type:       'std',      // Specify UI
+        type:       'operator',      // Specify UI
+        animation:  {
+            group:  'band',
+            type:   'robot',
+        },
         keyguide,
         punchFX
     }

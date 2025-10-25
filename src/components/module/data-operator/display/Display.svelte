@@ -1,23 +1,19 @@
 <!-- DATA OPERATOR DISPLAY -->
 <script>
     // Components 
-    import Metronome        from './icon/Metronome.svelte';
-    import GroupList        from './info/GroupList.svelte';
-    import ChartPitch       from './vis/ChartPitch.svelte';
-    import ChartPitchVelocity from './vis/ChartPitchVelocity.svelte';
-    import ChartPattern     from './vis/ChartPattern.svelte';
-    import SceneSelector     from './info/SceneSelector.svelte';
-    import UserMessage      from './info/UserMessage.svelte';
-    import RobotAnimation   from './vis/RobotAnimation.svelte';
-    import Overlay          from './info/Overlay.svelte';
-    // Libs and utils
-    import * as d3          from 'd3'
+    import Metronome            from './icon/Metronome.svelte';
+    import GroupList            from './info/GroupList.svelte';
+    import SceneSelector        from './info/SceneSelector.svelte';
+    import UserMessage          from './info/UserMessage.svelte';
+    import DataAnimation        from './vis/DataAnimation.svelte';
+    import DataVis              from './vis/DataVis.svelte';
+    import Overlay              from './info/Overlay.svelte';
 
     // Props
     let { model} = $props()
 
     // Models
-    const {dataModel, sonification, strudel, operatorConfig} = model
+    const { sonification, strudel, operatorConfig} = model
     const ui = operatorConfig.ui.type   
 
     // Reactive variables
@@ -47,42 +43,16 @@
         </div>
 
         <div class = 'animation-vis__container'>
-            <RobotAnimation {model} />
+            <DataAnimation {model} />
         </div>
 
         <div class = 'data-vis__container'>
-            {#if sonification.state.selection.group.active === 'master'}
-            <div class = 'mix-vis__container'>
-                {#if ui == 'dfam'}
-                <ChartPitchVelocity  {model} paramNameA={sonification.state.selection.group.A.chart} paramNameB = {sonification.state.selection.group.B.chart} chartType={'threeQ'} /> 
-                {:else}
-                <ChartPitch {model} group={'A'}  paramName = {sonification.state.selection.group.A.chart} chartType ={'quarter'} />
-                <ChartPitch {model} group={'B'}  paramName = {sonification.state.selection.group.B.chart} chartType ={'quarter'} />
-                {/if}
-                <ChartPattern {model} group={'C'}  chartType ={'quarter'} />            
-            </div>
-            {:else}
-                {@const type = sonification.schema.group[sonification.state.selection.group.active].type }
-                {#if ui === 'dfam'}
-                    {#if type === 'pattern'}     
-                    <ChartPattern {model} {group}  chartType={'full'} />
-                    {:else}
-                    <ChartPitchVelocity  {model} paramNameA={sonification.state.selection.group.A.chart} paramNameB = {sonification.state.selection.group.B.chart} chartType={'full'} /> 
-                    {/if}
-                 {:else}
-                    {#if type === 'pitch'}          
-                    <ChartPitch {model} {group} paramName={sonification.state.selection.group[group].chart} chartType={'full'} />
-                    {:else}
-                    <ChartPattern {model} {group}  chartType={'full'} />
-                    {/if}   
-                {/if}
-            {/if}
+            <DataVis {model}/>
         </div>
 
         <div class = 'overlay__container' class:active={sonification.state.userMessage.overlay.isShown}>
             <Overlay  {model} />
         </div>
-
     </div>
 </section>
 
@@ -138,18 +108,11 @@
         grid-area:              2/ 2 / 4 / 4;
         margin:                 var(--margin-std) 0 var(--margin-half) 0;   
     }
-        .mix-vis__container{
-            display:            flex;
-            flex-direction:     column;
-            height:             100%;
-            justify-content:    space-between;
-        }
 
     .animation-vis__container{
         grid-area:              3/ 1 / 5 / 2;
         display:                flex;
-        align-items: end;
-            
+        align-items:            end;
     }
 
     .overlay__container{
@@ -171,19 +134,5 @@
         grid-area:              1 / 2 / 2 / 3;        
         color:                  var(--pixel-0);
         display:                flex;
-    }
-
-    .active-mode{
-        font-size:              1.5vh;
-    }
-    .active-mode span{
-        text-transform:         uppercase;
-    }
-
-    .numkey-action,
-    .numkey-action span,
-    .navkey-action,
-    .navkey-action span{
-        font-size:          1.25vh;
     }
 </style>

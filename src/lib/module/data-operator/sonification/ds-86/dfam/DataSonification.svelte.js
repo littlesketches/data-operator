@@ -67,7 +67,7 @@ export class DataSonification extends Sonification{
                 )
                 .slow(${this.param.A.pitch.clockDivider})                
                 ${ this.param.synth.DFAM.duck ? `.orbit("${this.param.synth.DFAM.orbit}")` : ''}
-                ${this.state.sequencer.A.active ? `.struct("${this.param.A.pitch.legato ? this.param.A.pitch.structLegato : this.param.A.pitch.struct}")` 
+                ${this.state.sequencer.A.active ? `.struct("${this.param.A.pitch.legato ?  this.param.A.pitch.structLegato !== "" ?this.param.A.pitch.structLegato :  this.param.A.pitch.struct  : this.param.A.pitch.struct}")` 
                     : this.param.A.pitch.legato ? `.euclidLegato(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length})` : `.euclid(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}`}  
                 .attack("${this.param.synth.DFAM.vcaAttack}")
                 .decay("${this.param.synth.DFAM.vcaDecay}".mul("${this.param.B.velocity.pattern}".mul("${this.param.synth.DFAM.vcaEG}")))

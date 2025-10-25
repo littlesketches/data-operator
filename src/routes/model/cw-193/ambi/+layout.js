@@ -10,7 +10,6 @@ import { DataModel_CW as DataModel} from '$src/lib/module/data-operator/data-mod
 // Config
 import { appConfig }        from '$lib/_core/config/app-config';
 
-
 // Custom Data Operator model config
 import { keyguide }         from '$src/lib/module/data-operator/core/config/ui/operator/keyguide.js';
 import { punchFX }          from '$src/lib/module/data-operator/core/config/ui/operator/fx-config.js';
@@ -33,9 +32,13 @@ const operatorConfig = {
         name:       model,
         edition:    edition
     },
-    theme:          'ambient',        // Specify theme
+    theme:          'ambient',    
     ui: {
-        type:       'std',      // Specify UI
+        type:       'operator',      
+        animation:  {
+            group:  'band',
+            type:   'unicorse',
+        },
         keyguide,
         punchFX
     }
@@ -49,7 +52,6 @@ const config = {
         C:      groupPartPresets        // Group C preset part 1&2 patterns
     }   
 }
-
 
 // => Load function
 export async function load({ fetch, url }) {
