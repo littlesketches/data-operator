@@ -23,6 +23,9 @@ export class Sonification{
     ////////////////
 
     userMessageTimeout = 1500
+
+    pMap = {}
+
     state = $state()
     mode  = $derived({})
     // param        // Placeholder for derived parameter map 
@@ -74,8 +77,6 @@ export class Sonification{
                 navKeyAction:   undefined,                  // Track key action state
                 heldKeys:       new Set(),                  // Tracks all held keyboard keys / screen buttons
                 sceneIndex:     0,                          // Selector for they sceneIndex of the modelData
-                scaleLock:      true,                       // Locks pitch to  scale ('quantized') or uses raw value ('microtonic')
-                scaleNotes:     undefined,                  // Set by chosen scale
                 group: {
                     active:     'master',                   // Active 'mixer' track group
                     A: {
@@ -97,6 +98,16 @@ export class Sonification{
                             2: { series: 0,  sequencer: undefined },           
                             3: { series: 0,  sequencer: undefined }             
                         }                         
+                    }, 
+                    global:{
+                        scale: {
+                            tonalLock:  true,                // Locks pitch to  scale ('quantized') or uses raw value ('microtonic')
+                            notes:      undefined            // Set by chosen scale
+                        },
+                        bpm: {
+                            dataLinked:  false,
+                            series:      undefined
+                        }
                     }
                 }
             },
@@ -127,6 +138,100 @@ export class Sonification{
         this.updateStrudel =  (autoplay = true) => strudel?.repl?.evaluate(this.code, autoplay)      // Add update handler to class 
     }
 
+    #addParamHelper() {
+        // Helpers used in updateParameterMap
+        this.mapHelper = {
+            setEuclideanArray: () =>{
+                if(this.param.A.pitch) this.state.selection.group.A.euclideanArray = util.rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
+                if(this.param.B.pitch) this.state.selection.group.B.euclideanArray = util.rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
+            },
+            getDataVariables: () => {
+                const sceneData = this.data.scene[this.state.selection.sceneIndex],
+                    scaleNotes  = this.state.selection.group.global.scale.notes,
+                    pitchScale  = `pitch${scaleNotes}`,
+                    scaleLock   = this.state.selection.group.global.scale.tonalLock ? 'quantized' : 'value'
+
+                return {
+                    sceneData, scaleNotes, pitchScale, scaleLock
+                }
+            },
+            initGroupConfig: () => {
+                // i. Init object with imported  percussion and chord part presets           
+                const groupObj = {A: {}, B: {},  C:  this.schema.pattern.C }
+
+                // ii.  Set param intervals and default series 
+                Object.entries(this.schema.group).forEach( ([group, obj]) => {
+                    if(group === 'A' || group === 'B'){
+                        const pitchSeries = this.state.selection.group[group].pitchPattern 
+                        Object.entries(obj.map).forEach( ([param, d]) => {
+                            groupObj[group][param] = {
+                                interval:    d.interval, 
+                                series:      pitchSeries    // Default to pitch series and override at updateParamMap level
+                            }
+                        })
+                    } 
+                    if(group === 'C'){
+                        Object.entries(obj.part).forEach( ([partNo, partObj]) => {
+                            Object.entries(partObj.map).forEach( ([param, d]) => {
+                                if(param !== 'sound'){  // "sound" is reserved for presets
+                                    groupObj[group][partNo][param] = {interval: d.interval}
+                                }
+                            })
+                        })
+                    }
+                })
+
+                // => Return group obj
+                return groupObj
+            },
+            updateGroupPitch: (groupObj) => {
+                // i.  Set param intervals and default series 
+                Object.entries(this.schema.group).forEach( ([group, obj]) => {
+                    if(group === 'A' || group === 'B'){
+                        const pitchSeries = this.state.selection.group[group].pitchPattern 
+                        Object.entries(obj.map).forEach( ([param, d]) => {
+                            groupObj[group][param].series =  pitchSeries   
+                        })
+                    } 
+                })
+            },
+
+            setPitchSequence: (groupObj, group) => {
+                this.param[group].pitch.pattern  = `${JSON.stringify(groupObj[group].pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param[group].pitch.length}`
+
+                if(this.state.sequencer[group].onDelta){  // Create a custom onchange pulse pattern for A
+                    this.state.sequencer[group].active   = true 
+                    this.state.sequencer[group].array        = util.deltaArray( groupObj[group].pitch.array)
+                    this.param[group].pitch.struct       = this.state.sequencer[group].array.map(n => n && 'x' || '-').join(' ')   
+                    this.param[group].pitch.structLegato = util.legatoStruct(this.state.sequencer[group].array )
+                }
+            },
+
+            setChordSequence: (sceneData, groupObj, group, part) => {
+                const musicalScale  = this.param.global.scale.type,
+                    scaleChords     = this.schema.musicalScale[musicalScale].chordMap,
+                    chordMap = {
+                        0: scaleChords.I,
+                        1: scaleChords.IV,
+                        2: scaleChords.V,
+                        3: scaleChords.VI
+                    },
+                    chordInterval   = groupObj[group][part].chord.interval,
+                    chordSeries     = groupObj[group][part].chord.series,
+                    chordSoundIndex = this.state.selection.group[group].part["3"].series,
+                    chordConfig     = groupObj[group][part].sound[chordSoundIndex]
+
+                const chordArray = groupObj[group][part].patternArray = sceneData.scaledData[chordInterval][group][part].chord[chordSeries].map(d => d.quantized).map( d => chordMap[d])
+                this.param[group].part[part].sound.pattern    = `"<${chordArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
+                this.param[group].part[part].sound.length = chordArray.length
+                this.param[group].part[part].sound.code   = chordConfig.code
+                this.param[group].part[part].sound.ampEnv = chordConfig.ampEnv
+                this.param[group].part[part].sound.gain   = chordConfig.gain
+            }
+
+        }
+    }
+
     //////////////////////////
     ////  PUBLIC METHODS  ////
     //////////////////////////
@@ -148,6 +253,7 @@ export class Sonification{
         if(this.param.C.part["3"].sound)    this.param.C.part["3"].sound.length     = +this.schema.group.C.part["3"].map.sound.interval.slice(0, -1)
 
         if(this.param.C.part["2"].velocity) this.param.C.part["2"].velocity.length  = +this.schema.group.C.part["2"].map.velocity.interval.slice(0, -1)
+        if(this.param.C.part["3"].chord)    this.param.C.part["3"].chord.length     = +this.schema.group.C.part["3"].map.chord.interval.slice(0, -1)
 
         // ii. Add fx toggle object to params for master and each group
         this.param.A.fx = Object.fromEntries( Object.keys(punchFX).map(key => [key, false]) )       
@@ -164,6 +270,9 @@ export class Sonification{
                 this.param.global.fx[`${fxName}Post`] = obj.postGain
             }
         }
+
+
+        this.#addParamHelper()
     }
 
     checkScreenSize(mobileFlag){

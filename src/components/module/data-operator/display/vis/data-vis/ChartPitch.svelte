@@ -70,7 +70,7 @@
         length          = $derived(sonification.param[group][paramName].length),
         clockDivider    = $derived(sonification.param[group][paramName].clockDivider ?? 1),
         pulseArray      = $derived(sonification.state.sequencer[group].active ? sonification.state.sequencer[group].array : sonification.state.selection.group[group].euclideanArray  ),
-        chartScale      = $derived(`pitch${sonification.state.selection.scaleNotes}`),
+        chartScale      = $derived(`pitch${sonification.state.selection.group.global.scale.notes}`),
         seriesScaleY    = $derived(data?.scale[dataInterval][group][chartScale][series]),      
         scaleArrayY     = $derived(Array.from({ length: seriesScaleY?.range()[1] - seriesScaleY?.range()[0] + 1 }, (d, i) => seriesScaleY?.range()[0] + i)),
         seriesData      = $derived({

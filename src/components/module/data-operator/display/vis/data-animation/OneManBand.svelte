@@ -86,7 +86,7 @@
         bassDataInterval = sonification.schema.group.B.map.pitch?.interval
 
     let sceneIndex  = $derived(sonification.state.selection.sceneIndex),
-        pitchScale  = $derived(`pitch${sonification.state.selection.scaleNotes}`),
+        pitchScale  = $derived(`pitch${sonification.state.selection.group.global.scale.notes}`),
         data        = $derived(dataModel.scene[sceneIndex])       // Modelled data for selected day
 
     // ii. Derive lead pitch data with euclidean pulses and mutes

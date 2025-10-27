@@ -17,6 +17,8 @@ import { paramInit }            from './parameter-map';
 import { musicalScale }     from '$lib/module/data-operator/core/config/global/music-scale-config';
 import { timingConfig }         from '$lib/module/data-operator/core/config/global/timing-config';
 
+// Private variables
+let group
 
 // => DataSonification class
 export class DataSonification extends Sonification{
@@ -167,7 +169,7 @@ export class DataSonification extends Sonification{
 
         // Add state
         this.state.selection.group.B.chart = 'velocity'
-        this.state.selection.scaleNotes = musicalScale[this.param.global.scale.type].notes
+        this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
 
         // Add schema
         this.schema.group       = config.group,
@@ -187,49 +189,33 @@ export class DataSonification extends Sonification{
         /**
          *  I. ON INIT ACTIONS
          */
+        // a. On init setup
         if(init){
             // i. Set default pattern selections
             this.state.selection.group.A.pitchPattern    = util.randomItem(this.schema.group.A.series)
             this.state.selection.group.B.velocityPattern = util.randomItem(this.schema.group.B.series)
 
+            // ii. Init group object
+            group = this.mapHelper.initGroupConfig()
             // ii. Randomise euclidean pulse (for init) and set to onDelta 
             this.param.A.pitch.pulse = util.randomItem([9, 11, 13, 15])
             this.state.sequencer.A.onDelta = true
 
             // iii. Set euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
-            this.state.selection.group.A.euclideanArray = util.rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
+            this.mapHelper.setEuclideanArray()
         }
-
+        // b. Selection and reference variables
+        const { sceneData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
+        
 
         /**
-         *  II. Set of manual update methods to turns data selections into 'param' updates => (reactive) code   
+         *  II. UPDATE + CUSTOM DATA SERIES MAPPING  
          */ 
 
-        // Data selected and reference variables
-        const sceneData     = this.data.scene[this.state.selection.sceneIndex],
-            scaleNotes  = this.state.selection.scaleNotes,
-            pitchScale  = `pitch${scaleNotes}`,
-            scaleLock       = this.state.selection.scaleLock ? 'quantized' : 'value',
-            group = {
-                A: {
-                    pitch:      { interval: this.schema.group.A.map.pitch.interval      },
-                    velocity:   { interval: this.schema.group.A.map.velocity.interval   },
-                    lpf:        { interval: this.schema.group.A.map.lpf.interval   },
-                    lpq:        { interval: this.schema.group.A.map.lpq.interval   }
-                },
-                B: {
-                    velocity:   { interval: this.schema.group.B.map.velocity.interval }
-                },
-                C:  this.schema.pattern.C    //  Percussion part presets           
-            }
-
-        // ii. Add data for group C
-        group.C["2"].velocity = { interval: this.schema.group.A.map.pitch.interval }      
-        group.C["3"].chord    = { interval: this.schema.group.C.part["3"].map.sound.interval }
-
-        // iii. Set primary (pitch) pattern series
-        group.A.pitch.series    = group.A.velocity.series = group.A.lpf.series = group.A.lpq.series = group.C["2"].velocity.series = this.state.selection.group.A.pitchPattern
-        group.B.velocity.series = group.C["3"].series = this.state.selection.group.B.velocityPattern
+        // i. Selection and reference variables
+        this.mapHelper.updateGroupPitch(group)
+        group.C["3"].chord.series = group.A.pitch.series 
+        group.B.velocity.series = group.C["2"].velocity.series = this.state.selection.group.B.velocityPattern
 
 
         /**
@@ -238,14 +224,7 @@ export class DataSonification extends Sonification{
 
         // i. Pitch: constructed from selected data => update params
         group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
-        this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
-
-        if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for A
-            this.state.sequencer.A.active   = true 
-            this.state.sequencer.A.array    = util.deltaArray( group.A.pitch.array)
-            this.param.A.pitch.struct       = this.state.sequencer.A.array.map(n => n && 'x' || '-').join(' ')   
-            this.param.A.pitch.structLegato = util.legatoStruct(this.state.sequencer.A.array )
-        }
+        this.mapHelper.setPitchSequence(group, 'A')
 
         /**
          *  GROUP B: Percussive "bass + noise" synth
@@ -278,26 +257,7 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
 
         // Part 3. Chord progression notes and params
-        const musicalScale  = this.param.global.scale.type,
-            scaleChords     = this.schema.musicalScale[musicalScale].chordMap,
-            chordMap = {
-                0: scaleChords.I,
-                1: scaleChords.IV,
-                2: scaleChords.V,
-                3: scaleChords.VI
-            },
-            chordInterval   = group.C["3"].chord.interval,
-            chordSeries     = group.C["3"].series,
-            chordSoundIndex = this.state.selection.group.C.part["3"].series,
-            chordConfig     = group.C["3"].sound[chordSoundIndex]
-
-        const chordArray = group.C["3"].patternArray = sceneData.scaledData[chordInterval].C["3"].chord[chordSeries].map(d => d.quantized).map( d => chordMap[d])
-        this.param.C.part["3"].sound.pattern    = `"<${chordArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
-
-        this.param.C.part["3"].sound.length = chordArray.length
-        this.param.C.part["3"].sound.code   = chordConfig.code
-        this.param.C.part["3"].sound.ampEnv = chordConfig.ampEnv
-        this.param.C.part["3"].gain         = chordConfig.gain
+        this.mapHelper.setChordSequence(sceneData, group, 'C', 3)
     };
 
 }

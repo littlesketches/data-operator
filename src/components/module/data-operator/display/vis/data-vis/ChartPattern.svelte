@@ -203,8 +203,8 @@
             {@const dur = chordEnv.A +chordEnv.D +chordEnv.R}
             {@const path = `M0, 0 L${width * chordEnv.A /dur}, ${-height} L${width * (chordEnv.A + chordEnv.D) /dur}, ${-height * chordEnv.S} L${width}, 0 
                             L${width * (chordEnv.A + chordEnv.D) /dur}, ${height * chordEnv.S} L${width * chordEnv.A /dur}, ${height} z`}
-            <g transform =  'translate({scale.chord.x(i)}, {scale.chord.y(d) + height})' >
-                <path  class = 'chord-marker'class:active={( Math.floor(cycleIndex /clockDivider["3"])%  length.part3 ) === i  && strudel.state.transport === 'playing'}  
+            <g  class = 'chord-marker-group'  transform =  'translate({scale.chord.x(i)}, {scale.chord.y(d) + height})' >
+                <path  class = 'chord-marker' class:active={( Math.floor(cycleIndex /clockDivider["3"])%  length.part3 ) === i  && strudel.state.transport === 'playing'}  
                     d = {path}/>
             </g>
             {:else}
@@ -260,10 +260,13 @@
         opacity:        1;
     }
 
+    .chord-marker-group{
+        transition:     all 500ms;
+    }
     .chord-marker{
         fill:           var(--pixel-0);
         opacity:        0.5;
-        transition:     all 500ms
+
     }
     .chord-marker.active{
         opacity:        1;

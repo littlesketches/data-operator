@@ -25,6 +25,16 @@ import { adaptationDataMeta }   from "./config/data-meta-info"
 // Private variable
 let scaleConfig
 
+const adaptationMetric = {       // ascending = 1 (higher is 'better'),  descending = -1
+    vulnerabilityScore:     1,     
+    vulnerabilityRank:     -1,       
+    readinessScore:         1,
+    readinessRank:          1, 
+    climateRiskIndex:      -1, 
+    climateRiskRank:       -1
+}
+
+
 
 // => DataModel
 export class DataModel_CW extends DataModel{
@@ -69,7 +79,7 @@ export class DataModel_CW extends DataModel{
                     for(let [key, value] of Object.entries(dataObj)){
 
                         if(!isNaN(value) && value!== null ) {
-                        dataObj[key] = +value
+                            dataObj[key] = +value
                         } else {
                             dataObj[key] = value.trim()
                         }
@@ -279,6 +289,12 @@ export class DataModel_CW extends DataModel{
             })
         })
 
+        // iv. Add adaptation extents
+        modelData.adaptation.extent = {}
+        Object.keys(adaptationMetric).forEach( metric => {
+            modelData.adaptation.extent[metric] = d3.extent(Object.values(modelData.adaptation.byCountry).map(d => d[metric]).filter(d => d ))
+        })
+
         // => Return 
         return modelData
     }
@@ -324,60 +340,31 @@ export class DataModel_CW extends DataModel{
                 })
 
                 // ii. Create data scales and scaled data
-                scale[interval] = {}    
+                scale[interval]  = {}   
                 scaledData[interval] = {}
 
                 for( let [group, obj] of Object.entries(scaleConfig)){
+                    // Scales for user selectable data series
+                    if(group !== 'global'){
+                        scale[interval][group] = {}
+                        scaledData[interval][group] = {}
 
-                    scale[interval][group] = {}
-                    scaledData[interval][group] = {}
+                        switch(group){
+                            case "A": case "B": 
+                                const groupScale = scaleConfig[group]
 
-                    switch(group){
-                        case "A": case "B": 
-                            const groupScale = scaleConfig[group]
-
-                            for(let [paramName, scaleParam] of Object.entries(obj)){
-                                scale[interval][group][paramName] = {}
-                                scaledData[interval][group][paramName] = {}
-
-                                // I. Create scales 
-                                for (let [seriesName, d] of Object.entries(seriesData)) {
-                                    // a. Add scale for key
-                                    const dataScale = scale[interval][group][paramName][seriesName] =  d3.scaleLinear()
-                                                                                .domain(d3.extent(intervalData[interval][seriesName]))
-                                                                                .range([groupScale[paramName].min, groupScale[paramName].max])
-                                    // b. Add scaled data
-                                    scaledData[interval][group][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
-                                        return {
-                                            value:          dataScale(d),
-                                            quantized:      Math.round(dataScale(d))
-                                        }
-                                    })
-                                }
-                            }
-                            break
-
-                        case "C":
-                            for (let [part, d] of Object.entries(obj)){
-
-                                scale[interval][group][part] = {}
-                                scaledData[interval][group][part] = {}
-
-                                const partScale = scaleConfig[group][part]
-                                
-                                for(let [paramName, scaleParam] of Object.entries(d)){
-                                    scale[interval][group][part][paramName] = {}
-                                    scaledData[interval][group][part][paramName] = {}
+                                for(let [paramName, scaleParam] of Object.entries(obj)){
+                                    scale[interval][group][paramName] = {}
+                                    scaledData[interval][group][paramName] = {}
 
                                     // I. Create scales 
                                     for (let [seriesName, d] of Object.entries(seriesData)) {
                                         // a. Add scale for key
-                                        const dataScale = scale[interval][group][part][paramName][seriesName] =  d3.scaleLinear()
-                                                                                            .domain(d3.extent(intervalData[interval][seriesName]))
-                                                                                            .range([partScale[paramName].min, partScale[paramName].max])
-                                    
+                                        const dataScale = scale[interval][group][paramName][seriesName] =  d3.scaleLinear()
+                                                                                    .domain(d3.extent(intervalData[interval][seriesName]))
+                                                                                    .range([groupScale[paramName].min, groupScale[paramName].max])
                                         // b. Add scaled data
-                                        scaledData[interval][group][part][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
+                                        scaledData[interval][group][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
                                             return {
                                                 value:          dataScale(d),
                                                 quantized:      Math.round(dataScale(d))
@@ -385,12 +372,65 @@ export class DataModel_CW extends DataModel{
                                         })
                                     }
                                 }
-                            }
-                            break
-                    }
+                                break
+
+                            case "C":
+                                for (let [part, d] of Object.entries(obj)){
+
+                                    scale[interval][group][part] = {}
+                                    scaledData[interval][group][part] = {}
+
+                                    const partScale = scaleConfig[group][part]
+                                    
+                                    for(let [paramName, scaleParam] of Object.entries(d)){
+                                        scale[interval][group][part][paramName] = {}
+                                        scaledData[interval][group][part][paramName] = {}
+
+                                        // I. Create scales 
+                                        for (let [seriesName, d] of Object.entries(seriesData)) {
+                                            // a. Add scale for key
+                                            const dataScale = scale[interval][group][part][paramName][seriesName] =  d3.scaleLinear()
+                                                                                                .domain(d3.extent(intervalData[interval][seriesName]))
+                                                                                                .range([partScale[paramName].min, partScale[paramName].max])                                        
+                                            // b. Add scaled data
+                                            scaledData[interval][group][part][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
+                                                return {
+                                                    value:          dataScale(d),
+                                                    quantized:      Math.round(dataScale(d))
+                                                }
+                                            })
+                                        }
+                                    }
+                                }
+                                break
+                        }
+                    } 
                 }
 
             })
+
+            // iv. Global scale data
+            if(scaleConfig.global){
+                scale.global = {} 
+                scaledData.global = {} 
+
+                for( let [param, d] of Object.entries(scaleConfig.global)){
+                    scale.global[param] = {}
+                    scaledData.global[param] = {}
+                    Object.entries(adaptationMetric).forEach( ([metric, direction]) => {
+                        // a. Data scale
+                        const range = direction === 1 ? [d.min, d.max] : [d.max, d.min]
+                        const dataScale = scale.global[param][metric] 
+                                        = d3.scaleLinear().range(range)
+                                            .domain(modelData.adaptation.extent[metric])
+
+                        // b. Add scaled data
+                        const datum = modelData.adaptation.byCountry[countryCode][metric]
+                        scaledData.global[param][metric] = datum ? dataScale(datum) : d3.mean(dataScale.range())
+
+                    })
+                }
+            }
 
             // => Return model object 
             return  {
@@ -422,6 +462,8 @@ export class DataModel_CW extends DataModel{
 
         // iii. Transform data for sonification
         this.scene = this.#createDataScenes(this.model)
+
+        console.log(this)
     };
 
     getSceneLabel(sceneIndex){

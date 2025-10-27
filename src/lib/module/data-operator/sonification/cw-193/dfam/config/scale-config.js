@@ -25,7 +25,10 @@ export const scaleConfig = {
         3: {
             chord:    { min: 0,     max: 3    }
         }
-    }
+    },
+    // global: {
+    //     bpm:         { min: 70,      max: 110   }
+    // }
 }
 
 
