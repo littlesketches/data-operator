@@ -40,13 +40,14 @@
                 <li>For dynamic variation, the lead synths uses the assigned data series to affect note volume (velocity).
                 </li>
 
-                <li>By default (i.e. on load), the pulse sequencers for both Lead and Bass are set to only include pulses when there is a change in note. This corresponds to a change in the data that is 'significant' enough to cause a change in pitch (i.e. once quantized to scale). This pulse model is maintained when the user selects new data (series or scenes) but is overridden when the Euclidean Rhythm or Pulse Sequencers are activated, for each track. </li>
+                <li>The pulse sequencers for both lead and bass are set (by default) to only include pulses when there is a change in note. This corresponds to a change in the data that is 'significant' enough to cause a change in pitch (i.e. once quantized to scale). This pulse model is maintained when the user selects new data (series or scenes) but is overridden when the Euclidean Rhythm or Pulse Sequencers are activated, for each track. </li>
 
                 <li>The chord layer uses a progression that follows the data series selected for the lead synth. This is scaled to a basic four chord progression that follows the chosen musical scale of composition with a lower note resolution (of 4n). By default, this is set to play over 8 bars (by applying a clock division of 2).
                 </li>
 
-                <li>Drum kit patterns (separated across C1 and C2) are presets: further work may be done to introduce data mapping to some of these (e.g. velocity). Drum kits use the default Strudel acoustic drum samples.
+                <li>Drum kit patterns (separated across C1 and C2) are presets. Drum kits use the default <a href ='https://strudel.cc/workshop/getting-started/' target = "_blank">Strudel</a> acoustic drum samples.
                 </li>
+
             </ul>
         </section>
 

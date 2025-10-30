@@ -16,10 +16,11 @@
         </div>
 
         <div class = 'do-model-page__content'>
-            <p><strong>Data Operator OE-10</strong> is a collection of data sonification instruments that explore electricity data from Australia's National Energy Market (NEM), published by <a href = 'https://openelectricity.org.au/' target = "_blank">Open Electricity</a>. There are <strong>three editions</strong> of the OE-10 available, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every OE-10 is designed to be <i>played with</i>, in a musical way.
+            <p><strong>Data Operator OE-10</strong> is a collection of data sonification <i>instruments</i> that explore electricity data from Australia's National Energy Market (NEM), published by <a href = 'https://openelectricity.org.au/' target = "_blank">Open Electricity</a>. There are <strong>three editions</strong> of the OE-10 available, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every OE-10 is designed to be <i>played with</i>, in a musical way.
             </p>
         </div>
 
+        <!-- MENU-->
         <ul class = 'do_model-page__menu'>
             <a href = "/model/oe-10/operator">
                 <li class = 'operator'>

@@ -46,7 +46,7 @@ export const paramInit = {
     },
     // Group A: [melodic] 'synth'    
     A: {
-        gain:           0.35,            // Group level gain 
+        gain:           0.5,            // Group level gain 
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
@@ -76,8 +76,8 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              16,    // Euclidean pulse (default on load)
-            rotation:           0,          // Euclidean rotation
+            pulse:              16,             // Euclidean pulse (default on load)
+            rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch
             transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale

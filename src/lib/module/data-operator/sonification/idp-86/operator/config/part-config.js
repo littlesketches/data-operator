@@ -45,6 +45,7 @@ export const groupPartPresets =  {
             5: chord.harp,
             6: chord.wineglass,
             7: chord.pipeorgan,
+            8: chord.alienpad
         }
     }
 }

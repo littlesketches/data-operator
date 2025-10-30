@@ -27,11 +27,18 @@ export const chordSoundConfig = {
         ampEnv:     `1.5:0.1:0.8:0.25`
     },
     dfampad: {
-        label:      'Pad synth',
+        label:      'Deformed supersaw',
         gain:       1,
         code:      `.s("supersaw").lpf(440).lpq(14).lpd(0.5).lpenv(5)`,
         ampEnv:     `1:0:1:0.5`
     },
+    alienpad: {
+        label:      'Alien square',
+        gain:       1,
+        code:      `.s("square").n(8).lpf(2400).lpq(6).lpenv(3).lpd(0.5).phaser(0.5).vib(0.25)`,
+        ampEnv:     `1:0:1:0.5`
+    },
+
     // Sounds
     vibraphone: {
         label:      'Vibraphone',

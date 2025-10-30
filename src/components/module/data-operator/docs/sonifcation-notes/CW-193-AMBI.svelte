@@ -43,7 +43,7 @@
                 <li>The chord layer uses a progression mapped to the same data series as the lead synth. It is scaled to a basic four chord progression that follows the chosen musical scale of composition, ans is played over four bars. The progression is set to play over 8 bars (by applying a clock division of 2).
                 </li>
 
-                <li>Drum kit patterns (separated across C1 and C2) are presets: further work may be done to introduce data mapping to some of these (e.g. velocity). Drum kits use the default Strudel acoustic drum samples.
+                <li>Drum kit patterns (separated across C1 and C2) are presets. Drum kits use the default <a href ='https://strudel.cc/workshop/getting-started/' target = "_blank">Strudel</a> acoustic drum samples.
                 </li>
             </ul>
         </section>

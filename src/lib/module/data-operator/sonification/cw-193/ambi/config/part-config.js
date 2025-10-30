@@ -43,11 +43,12 @@ export const groupPartPresets =  {
             0: chord.ambientpad,
             1: chord.supersaw,
             2: chord.dfampad,
-            3: chord.vibraphone,
-            4: chord.piano,
-            5: chord.harp,
-            6: chord.wineglass,
-            7: chord.pipeorgan,
+            3: chord.alienpad,
+            4: chord.vibraphone,
+            5: chord.piano,
+            6: chord.harp,
+            7: chord.wineglass,
+            8: chord.pipeorgan,
         }
     }
 }

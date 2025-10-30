@@ -16,7 +16,7 @@
         </div>
 
         <div class = 'do-model-page__content'>
-            <p><strong>Data Operator CW-193</strong> is a collection of data sonification instruments that explore national-level climate datasets that have been collated and published by <a href = 'https://www.climatewatchdata.org/' target = "_blank">Climate Watch</a>. There are <strong>three editions</strong> of the CW-193 available, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every CW-193 is designed to be <i>played with</i>, in a musical way.</p>
+            <p><strong>Data Operator CW-193</strong> is a collection of data sonification <i>instruments</i> that explore national-level climate datasets that have been collated and published by <a href = 'https://www.climatewatchdata.org/' target = "_blank">Climate Watch</a>. There are <strong>three editions</strong> of the CW-193 available, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every CW-193 is designed to be <i>played with</i>, in a musical way.</p>
         </div>
 
         <ul class = 'do_model-page__menu'>

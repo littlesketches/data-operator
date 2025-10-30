@@ -14,7 +14,7 @@
         </div>
 
         <div class = 'do-model-page__content'>
-            <p><strong>Data Operator IDP-86</strong> is a collection of data sonification <i>instruments</i> that explores data on internally displaced people that have been collated and published by the <a href = 'https://www.internal-displacement.org/' target = "_blank">Internal Displacement Monitoring Center (IDMC)</a>. There are <strong>three editions</strong> of the IDP-86 available in the collection, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every IDP-86 is designed to be <i>played with</i> in a musical way.</p>
+            <p><strong>Data Operator IDP-86</strong> is a collection of data sonification <i>instruments</i> that explore data on internally displaced people that have been collated and published by the <a href = 'https://www.internal-displacement.org/' target = "_blank">Internal Displacement Monitoring Center (IDMC)</a>. There are <strong>three editions</strong> of the IDP-86 available in the collection, each with a different sonification and instrumentation flavour. In contrast to most data sonifications, every IDP-86 is designed to be <i>played with</i> in a musical way.</p>
         </div>
 
         <ul class = 'do_model-page__menu'>
@@ -62,7 +62,7 @@
 
         <div class = 'do-model-page__content'>
             <h2>Data bits</h2>
-            <p><strong>The <a href = 'https://www.internal-displacement.org/' target = "_blank">IDMC</a></strong> is a fantastic organisation that is <i>the world's leading source of data and analysis on internal displacement</i> . Their Global Internal Displacement Database (GIDD) openly publishes data on internallly displaced people around hte world, dating back to 2008. ent climate action, and assessments of climate risk and vulnerability, for 193 nations. They do very important work that provides insights into a very serious, complex issue. Please visit their <a href = 'https://www.internal-displacement.org/database/displacement-data/' target = "_blank">website</a> to find out more.</p>
+            <p><strong>The <a href = 'https://www.internal-displacement.org/' target = "_blank">IDMC</a></strong> is a fantastic organisation that is <i>the world's leading source of data and analysis on internal displacement</i>. Their Global Internal Displacement Database (GIDD) openly publishes data on internally displaced people around the world, dating back to 2008. The GIDD publishes data on internal displacement for 86 nations are locations. IDMC do very important work that provides insights into a very serious, complex issue. Please visit their <a href = 'https://www.internal-displacement.org/database/displacement-data/' target = "_blank">website</a> to find out more.</p>
 
             <OperatorDataDisclaimer/>
 

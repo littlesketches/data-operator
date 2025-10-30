@@ -276,9 +276,6 @@
     h1{
         margin-block-start: 0;
     }
-    h2.mode{
-        /* color:              var(--col-highlight); */
-    }
     h3{
         margin-top:         10vh;
     }
