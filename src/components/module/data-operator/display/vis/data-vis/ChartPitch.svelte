@@ -64,8 +64,8 @@
     const dataInterval = sonification.schema.group[group].map[paramName].interval,
         type          = sonification.schema.group[group].type
 
-    let sceneIndex      = $derived(sonification.state.selection.sceneIndex),
-        data            = $derived(dataModel.scene[sceneIndex]),        // Modelled data for selected day
+    let projectIndex      = $derived(sonification.state.selection.projectIndex),
+        data            = $derived(dataModel.project[projectIndex]),        // Modelled data for selected day
         series          = $derived(sonification.state.selection.group[group][`${paramName}Pattern`]),
         length          = $derived(sonification.param[group][paramName].length),
         clockDivider    = $derived(sonification.param[group][paramName].clockDivider ?? 1),

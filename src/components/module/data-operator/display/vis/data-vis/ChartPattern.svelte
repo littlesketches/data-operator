@@ -83,8 +83,8 @@
         3: sonification.param[group].part["3"].sound.clockDivider ?? 1
     })
 
-    let sceneIndex  = $derived(sonification.state.selection.sceneIndex),
-        data        = $derived(dataModel.scene[sceneIndex])        // Modelled data for selected day
+    let projectIndex  = $derived(sonification.state.selection.projectIndex),
+        data        = $derived(dataModel.project[projectIndex])        // Modelled data for selected day
 
     let part1_array = $derived(groupPartPresets["1"].sound[sonification.state.selection.group[group].part["1"].series]?.vis),
         part2_array = $derived(groupPartPresets["2"].sound[sonification.state.selection.group[group].part["2"].series]?.vis),

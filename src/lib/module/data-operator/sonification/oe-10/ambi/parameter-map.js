@@ -33,14 +33,15 @@ export const paramInit = {
                 noise:  0.8
             },
             ampEnv: {
-                A: 0.0,     D: 0.1,     S: 0.9,     R: 0.5
+                A: 0.25,     D: 0.1,     S: 0.4,     R: 0.5
             },
             filter: {
-                type:       "ladder",
-                cutoff:     380,    // Default replaced with data-driven ranges
+                type:       "24db",
+                cutoff:     220,    // Default replaced with data-driven ranges
                 Q:          4,  
                 env: {
-                    A: 0,   D: 0.1,     S: 0.2,     R: 0.5, depth:  2.5,  
+                    A: 0,   D: 0.1,     S: 0.2,     R: 0.5,     
+                    depth:  2.5,  
                 }
             }
         }
@@ -58,7 +59,7 @@ export const paramInit = {
             pattern:            undefined,      // From via updateParameterMap
             pulse:              undefined,      // Euclidean pulse (default on load)
             rotation:           0,              // Euclidean rotation
-            legato:             true,           // Switch for euclidean pitch 
+            legato:             false,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
             structLegato:       undefined,      // Legato version of pulse sequencer pattern
@@ -82,7 +83,7 @@ export const paramInit = {
             pulse:              undefined,      // Euclidean pulse (default on load)
             rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch
-            transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
+            transpose:          0,              // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
             structLegato:       undefined,      // Legato version of pulse sequencer pattern
@@ -101,7 +102,7 @@ export const paramInit = {
         },
         part: {     
             1: {  // "Beat":  
-                gain:               0.25,            // Sets group level with group
+                gain:               0.9,            // Sets group level with group
                 mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
@@ -122,7 +123,7 @@ export const paramInit = {
                 }
             },
             3: {    // Chords
-                gain:               0.9,           // Sets group level with group
+                gain:               0.5,           // Sets group level with group
                 mute:               false,
                 octave:             3,              // Scale octave
                 sound: {
@@ -140,7 +141,7 @@ export const paramInit = {
         gain:               0.8,          // Master volume
         mute:               false,
         reverb: {
-            size:           0.5,       // Default global reverb: punch FX reverb is a multiple of this
+            size:           2,       // Default global reverb: punch FX reverb is a multiple of this
         }
     },
     // Global params: tempo and FX settings

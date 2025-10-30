@@ -10,33 +10,33 @@ export const paramInit = {
     synth: {
         DFAM: {
             duck:           false,
-            orbit:          1,          // 1 = no ducking; 2 = duckOrbit
+            orbit:          2,          // 1 = no ducking; 2 = duckOrbit
             // VCO / PITCH ENVELOPE
             vcoAttack:      0,          // Does not seem to work
-            vcoMax:         6,         // [VCO Decay] Pitch env "range" (in semitones) shared between VCO1+2 
+            vcoMax:         3,         // [VCO Decay] Pitch env "range" (in semitones) shared between VCO1+2 
             vcoDecay:       3,          // Base decay level shared between VCO1+2 and multiplied with vco1EG and vco2EG to apply pitch env.
             /*OSC1*/  
             vco1pitched:    true,
-            vco1wave:       "square",   // [VCO 1 Wave] Waveshape switch: "square' or "triangle"
-            vco1EG:         "<1 1 1 1>",        // [VCO 1 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay  x velocity (negative to invert the envelope)
+            vco1wave:       "triangle",   // [VCO 1 Wave] Waveshape switch: "square' or "triangle"
+            vco1EG:         1,        // [VCO 1 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay  x velocity (negative to invert the envelope)
             /*OSC2*/  
             vco2pitched:    true,
-            vco2wave:       "triangle", // [VCO 2 Wave] Waveshape switch: "square' or "triangle"
-            vco2EG:         0.25,       // [VCO 2 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay velocity (negative to invert the envelope)
-            FM1_2Amt:       0,         // 0 to 50,
+            vco2wave:       "square", // [VCO 2 Wave] Waveshape switch: "square' or "triangle"
+            vco2EG:         0.1,       // [VCO 2 EG] 0 to 1: controls amount of pitch envelope decay x vcoDecay velocity (negative to invert the envelope)
+            FM1_2Amt:       25,         // 0 to 50,
             /*NOISE*/ 
-            noiseType:     "pink",      // Noise source type switch: "white", "pink", "brown"
-            noiseLvl:       0.75,       // [Noise Level] 0 to 1: gain multiplier to control Noise source volume
+            noiseType:     "white",      // Noise source type switch: "white", "pink", "brown"
+            noiseLvl:       0.5,       // [Noise Level] 0 to 1: gain multiplier to control Noise source volume
             /*FILTER*/
-            vcfCutoff:      "<1000 1000 300 1000>",    // [Cutoff]  filter cutoff frequency: can be sequenced
-            vcfResonance:   "<12 12 12 12>",           // [Resonance] Filter resonance level: can be sequenced
-            vcfEnv:         4,          // Sets the max modulation depth (semitone?) the filter envelope
-            vcfDecay:       5,          // Sets max decay length: applied with vcfEG and velocity
-            vcfEG:          0.75,        // [VCF EG AMOUNT] 0 to 1: controls amount of filter envelope decay x velocity  (negative to invert the envelope?)
+            vcfCutoff:      440,    // [Cutoff]  filter cutoff frequency: can be sequenced
+            vcfResonance:   12,           // [Resonance] Filter resonance level: can be sequenced
+            vcfEnv:         2,          // Sets the max modulation depth (semitone?) the filter envelope
+            vcfDecay:       1,          // Sets max decay length: applied with vcfEG and velocity
+            vcfEG:          0.25,        // [VCF EG AMOUNT] 0 to 1: controls amount of filter envelope decay x velocity  (negative to invert the envelope?)
             /*ENV*/   
             vcaAttack:      0,          // Default to zero
-            vcaDecay:       4,          // Sets max decay length: applied with vcfEG and velocity
-            vcaEG:          "<0.5 0.5 0.75 0.5>*4",   // [VCA Decay] 0 to 1, VCA env. x (velocity on each step) =< can sequence
+            vcaDecay:       6,          // Sets max decay length: applied with vcfEG and velocity
+            vcaEG:          1,             // [VCA Decay] 0 to 1, VCA env. x (velocity on each step) =< can sequence
             vcaSustain:     0,          // Set to zero fo AD envelope
             vcaRelease:     0,          // Set to zero fo AD envelope
         }
@@ -51,8 +51,8 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // Init default: updated by user selection (state) via updateParameterMap
-            pulse:              randomItem([11, 13, 15]),    // Euclidean pulse (default on load)
-            rotation:           1,          // Euclidean rotation
+            pulse:              16,    // Euclidean pulse (default on load)
+            rotation:           0,          // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             transpose:          24,             // OSC 2 transpose
             scaleTranspose:     0,               // Transpose along the scale
@@ -88,7 +88,7 @@ export const paramInit = {
         },
         part: {     
             1: {  // "Beat":  mostly set for selected series in updateParameterMap
-                gain:               1,
+                gain:               0.65,
                 mute:               false,
                 sound: {
                     pattern:        {},      // sound part pattern
@@ -146,11 +146,11 @@ export const paramInit = {
     },
     // Global params: tempo and FX settings
     global: {
-        bpm:                70,          // tempo
+        bpm:                95,          // tempo
         step:               0,
         scale: {
             pitch:           undefined,             // Musical scale
-            root:           'C',                    // pitch root
+            root:           'D',                    // pitch root
             type:           'minor:pentatonic',     //
         },
         // Punch FX config: params could potentially exposed

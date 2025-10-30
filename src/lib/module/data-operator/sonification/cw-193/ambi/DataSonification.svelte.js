@@ -38,9 +38,9 @@ export class DataSonification extends Sonification{
 
     code = $derived(`
         /* 
-         @title Climate Watch Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
+         @title Climate Watch Data Jam: ${this.data.getProjectLabel(this.state.selection.projectIndex)}   
          @by Data Operator CW-193:AMBI
-         @details Sonification of Climate Watch data for ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
+         @details Sonification of Climate Watch data for ${this.data.getProjectLabel(this.state.selection.projectIndex)}   
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */
@@ -48,13 +48,15 @@ export class DataSonification extends Sonification{
         setcpm(${this.param.global.bpm / timingConfig.beats.perBar})
 
         stack(
-            // Group A. Lead chimes
+            // Group A. Lead piano
             n("${this.param.A.pitch.pattern}")      // Data for "${this.state.selection.group.A.pitchPattern}" scaled to pitch 
-                .scale("${this.param.global.scale.root}${this.param.A.octave}:${this.param.global.scale.type}")            
+                .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")            
                 .scaleTranspose(${this.param.A.pitch.scaleTranspose})
                 ${this.state.sequencer.A.active ? `.struct("${this.param.A.pitch.legato ?  this.param.A.pitch.structLegato !== "" ?this.param.A.pitch.structLegato :  this.param.A.pitch.struct  : this.param.A.pitch.struct}")` 
                     : this.param.A.pitch.legato ? `.euclidLegatoRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})` : `.euclidRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})`  }                             
                 .s("${this.param.synth.lead.sound}")               // Sound source
+                .adsr("${this.param.synth.lead.ampEnv.A}:${this.param.synth.lead.ampEnv.D}:${this.param.synth.lead.ampEnv.S}:${this.param.synth.lead.ampEnv.R}")                         
+
                 .slow(${this.param.A.pitch.clockDivider})                
                 .velocity("${this.param.A.velocity.pattern}")
                 .swingBy(${this.param.A.swing.level}, 8)              // - swing applied on 1/8 notes
@@ -94,7 +96,7 @@ export class DataSonification extends Sonification{
                 .lpq(${this.param.synth.bass.filter.Q})           
                 .lpenv(${this.param.synth.bass.filter.env.depth})   
                 .lpa(${this.param.synth.bass.filter.env.A}).lpd(${this.param.synth.bass.filter.env.D}).lps(${this.param.synth.bass.filter.env.S}).lpr(${this.param.synth.bass.filter.env.R})         
-                .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
+                .swingBy(${this.param.B.swing.level}, 8)          
                 ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
                 ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
                 ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}
@@ -171,13 +173,16 @@ export class DataSonification extends Sonification{
         this.app    = app
         this.data   = dataModel
 
-        // Add state
-        this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
-
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
-        this.schema.sceneIndex  = this.data.schema.list.countryCodes.map((d, i) => i).reverse()
+        this.schema.projectIndex  = this.data.schema.list.countryCodes.map((d, i) => i).reverse()
+
+        // Add state
+        this.state.selection.projectIndex = util.randomItem(this.schema.projectIndex)                           
+        this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
+        this.state.selection.group.global.bpm.dataLinked = true   
+
 
         // Update params with model group and FX config to match data selection
         this.initParam(config.fx)
@@ -197,19 +202,20 @@ export class DataSonification extends Sonification{
         // a. On init setup
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern = util.randomItem(this.schema.group.A.series)
-            this.state.selection.group.B.pitchPattern = util.randomItem(this.schema.group.B.series) 
+            this.state.selection.group.A.pitchPattern = 'netGhg_perCapita'
+            this.state.selection.group.B.pitchPattern = 'netGhg'
             // ii. Init group object
             group = this.mapHelper.initGroupConfig()
-            // iii. Randomise euclidean pulse
-            this.param.A.pitch.pulse = util.randomItem([5, 7, 9, 11, 13])
-            this.param.B.pitch.pulse = util.randomItem([5, 7, 9, 11])
+            // iii. Set  pulse
+            // this.param.B.pitch.pulse = util.randomItem([5, 7, 9])
+            this.state.sequencer.A.onDelta = true
+            this.state.sequencer.B.onDelta = true
             // iv. Update euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
             this.mapHelper.setEuclideanArray()
         }
 
         // b. Selection and reference variables
-        const { sceneData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
+        const { projectData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
         
         /**
          *  II. UPDATE + CUSTOM DATA SERIES MAPPING  
@@ -217,21 +223,25 @@ export class DataSonification extends Sonification{
 
         this.mapHelper.updateGroupPitch(group)
         group.C["3"].chord.series = group.A.pitch.series 
-
-        /// iii. Set primary (pitch) pattern series
         group.C["2"].velocity.series  = group.B.pitch.series
 
+        // Set BPM 
+        const countryCode = this.data.schema.list.countryCodes[this.state.selection.projectIndex]             
+        if(this.state.selection.group.global.bpm.dataLinked){
+            const bpmSeries =  this.state.selection.group.global.bpm.series = 'vulnerabilityScore'
+            this.param.global.bpm = Math.round(projectData.scaledData.global.bpm[bpmSeries])
+        }
 
         /**
          *  GROUP A: Melodic "synth"
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
+        group.A.pitch.array = projectData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'A')
 
         // ii. Velocity: constructed from selected data => update params
-        group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value )
+        group.A.velocity.array = projectData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value )
         this.param.A.velocity.pattern  = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
 
@@ -240,8 +250,14 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
+        group.B.pitch.array         = projectData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'B')
+
+        // ii. Noise part level "velocity": constructed from data 
+        group.B.noise.array = projectData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value )
+        this.param.synth.bass.mix.noise = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
+
+
 
         /**
          *  GROUP C. Pattern "percussion" parts
@@ -256,10 +272,11 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern = group.C["2"].sound[this.state.selection.group.C.part["2"].series].pattern
 
         // ii. Velocity 
-        group.C["2"].velocity.array             = sceneData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
+        group.C["2"].velocity.array             = projectData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
         this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
 
+
         // Part 3. Chord progression notes and params
-        this.mapHelper.setChordSequence(sceneData, group, 'C', 3)
+        this.mapHelper.setChordSequence(projectData, group, 'C', 3)
     };
 }

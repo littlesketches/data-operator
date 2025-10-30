@@ -4,7 +4,7 @@
 
 
 <!-- HTML COMPONENT MARKUP -->
-<p><i>Scenes</i> can be thought of as all the materials and pieces that make up musical composition. You might be tempted to think of it as a 'song', but its more like all the parts that make up a song<label for="sn-A" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-A" class="margin-toggle"/><span class="sidenote"> In a data sonification terms, a scene is is a 'slice' of data used in the sonification. 'Data' scenes can be broken up in different ways, depending on the Data Operator model: if you have time series data, you might have scenes as a complete day (i.e. dates).</span>. The upshot is that you can change the 'scene' on-the-fly, which is also a great way to compare patterns and variations in scenes of data<label for="sn-B" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-B" class="margin-toggle"/><span class="sidenote">Depending how data is arranged as scenes, this may be used for comparing patterns ands over time, or between entities.</span>.
+<p><i>Projects</i> can be thought of as all the materials and pieces that make up musical composition. You might be tempted to think of it as a 'song', but its more like all the parts that make up a song<label for="sn-A" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-A" class="margin-toggle"/><span class="sidenote"> In a data sonification terms, a project is is a 'slice' of data used in the sonification. 'Data' projects can be broken up in different ways, depending on the Data Operator model: if you have time series data, you might have projects as a complete day (i.e. dates).</span>. The upshot is that you can change the 'project' on-the-fly, which is also a great way to compare patterns and variations in projects of data<label for="sn-B" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-B" class="margin-toggle"/><span class="sidenote">Depending how data is arranged as projects, this may be used for comparing patterns ands over time, or between entities.</span>.
 </p>
 
 <div class = 'pad__container'>
@@ -32,7 +32,7 @@
 
     <div class = 'pad-aside'>
         <div class = 'aside-left'>
-            <p>&larr; Hold down the select key <span class = 'key'>&times;</span> and use   <span class = 'key'>-</span> / <span class = 'key'>+</span> to cycle back and forward through the available scenes. The name of the scene will be shown in the bottom right of the <i>Data Operator</i> display.
+            <p>&larr; Hold down the select key <span class = 'key'>&times;</span> and use   <span class = 'key'>-</span> / <span class = 'key'>+</span> to cycle back and forward through the available projects. The name of the project will be shown in the bottom right of the <i>Data Operator</i> display.
             </p>
         </div>
     </div>

@@ -266,8 +266,8 @@
                                 break
                         }
                         break
-                    case 'select':    // Cycle scene data
-                        sonification.handle.cycleScene(direction)      
+                    case 'select':    // Cycle project data
+                        sonification.handle.cycleProject(direction)      
                         break
                     case 'shift':   // Swing adjust: group level
                         switch(group){

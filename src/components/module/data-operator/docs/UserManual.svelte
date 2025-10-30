@@ -7,7 +7,7 @@
     import ButtonControls       from './ButtonControls.svelte';
     import SelectTracks         from './mode-keys/SelectTracks.svelte';
     import SelectScale          from './mode-keys/SelectScale.svelte';
-    import SelectScene          from './mode-keys/SelectScene.svelte';
+    import SelectProject          from './mode-keys/SelectProject.svelte';
     import ModifyMute           from './mode-keys/ModifyMute.svelte';
     import ShiftSolo            from './mode-keys/ShiftSolo.svelte';
     import ModifyTempo          from './mode-keys/ModifyTempo.svelte';
@@ -53,7 +53,7 @@
 
             <p>In each Data Operator, <strong>data</strong> will always be the foundation for the patterns of music that you hear. <i>Parameters</i> in the underlying data are mapped<label for="sn-003" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-003" class="margin-toggle"/><span class="sidenote">This a common data sonification approach known as...<i>parameter mapping</i>.</span> to <i>parameters</i> that control a set of <i>virtual musical instruments</i> that are built using an <i>audio engine</i> in your web browser<label for="sn-004" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-004" class="margin-toggle"/><span class="sidenote">Under the hood, this is the native <a href = 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API' target = "_blank">Web Audio API</a>. The brilliant <a href = 'https://codeberg.org/uzu/strudel/src/branch/main/packages/web' target = "blank">@strudel/web package</a> is used as the key JavaScript library to both utilise the Web Audio API, and to map modelled data to parameters that control the audio transport, synthesizers and sampler parameters.</span>. This is what produces (musical) sound that represents data.</p> 
 
-            <p>Every <i>Data Operator</i> requires raw <strong>input data</strong><label for="sn-005" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-005" class="margin-toggle"/><span class="sidenote">For the initial series of Data Operators, input data is sourced from data providers who publish (open source) data as either static files, or through data APIs. Information about each data source is documented separately on the homepage for each <i>Data Operator</i> model.</span> and a custom <strong>data model</strong> that transforms the raw data into (musically) useful shapes, scales and parameters<label for="sn-006" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-006" class="margin-toggle"/><span class="sidenote">This includes: 1) data wrangling to extract, aggregate and manipulate the <i>data series</i> and <i>scenes</i> (explained further below) that are available for selection in the user interface; and 2) a layer of data transforms to shape data series into useful musical intervals (e.g. 16, 8, 4 steps), and parameter ranges and scales (including musical note scales).</span> that are used to control parameters for sound and visualisations. The <strong>sonification</strong> &mdash; which is specific to <i>Data Operator</i> model/version &mdash; then maps that modelled data to parameters for a set of <strong>virtual instruments</strong> that are also specificaly desgined to <i>Data Operator</i> model/version. 
+            <p>Every <i>Data Operator</i> requires raw <strong>input data</strong><label for="sn-005" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-005" class="margin-toggle"/><span class="sidenote">For the initial series of Data Operators, input data is sourced from data providers who publish (open source) data as either static files, or through data APIs. Information about each data source is documented separately on the homepage for each <i>Data Operator</i> model.</span> and a custom <strong>data model</strong> that transforms the raw data into (musically) useful shapes, scales and parameters<label for="sn-006" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-006" class="margin-toggle"/><span class="sidenote">This includes: 1) data wrangling to extract, aggregate and manipulate the <i>data series</i> and <i>projects</i> (explained further below) that are available for selection in the user interface; and 2) a layer of data transforms to shape data series into useful musical intervals (e.g. 16, 8, 4 steps), and parameter ranges and scales (including musical note scales).</span> that are used to control parameters for sound and visualisations. The <strong>sonification</strong> &mdash; which is specific to <i>Data Operator</i> model/version &mdash; then maps that modelled data to parameters for a set of <strong>virtual instruments</strong> that are also specificaly desgined to <i>Data Operator</i> model/version. 
             </p>    
 
             <p>The summary of key components in the data sonification workflow is:</p>
@@ -90,7 +90,7 @@
                 <li>The <strong>top panel</strong>: this is mainly aesthetic, except on mobile devices where the multi-purpose button (see below) will appear.
                 </li>
 
-                <li>The <strong>display</strong>: this is where you'll see information about your selections. You'll see the selected 'track' their volume level (top left), current tempo (top right); label for selected data <i>scene</i> (bottom right); and short text feedback/confirmation of the most recent action taken (top of screen). Central to the display are audio-synced visuals and charts.
+                <li>The <strong>display</strong>: this is where you'll see information about your selections. You'll see the selected 'track' their volume level (top left), current tempo (top right); label for selected data <i>project</i> (bottom right); and short text feedback/confirmation of the most recent action taken (top of screen). Central to the display are audio-synced visuals and charts.
                 </li>
 
                 <li>The <strong>pad buttons</strong>: this consists of a 4 x 4 grid, labeled in a calculator numpad-style". On larger screens, a multi-purpose button appears on the top left of the pad: it will show:
@@ -196,8 +196,8 @@
             <h3>b. Selecting a musical scale</h3>
             <SelectScale/>
 
-            <h3>c. Selecting a 'data scene'</h3>
-            <SelectScene/>
+            <h3>c. Selecting a 'data project'</h3>
+            <SelectProject/>
         </section>
 
         <hr>
@@ -244,8 +244,6 @@
 
             <h3>d. Adjusting swing</h3>
             <ShiftSwing/>
-
-
         </section>
 
         <hr>

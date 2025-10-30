@@ -11,7 +11,7 @@ export const scaleConfig = {
         pitch6:     { min: 0,       max: 12   },
         pitch7:     { min: 0,       max: 14   },
         velocity:   { min: 0.5,     max: 1    },
-        lpf:        { min: 400,     max: 1400 },
+        lpf:        { min: 300,     max: 800 },
         lpq:        { min: 2,       max: 10   }
     },
     B: {

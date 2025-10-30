@@ -22,6 +22,11 @@
 </script>
 
 
+<!-- SVELTE SPECIAL ELEMENTS-->
+<svelte:head>
+    <link  rel='stylesheet' href='/css/module/data-operator/sidenote.css'>
+</svelte:head>
+
 <!-- HTML COMPONENT MARKUP-->
 <section class:active={viewGuide}>
     {#if guideType === 'quickStart'}

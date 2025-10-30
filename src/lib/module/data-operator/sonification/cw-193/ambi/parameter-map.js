@@ -9,16 +9,9 @@ import { strudelVisOptions, strudelVisPalette }     from "../../_shared/strudel-
 export const paramInit = {
     synth: {
         lead: {
-            sound:        'handbells',
-            filter: {
-                cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
-                Q:          'sine.range(2,6).slow(2)',  
-                env: {
-                    A:      '0.005',     
-                    D:      'perlin.range(.02,.2)',     
-                    S:      'perlin.range(0,.5).slow(3)',  
-                    depth:  'perlin.range(1,4).slow(2)',  
-                }
+            sound:        'ocarina_vib',
+            ampEnv: {
+                A: 0.0,     D: 0,     S: 1,     R: 0
             }
         },
         bass: {
@@ -45,20 +38,19 @@ export const paramInit = {
     A: {
         gain:           0.85,            // Group level gain 
         mute:           false,          // Mute available at group level
-        octave:         3,              // Scale octave
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              undefined,      // Euclidean pulse (default on load)
+            pulse:              16,             // Euclidean pulse (default on load)
             rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined,       // Legato version of pulse sequencer pattern
-            clockDivider:       2              // Clock divider
+            structLegato:       undefined,      // Legato version of pulse sequencer pattern
+            clockDivider:       2               // Clock divider
         },
         velocity: {
             pattern:            undefined
@@ -74,13 +66,13 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              undefined,      // Euclidean pulse (default on load)
+            pulse:              16,      // Euclidean pulse (default on load)
             rotation:           0,              // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch
-            transpose:          -24,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
+            transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
-            structLegato:       undefined,       // Legato version of pulse sequencer pattern
+            structLegato:       undefined,      // Legato version of pulse sequencer pattern
             clockDivider:       4               // Clock divider
         },
         noise: {
@@ -89,14 +81,14 @@ export const paramInit = {
     },
     // Group C: [pattern] percussion
     C: {
-        gain:           0.25,            // Used for group level and mute
+        gain:           0.4,            // Used for group level and mute
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
         part: {     
             1: {  // "Beat":  
-                gain:           0.8,            // Sets group level with group
+                gain:           0.4,            // Sets group level with group
                 mute:           false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
@@ -111,14 +103,14 @@ export const paramInit = {
                 }
             },
             2: { // "Hats"
-                gain:           0.8,            // Sets group level with group
+                gain:           0.1,            // Sets group level with group
                 mute:           false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           null,  // Sound bank alias 
-                    length:         16,            // 
-                    pulse:          16,            // Euclidean pulse
-                    rotation:       0,             // Euclidean rotation
+                    bank:           null,           // Sound bank alias 
+                    length:         16,             // 
+                    pulse:          16,             // Euclidean pulse
+                    rotation:       0,              // Euclidean rotation
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
@@ -126,14 +118,14 @@ export const paramInit = {
                 }
             },
             3: {    // Chords
-                gain:           0.35,           // Sets group level with group
+                gain:           0.7,           // Sets group level with group
                 mute:           false,
-                octave:         3,              // Scale octave
+                octave:         2,              // Scale octave
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    code:      undefined,
+                    code:           undefined,
                     length:         undefined,
-                    clockDivider:   1               // Clock divider
+                    clockDivider:   2               // Clock divider
                 }
             }
         }
@@ -143,7 +135,7 @@ export const paramInit = {
         gain:           0.8,          // Master volume
         mute:           false,
         reverb: {
-            size:       0.5,       // Default global reverb: punch FX reverb is a multiple of this
+            size:       1.5,       // Default global reverb: punch FX reverb is a multiple of this
         }
     },
     // Global params: tempo and FX settings

@@ -5,8 +5,9 @@
 
 import { groupPartPresets } from "./part-config"
 const series = [  
-    'netGhg_perCapita', 'sourceGhg_perCapita',  'sinkGhg_perCapita', 
-    'netGhg',           'sourceGhg',            'sinkGhg', 
+    'netGhg_perCapita',     'sourceGhg_perCapita',  'sinkGhg_perCapita', 
+    'netGhg',               'sourceGhg',            'sinkGhg', 
+    'netGhg_cumulative',    'netGhg_cumulativePerCapita'
 ]
 
 export const groupConfig = {

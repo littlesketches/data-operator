@@ -61,8 +61,8 @@
     const dataIntervalA = sonification.schema.group.A.map[paramNameA].interval,
         dataIntervalB = sonification.schema.group.B.map[paramNameB].interval
 
-    let sceneIndex    = $derived(sonification.state.selection.sceneIndex),
-        data            = $derived(dataModel.scene[sceneIndex]),        // Modelled data for selected day
+    let projectIndex    = $derived(sonification.state.selection.projectIndex),
+        data            = $derived(dataModel.project[projectIndex]),        // Modelled data for selected day
         pitchSeries     = $derived(sonification.state.selection.group.A[`${paramNameA}Pattern`]),
         velocitySeries  = $derived(sonification.state.selection.group.B[`${paramNameB}Pattern`]),
         clockDivider    = $derived(sonification.param.A[paramNameA].clockDivider ?? 1),

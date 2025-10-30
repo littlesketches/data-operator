@@ -37,8 +37,8 @@ export class DataModel{
 
         // Data model, schema and output by composition "group"
         this.schema = undefined
-        this.model  = undefined         // Used for storing data modelling objects (prior to scene output)
-        this.scene  = undefined         // Used for creating the outputed 'data scenes' for the Data Operator
+        this.model  = undefined         // Used for storing data modelling objects (prior to project output)
+        this.project  = undefined       // Used for creating the outputted 'data projects' for the Data Operator
 
     }
 
@@ -50,7 +50,7 @@ export class DataModel{
  
     #transformData(){ return null }
 
-    #createDataScenes(){ return null }
+    #createDataProjects(){ return null }
 
     #extractSchema(){  return null}
 
@@ -65,8 +65,8 @@ export class DataModel{
         // ii. Perform data transformations/modelling
         this.model = this.#transformData()
 
-        // iii.a. Transform data for sonification
-        this.scene = this.#createDataScenes(this.input)
+        // iii.a. Transform data into 'project' slices for sonification
+        this.project = this.#createDataProjects(this.input)
 
         // iii.b. Extract schema for UI and visuals [may be before or after transformData]
         this.schema = this.#extractSchema(this.input, this.model)

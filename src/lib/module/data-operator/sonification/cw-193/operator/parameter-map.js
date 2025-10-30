@@ -19,39 +19,39 @@ export const paramInit = {
                     A:      '0.005',     
                     D:      'perlin.range(.02,.2)',     
                     S:      'perlin.range(0,.5).slow(3)',  
-                    depth:  'perlin.range(1,4).slow(2)',  
+                    depth:  'perlin.range(1,3).slow(2)',  
                 }
             },
             ampEnv: {
-                A: 0.01, D: 0.1, S: 0.8, R: 0.5
+                A: 0.0, D: 0.1, S: 0.8, R: 0.25
             }
         },
         bass: {
             mix: {  
-                osc1:   1,
-                osc2:   0.4,
-                sub:    0.65,
-                noise:  0.1
+                osc1:   0.65,
+                osc2:   0.8,
+                sub:    1,
+                noise:  0.5
             },
             ampEnv: {
-                A: 0.0, D: 0.1, S: 0.75, R: 0.5
+                A: 0, D: 0.1, S: 0.9, R: 0.5
             },
             filter: {
                 type:       'ladder',
-                cutoff:     220,    // Default replaced with data-driven ranges
-                Q:          12,  
+                cutoff:     280,    // Default replaced with data-driven ranges
+                Q:          2,  
                 env: {
-                    A: 0,  D: 0.1,  S: 0.2,  R: 0.5,
-                    depth:  4,  
+                    A: 0,  D: 0.1,  S: 1,  R: 0.5,
+                    depth:  2.5,  
                 }
             }
         }
     },
     // Group A: [melodic] 'synth'    
     A: {
-        gain:           0.35,            // Group level gain 
+        gain:           0.35,           // Group level gain 
         mute:           false,          // Mute available at group level
-        octave:         3,              // Scale octave
+        octave:         2,              // Scale octave
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
@@ -72,7 +72,7 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.65,           // Group level gain
+        gain:           0.75,           // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
@@ -80,9 +80,9 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              undefined,    // Euclidean pulse (default on load)
-            rotation:           0,          // Euclidean rotation
-            legato:             false,           // Switch for euclidean pitch
+            pulse:              undefined,      // Euclidean pulse (default on load)
+            rotation:           0,              // Euclidean rotation
+            legato:             false,          // Switch for euclidean pitch
             transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
@@ -96,46 +96,46 @@ export const paramInit = {
     },
     // Group C: [pattern] percussion
     C: {
-        gain:           0.5,            // Used for group level and mute
+        gain:           0.4,            // Used for group level and mute
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
         part: {     
             1: {  // "Beat":  
-                gain:           0.8,            // Sets group level with group
-                mute:           false,
+                gain:               0.8,            // Sets group level with group
+                mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           'RolandTR909',  // Sound bank alias 
+                    bank:           'LinnDrum',     // Sound bank alias 
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:        undefined,     // velocity pattern
+                    pattern:        undefined,      // velocity pattern
                 }
             },
             2: { // "Hats"
-                gain:           0.8,            // Sets group level with group
-                mute:           false,
+                gain:               0.25,           // Sets group level with group
+                mute:               false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
-                    bank:           'RolandTR909',  // Sound bank alias 
+                    bank:           'LinnDrum',     // Sound bank alias 
                     clockDivider:   1               // Clock divider
                 },
                 velocity: {     
-                    pattern:        undefined,     // Velocity pattern
+                    pattern:        undefined,      // Velocity pattern
                 }
             },
             3: {    // Chords
-                gain:           0.65,           // Sets group level with group
-                mute:           false,
-                octave:         3,              // Scale octave
+                gain:               0.65,           // Sets group level with group
+                mute:               false,
+                octave:             3,              // Scale octave
                 sound: {
                     pattern:        undefined,      // sound part pattern
                     code:           undefined,
                     length:         undefined,
                     ampEnv:         undefined,
-                    clockDivider:   2                 // Clock divider
+                    clockDivider:   2               // Clock divider
                 },
                 velocity: {     
                     pattern:        undefined,     // Velocity pattern

@@ -530,7 +530,7 @@ export const iso3map = {
         "subregion": "South-eastern Asia"
     },
     "IRN": {
-        "name": "Iran, Islamic Republic of",
+        "name": "Iranf",
         "region": "Asia",
         "subregion": "Southern Asia"
     },
@@ -595,12 +595,12 @@ export const iso3map = {
         "subregion": "Micronesia"
     },
     "PRK": {
-        "name": "Korea, Democratic People's Republic of",
+        "name": "North Korea",
         "region": "Asia",
         "subregion": "Eastern Asia"
     },
     "KOR": {
-        "name": "Korea, Republic of",
+        "name": "South Korea",
         "region": "Asia",
         "subregion": "Eastern Asia"
     },
@@ -615,7 +615,7 @@ export const iso3map = {
         "subregion": "Central Asia"
     },
     "LAO": {
-        "name": "Lao People's Democratic Republic",
+        "name": "Lao",
         "region": "Asia",
         "subregion": "South-eastern Asia"
     },
@@ -730,7 +730,7 @@ export const iso3map = {
         "subregion": "Micronesia"
     },
     "MDA": {
-        "name": "Moldova, Republic of",
+        "name": "Moldova",
         "region": "Europe",
         "subregion": "Eastern Europe"
     },
@@ -785,7 +785,7 @@ export const iso3map = {
         "subregion": "Southern Asia"
     },
     "NLD": {
-        "name": "Netherlands, Kingdom of the",
+        "name": "Netherlands",
         "region": "Europe",
         "subregion": "Western Europe"
     },
@@ -1010,7 +1010,7 @@ export const iso3map = {
         "subregion": "South-eastern Asia"
     },
     "SXM": {
-        "name": "Sint Maarten (Dutch part)",
+        "name": "Sint Maarten",
         "region": "Americas",
         "subregion": "Latin America and the Caribbean"
     },
@@ -1090,7 +1090,7 @@ export const iso3map = {
         "subregion": "Western Asia"
     },
     "TWN": {
-        "name": "Taiwan, Province of China",
+        "name": "Taiwan",
         "region": null,
         "subregion": null
     },
@@ -1205,12 +1205,12 @@ export const iso3map = {
         "subregion": "Melanesia"
     },
     "VEN": {
-        "name": "Venezuela, Bolivarian Republic of",
+        "name": "Venezuela",
         "region": "Americas",
         "subregion": "Latin America and the Caribbean"
     },
     "VNM": {
-        "name": "Viet Nam",
+        "name": "Vietnam",
         "region": "Asia",
         "subregion": "South-eastern Asia"
     },

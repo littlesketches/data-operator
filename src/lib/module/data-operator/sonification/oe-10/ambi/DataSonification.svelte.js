@@ -39,9 +39,9 @@ export class DataSonification extends Sonification{
 
     code = $derived(`
         /* 
-         @title Open Electricity Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)} 
+         @title Open Electricity Data Jam: ${this.data.getProjectLabel(this.state.selection.projectIndex)} 
          @by Data Operator OE-10:AMBI
-         @details Sonification of Open Electricity (NEM) data over 24hrs for the date of ${this.data.getSceneLabel(this.state.selection.sceneIndex)} 
+         @details Sonification of Open Electricity (NEM) data over 24hrs for the date of ${this.data.getProjectLabel(this.state.selection.projectIndex)} 
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */
@@ -65,6 +65,7 @@ export class DataSonification extends Sonification{
                 .slow(${this.param.A.pitch.clockDivider})            
                 .velocity("${this.param.A.velocity.pattern}")
                 .swingBy(${this.param.A.swing.level}, 8)
+                .delay(0.35)
                 ${this.param.A.fx.juxRev       ? `${this.param.global.fx.juxRev}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.juxPress     ? `${this.param.global.fx.juxPress}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.crusher      ? this.param.global.fx.crusher : ''}
@@ -79,15 +80,15 @@ export class DataSonification extends Sonification{
                 ${this.param.A.fx.halfTime     ? this.param.global.fx.halfTime  : ''}
                 ${this.param.A.fx.doubleTime   ? this.param.global.fx.doubleTime  : ''}    
                 ${this.param.A.mute            ? this.param.global.fx.mute : `.gain(${this.param.A.gain})`}  
-                .color("${this.param.visual.color.A}")
+                .color("${this.param.visual.color.A}")   
             ,
             // Group B. "Bass" 
             n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
                 .scale("${this.param.global.scale.root}${this.param.B.octave}:${this.param.global.scale.type}")      
                 .scaleTranspose(${this.param.B.pitch.scaleTranspose})
                 .layer(
-                    x => x.s("pulse").pw(0.2).vib(4).velocity("${this.param.synth.bass.mix.osc1}"),
-                    x => x.s("pulse").pw(0.8).velocity("${this.param.synth.bass.mix.osc2}"),
+                    x => x.s("pulse").pw(0.2).vib(8).velocity("${this.param.synth.bass.mix.osc1}"),
+                    x => x.s("pulse").pw(2).velocity("${this.param.synth.bass.mix.osc2}"),
                     x => x.s("square").add(note(-12)).velocity("${this.param.synth.bass.mix.sub}"),
                     x => x.s("white").velocity("${this.param.synth.bass.mix.noise}")
                 )
@@ -102,6 +103,7 @@ export class DataSonification extends Sonification{
                 .lpenv(${this.param.synth.bass.filter.env.depth})   
                 .lpa(${this.param.synth.bass.filter.env.A}).lpd(${this.param.synth.bass.filter.env.D}).lps(${this.param.synth.bass.filter.env.S}).lpr(${this.param.synth.bass.filter.env.R})         
                 .swingBy(${this.param.B.swing.level}, 8)
+                .phaser(0.5)
                 ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
                 ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
                 ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}
@@ -114,7 +116,7 @@ export class DataSonification extends Sonification{
                 ${this.param.B.mute            ? this.param.global.fx.mute : `.gain(${this.param.B.gain})`}  
                 ${this.param.B.fx.halfTime     ? this.param.global.fx.halfTime  : ''}
                 ${this.param.B.fx.doubleTime   ? this.param.global.fx.doubleTime  : ''}    
-                .color("${this.param.visual.color.B}")
+                .color("${this.param.visual.color.B}")         
             ,
             // Group C.
             stack( // Part 1: Membrane percussion sounds
@@ -185,7 +187,7 @@ export class DataSonification extends Sonification{
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
-        this.schema.sceneIndex  = this.data.schema.list.dayIndex
+        this.schema.projectIndex  = this.data.schema.list.dayIndex
 
         // Update params with model group and FX config to match data selection
         this.initParam(config.fx)
@@ -217,7 +219,7 @@ export class DataSonification extends Sonification{
         }
 
         // b. Selection and reference variables
-        const { sceneData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
+        const { projectData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
         
         /**
          *  II. UPDATE + CUSTOM DATA SERIES MAPPING  
@@ -233,11 +235,11 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
+        group.A.pitch.array = projectData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'A')
 
         // ii. Velocity: constructed from selected data => update params
-        group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value )
+        group.A.velocity.array = projectData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value )
         this.param.A.velocity.pattern  = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
 
@@ -246,15 +248,15 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.pitch.array = sceneData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
+        group.B.pitch.array = projectData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'B')
 
         // ii. Noise part level "velocity"
-        group.B.noise.array = sceneData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value)
+        group.B.noise.array = projectData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value)
         this.param.synth.bass.noise  = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
         // iii. Sub oscillator "velocity": 
-        group.B.sub.array = sceneData.scaledData[group.B.sub.interval].B.noise[group.B.sub.series].map(d => d.value)
+        group.B.sub.array = projectData.scaledData[group.B.sub.interval].B.noise[group.B.sub.series].map(d => d.value)
         this.param.synth.bass.sub  = `${JSON.stringify(group.B.sub.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
 
@@ -271,10 +273,10 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern = group.C["2"].sound[this.state.selection.group.C.part["2"].series].pattern
 
         // ii. Velocity 
-        group.C["2"].velocity.array             = sceneData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
+        group.C["2"].velocity.array             = projectData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
         this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
 
         // Part 3. Chord/harmony progression 
-        this.mapHelper.setChordSequence(sceneData, group, 'C', 3)
+        this.mapHelper.setChordSequence(projectData, group, 'C', 3)
     };
 }

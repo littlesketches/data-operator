@@ -15,7 +15,7 @@
             <div>データオペレーター</div>
             <div>Data Operator</div>
         </section>
-        <h1 class = 'header'>// Quick start guide</h1>
+        <h1 class = 'header'>Quick start guide</h1>
 
         <section>
             <p>Let's get started with the <i>Data Operator</i>: <span class = 'sideguide-hide'>the data instrument that invites you to play with data in ways you never even thought you needed (...but in a good way!). It doesn't matter which model of <i>Data Operator</i> you are using, they all start with play!</span>
@@ -45,7 +45,7 @@
 
         <section class = 'aside'>
             <hr>
-            <h3>An brief aside: finding controls</h3>
+            <h3>&mdash; An brief aside: finding controls</h3>
             <ButtonControls {isSideGuide}/>
             <hr>
         </section>
@@ -85,7 +85,7 @@
             <p>Here's a few fun things you'll find the <i>Data Operator</i> can do that we'll leave it to you to figure out how:
             </p>
             <ul>
-                <li>Change up the <i>scene</i>! Great for varying the melody and comparing data trends.</li>
+                <li>Change up the <i>project</i>! Great for varying the melody and comparing data trends.</li>
                 <li>Find your groove by controlling tempo and swing.</li>
                 <li>Scale it your way: set the vibe by choosing a musical scale to match the data context.</li>
                 <li>Solo data to bring it to put the spotlight on it.</li>

@@ -36,25 +36,24 @@
         <section>
             <h3>Things that worked</h3>
             <ul>
-                <li>Form a technical perspective, the use of Strudel worked excpetionally well for parameter mapping and sound design/exploration. In particular, the (developed) workflow of being able to export the sonification strudel code directly to the Strudel REPL, is very useful for testing and twesking.
+                <li>Form a technical perspective, the use of Strudel worked exceptionally well for parameter mapping and sound design/exploration. In particular, the (developed) workflow of being able to export the sonification strudel code directly to the Strudel REPL, is very useful for testing and tweaking.
                 </li>
                 <li>Pitched sequences mapped to data series.
                     <ul>
-                        <li> Monophonic 'interlocking' sequences for bass and melody work well together (or solo). Frequency range (wiht timbral differences) is 'enough'  however differents in pulse rhythm are helpful, partly for aesthetic interest.</li>
-                        <li>Mapping data series to velocity (for loudness)  is useful but needs to be subttle and in a limited range (i.e. more to humanize the notes).</li>
-                        <li>Harmony (i.e. chords/pads/drones) works well if played at a slower rate (clock divider)</li>
-                        <li>Supporting voices wth noise sources had mixed results. The 'idea'of blending in noise with (data mapped) dynamics works a bit 'better in theory' than in practice, as noise can lead to mudiness if sequences with regular pulses.
+                        <li> Monophonic 'interlocking' sequences for bass and melody work well together (or solo). Frequency range (with timbral differences) is 'enough'  however differences in pulse rhythm are helpful, partly for aesthetic interest.</li>
+                        <li>Mapping data series to velocity (for loudness) is useful but needs to be subtle and in a limited range (i.e. more to humanize the notes).
+                        </li>
+                        <li>Harmony (i.e. chords/pads/drones) works well if played at a slower rate (clock divider)
+                        </li>
 
+                        <li>Supporting voices wth noise sources had mixed results. The 'idea'of blending in noise with (data mapped) dynamics works a bit 'better in theory' than in practice, as noise can lead to muddiness if sequences with regular pulses.
                         </li>
                     </ul>
                 </li>
-                <li>
 
-                </li>
             </ul>
 
-
-            <p>Of course, aside from pitch, there are lots of other parameters that data can be mapped to. Some are obvious to the ear,  like 'velocity' (which translates volume) or panning (positioning of an instrument in the stereo field), and others can be more subtle and/or result in changes in timbre, like the positioning of a filter cutoff frequency. Much like data visualisation, some 'channels' are more noticeable and intuitive than others. As an analogue, you could think of visual position and size, to be akin to say, the pitch and volume of sound. Colours might be instruments etc. The point though, is not to replicate visual channels, or to get too dogmatic about choosing parameters. In the sonification space, there are more options for parameter mapping, and most of them are subtle. And so beyond the 'primary' channels of pitch, velocity (dynamics) and instrumentation, the Data Operators tend to use data to create movement (modulation) and interest in the sound.
+            <p>Of course, aside from pitch, there are lots of other parameters that data can be mapped to. Some are obvious to the ear, like 'velocity' (which translates volume) or panning (positioning of an instrument in the stereo field), and others can be more subtle and/or result in changes in timbre, like the positioning of a filter cutoff frequency. Much like data visualisation, some 'channels' are more noticeable and intuitive than others. As an analogue, you could think of visual position and size, to be akin to say, the pitch and volume of sound. Colours might be instruments etc. The point though, is not to replicate visual channels, or to get too dogmatic about choosing parameters. In the sonification space, there are more options for parameter mapping, and most of them are subtle. And so beyond the 'primary' channels of pitch, velocity (dynamics) and instrumentation, the Data Operators tend to use data to create movement (modulation) and interest in the sound.
             </p>
 
             <p>Its also important to point out that the Data Operators have synced animated data visuals/charts the are matched to these primary channels. This 'double-encoding' is very much deliberate.

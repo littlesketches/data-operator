@@ -5,6 +5,21 @@
  *  - Sidechained versions TBA
  */
 export const beatConfig = {
+    one_four:  {
+        label:   'One-four beat',
+        pattern: {
+            combined:   '<bd - - -  - - - -  - - - -   bd - - - >*16',
+            ducked:     '<bd - - -  - - - -  - - - -   bd - - - >*16',
+            normal:     '<-  - - -  - - - -  - - - -   - - - - >*16',
+        },
+        vis: [
+            ['bd'], ['-'], ['-'], ['-'],
+            ['-'],  ['-'], ['-'], ['-'],
+            ['-'],  ['-'], ['-'], ['-'],
+            ['bd'],  ['-'], ['-'], ['-'],
+        ]
+    },
+
     // A. 4/4 on-the-beats:
     four_on_the_floor:  {
         label:   'Four on the floor',

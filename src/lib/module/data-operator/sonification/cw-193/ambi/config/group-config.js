@@ -5,8 +5,9 @@
 
 import { groupPartPresets } from "./part-config"
 const series = [  
-    'netGhg_perCapita', 'sourceGhg_perCapita',  'sinkGhg_perCapita', 
-    'netGhg',           'sourceGhg',            'sinkGhg', 
+    'netGhg_perCapita',     'sourceGhg_perCapita',  'sinkGhg_perCapita', 
+    'netGhg',               'sourceGhg',            'sinkGhg', 
+    'netGhg_cumulative',    'netGhg_cumulativePerCapita'
 ]
 
 export const groupConfig = {
@@ -22,8 +23,6 @@ export const groupConfig = {
         map: {
             pitch:    { interval: '16n' }, 
             velocity: { interval: '16n' },
-            lpf:      { interval: '4n' },
-            lpq:      { interval: '2n' }
         }
     },
     B: {
@@ -33,6 +32,7 @@ export const groupConfig = {
         series,
         map: {
             pitch:    { interval: '16n' },
+            velocity: { interval: '16n' },
             noise:    { interval: '16n' }
         }
     },

@@ -76,7 +76,7 @@ export class DataModel_IDMC extends DataModel{
         // i. Init schema obj
         const schema = {
             list: {
-                countryCodes:  [...new Set(inputData.idp_volumes.map(d => d.ISO3))]       // Scene index
+                countryCodes:  [...new Set(inputData.idp_volumes.map(d => d.ISO3))]       // Project index
                                 .map( ISO3 => { return { ISO3, name: iso3map[ISO3].name}})
                                 .sort((a, b) =>  a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
                                 .map(d => d.ISO3)
@@ -153,10 +153,10 @@ export class DataModel_IDMC extends DataModel{
         return modelData
     }
 
-    #createDataScenes(modelData){
+    #createDataProjects(modelData){
 
-        // i. Init sceneData array
-        const sceneData = []
+        // i. Init projectData array
+        const projectData = []
 
         // ii. Variables for timing and series
         const dataPointsPerMeasure = this.schema.list.availableYears.length
@@ -164,7 +164,7 @@ export class DataModel_IDMC extends DataModel{
             '1m': 1,    '2n': 2,    '4n': 4,   '8n': 8,     '16n': 16,     
         }
 
-        // iii. Transform data into scenes
+        // iii. Transform data into projects
         const model = modelData.map( d => {
 
             const ISO3 = d.ISO3
@@ -298,13 +298,12 @@ export class DataModel_IDMC extends DataModel{
         this.model = this.#transformData(this.input)
 
         // ii. Transform data for sonification
-        this.scene = this.#createDataScenes(this.model)
-console.log(this)
+        this.project = this.#createDataProjects(this.model)
     };
 
-    getSceneLabel(sceneIndex){
+    getProjectLabel(projectIndex){
         // Get country name as label
-        const countryCode =  this.schema.list.countryCodes[sceneIndex],
+        const countryCode =  this.schema.list.countryCodes[projectIndex],
             countryName = this.schema.map.countryMeta[countryCode]?.name
         // => Return 
         return countryName

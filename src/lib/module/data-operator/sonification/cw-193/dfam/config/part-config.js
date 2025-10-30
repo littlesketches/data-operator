@@ -13,8 +13,8 @@ export const groupPartPresets =  {
     1: { // Part 1. Percussion patters: "membrane" layer
         sound: {
             // A. On the beat:
-            0:  beat.four_on_the_floor,
-            1:  beat.back_beat,
+            0:  beat.back_beat,
+            1:  beat.four_on_the_floor,
             2:  beat.electro_1a,
             3:  beat.hip_hop_1,
             4:  beat.hip_hop_3,
@@ -26,7 +26,7 @@ export const groupPartPresets =  {
     },
     2: { // Part 2. Percussion patterns: "metal and misc" layer
         sound: {
-            0:  perc.xtal,
+            0:  perc.groove_b,
             1:  perc.ageiopolis,
             2:  perc.hats_closed_16,
             3:  perc.unknown_drummer,
@@ -34,7 +34,7 @@ export const groupPartPresets =  {
             5:  perc.brit_house,
             6:  perc.deeper_house,
             7:  perc.slow_deep_house,
-            8:  perc.groove_b,
+            8:  perc.xtal,
         }
     },
     3: { // Part 3: Chords from synth or sampled sounds)

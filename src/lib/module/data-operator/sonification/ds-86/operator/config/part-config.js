@@ -5,13 +5,14 @@
  */
 import { beatConfig as beat } from "../../../_shared/beat-config"
 import { percConfig as perc } from "../../../_shared/perc-config"
+import { chordSoundConfig as chord }  from "../../../_shared/chord-config"
 
 export const groupPartPresets =  {
     1: { // Part 1. Percussion patters: "membrane" layer
         sound: {
             // A. On the beat:
-            0:  beat.four_on_the_floor,
-            1:  beat.back_beat,
+            1:  beat.four_on_the_floor,
+            0:  beat.back_beat,
             2:  beat.electro_1a,
             3:  beat.hip_hop_1,
             4:  beat.hip_hop_3,
@@ -23,7 +24,7 @@ export const groupPartPresets =  {
     },
     2: { // Part 2. Percussion patterns: "metal and misc" layer
         sound: {
-            0:  perc.hats_open_4,
+            0:  perc.xtal,
             1:  perc.hats_closed_8,
             2:  perc.hats_closed_16,
             3:  perc.unknown_drummer,
@@ -36,37 +37,14 @@ export const groupPartPresets =  {
     },
     3: { // Part 3: Chords from synth or sampled sounds)
         sound: {
-            0: {
-                label:      'Supersaw synth',
-                gain:       0.6,
-                code:      `.s("supersaw").lpf(2500).lpq(8).lpenv(3)`,
-                ampEnv:     `0.5:0.1:0.8:1`
-            },
-            2: {
-                label:      'Vibraphone',
-                code:      `.s("vibraphone")`,
-                gain:       0.65,
-            },
-            3: {
-                label:      'Piano',
-                code:      `.s("piano")`,
-                gain:       3,
-            },
-            4: {
-                label:      'Harp',
-                code:      `.s("folkharp")`,
-                gain:       2,
-            },
-            5: {
-                label:      'Wine glass',
-                code:      `.s("wineglass")`,
-                gain:       2,
-            },
-            6: {
-                label:      'Pipe organ',
-                code:      `.s("pipeorgan_loud_pedal")`,
-                gain:       0.6,
-            }
+            1: chord.supersaw,
+            0: chord.ambientpad,
+            2: chord.dfampad,
+            3: chord.vibraphone,
+            4: chord.piano,
+            5: chord.harp,
+            6: chord.wineglass,
+            7: chord.pipeorgan,
         }
     }
 }

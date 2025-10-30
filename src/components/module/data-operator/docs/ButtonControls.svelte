@@ -84,7 +84,8 @@ console.log(isSideGuide)
 
     .isSideGuide .pad-aside,
     .isSideGuide .pad-aside span{
-        font-size:              1vh;
+        font-size:              small;
+        font-weight:            300;
     }
 
     .pad{

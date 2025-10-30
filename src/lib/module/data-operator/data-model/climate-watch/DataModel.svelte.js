@@ -28,9 +28,9 @@ let scaleConfig
 const adaptationMetric = {       // ascending = 1 (higher is 'better'),  descending = -1
     vulnerabilityScore:     1,     
     vulnerabilityRank:     -1,       
-    readinessScore:         1,
+    readinessScore:        -1,
     readinessRank:          1, 
-    climateRiskIndex:      -1, 
+    climateRiskIndex:       1, 
     climateRiskRank:       -1
 }
 
@@ -102,9 +102,12 @@ export class DataModel_CW extends DataModel{
         // i. Init schema obj
         const schema = {
             list: {
-                countryCodes: [...new Set(this.input['historical-emissions']['CW_HistoricalEmissions_ClimateWatch'].data
-                                .map(d => d.Country))]
-                                .filter(d => d !== 'EUU' && d !== 'WORLD'),     // Scene index
+                countryCodes: [...new Set(this.input['historical-emissions']['CW_HistoricalEmissions_ClimateWatch'].data.map(d => d.Country))]
+                                .filter(d => d !== 'EUU' && d !== 'WORLD')
+                                .map( ISO3 => { return { ISO3, name: iso3map[ISO3].name}})
+                                .sort((a, b) =>  a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+                                .map(d => d.ISO3)
+                ,    
                 series:     {},
                 availableYears: Object.keys(this.input['historical-emissions']['CW_HistoricalEmissions_ClimateWatch'].data[0])
                                 .filter( d => !isNaN(d)).map(d => +d),
@@ -121,12 +124,14 @@ export class DataModel_CW extends DataModel{
                 countryMeta:    iso3map,
                 series: {
                     label: {
-                        netGhg_perCapita:     { label: "Net GHG per capita"},
-                        sourceGhg_perCapita:  { label: "Source GHG per capita"},
-                        sinkGhg_perCapita:    { label: "Sink GHG per capita"},
-                        netGhg:               { label: "Net GHG"},
-                        sourceGhg:            { label: "Source GHG"},
-                        sinkGhg:              { label: "Sink GHG"}
+                        netGhg_perCapita:               { label: "Net GHG emissions per person"},
+                        sourceGhg_perCapita:            { label: "GHG emitted per person"},
+                        sinkGhg_perCapita:              { label: "GHG drawn down per person"},
+                        netGhg:                         { label: "Net GHG emissions p.a."},
+                        sourceGhg:                      { label: "GHG emitted p.a."},
+                        sinkGhg:                        { label: "GHG drawn down p.a."},
+                        netGhg_cumulative:              { label: "Cumulative net GHG"},
+                        netGhg_cumulativePerCapita:     { label: "Cumulative net GHG per person"},
                     }
                 }    
             }
@@ -299,9 +304,9 @@ export class DataModel_CW extends DataModel{
         return modelData
     }
 
-    #createDataScenes(modelData){
-        // i. Init sceneData array
-        const sceneData = []
+    #createDataProjects(modelData){
+        // i. Init projectData array
+        const projectData = []
 
         // ii. Variables for timing and series
         const dataPointsPerMeasure = this.schema.list.availableYears.length
@@ -309,7 +314,7 @@ export class DataModel_CW extends DataModel{
             '1m': 1,    '2n': 2,    '4n': 4,   '8n': 8,     '16n': 16,     
         }
 
-        // iii. Build model of each country as "scene"
+        // iii. Build model of each country as "project"
         const model = this.schema.list.countryCodes.map( (countryCode, countryIndex) => {
 
             // i. Init model props
@@ -322,12 +327,14 @@ export class DataModel_CW extends DataModel{
                 adaptation  = modelData.adaptation.byCountry[countryCode]
 
             const seriesData = {
-                netGhg:               Object.values(ghg.annual.net),
-                sourceGhg:            Object.values(ghg.annual.source),
-                sinkGhg:              Object.values(ghg.annual.sink),
-                netGhg_perCapita:     Object.values(ghg.annualPerCapita.net),
-                sourceGhg_perCapita:  Object.values(ghg.annualPerCapita.source),
-                sinkGhg_perCapita:    Object.values(ghg.annualPerCapita.sink),
+                netGhg:                     Object.values(ghg.annual.net),
+                sourceGhg:                  Object.values(ghg.annual.source),
+                sinkGhg:                    Object.values(ghg.annual.sink),
+                netGhg_perCapita:           Object.values(ghg.annualPerCapita.net),
+                sourceGhg_perCapita:        Object.values(ghg.annualPerCapita.source),
+                sinkGhg_perCapita:          Object.values(ghg.annualPerCapita.sink),
+                netGhg_cumulative:          Object.values(ghg.cumulative.net),
+                netGhg_cumulativePerCapita: Object.values(ghg.cumulativePerCapita.net),
             }
 
             // iii. Transform data into timing intervals
@@ -360,14 +367,17 @@ export class DataModel_CW extends DataModel{
                                     // I. Create scales 
                                     for (let [seriesName, d] of Object.entries(seriesData)) {
                                         // a. Add scale for key
-                                        const dataScale = scale[interval][group][paramName][seriesName] =  d3.scaleLinear()
-                                                                                    .domain(d3.extent(intervalData[interval][seriesName]))
-                                                                                    .range([groupScale[paramName].min, groupScale[paramName].max])
+                                        const domain    = d3.extent(intervalData[interval][seriesName]),
+                                            range       = [groupScale[paramName].min, groupScale[paramName].max],
+                                            noDomain    = domain[0] === domain[1],  
+                                            dataScale   = scale[interval][group][paramName][seriesName] 
+                                                        = d3.scaleLinear().domain(domain) .range(range)
+
                                         // b. Add scaled data
                                         scaledData[interval][group][paramName][seriesName] = intervalData[interval][seriesName].map( d => {
                                             return {
-                                                value:          dataScale(d),
-                                                quantized:      Math.round(dataScale(d))
+                                                value:          noDomain ? range[0] : dataScale(d),
+                                                quantized:      noDomain ? range[0] : Math.round(dataScale(d))
                                             }
                                         })
                                     }
@@ -432,6 +442,7 @@ export class DataModel_CW extends DataModel{
                 }
             }
 
+
             // => Return model object 
             return  {
                 meta:        this.schema.map.countryMeta[countryCode],
@@ -461,15 +472,13 @@ export class DataModel_CW extends DataModel{
         this.model = this.#transformData(this.input)
 
         // iii. Transform data for sonification
-        this.scene = this.#createDataScenes(this.model)
-
-        console.log(this)
+        this.project = this.#createDataProjects(this.model)
     };
 
-    getSceneLabel(sceneIndex){
+    getProjectLabel(projectIndex){
 
         // Get country name as label
-        const countryCode =  this.schema.list.countryCodes[sceneIndex],
+        const countryCode =  this.schema.list.countryCodes[projectIndex],
             countryName = this.schema.map.countryMeta[countryCode]?.name
 
         // => Return 

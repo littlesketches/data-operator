@@ -38,7 +38,7 @@ export class DataSonification extends Sonification{
 
     code = $derived(`
         /* 
-         @title IDMC Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)} 
+         @title IDMC Data Jam: ${this.data.getProjectLabel(this.state.selection.projectIndex)} 
          @by Data Operator DS86:AMBI
          @details Sonification of Internal Displacement Monitoring Centre (IDMC) data ${d3.min(this.data.schema.list.availableYears)}-${d3.max(this.data.schema.list.availableYears)}
          @url https://data-operator.littlesketch.es
@@ -177,7 +177,7 @@ export class DataSonification extends Sonification{
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
-        this.schema.sceneIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
+        this.schema.projectIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
 
         // Update params with model group and FX config to match data selection
         this.initParam(config.fx)
@@ -192,6 +192,7 @@ export class DataSonification extends Sonification{
         /**
          *  I. ON INIT ACTIONS
          */
+
         // a. On init setup
         if(init){
             // i. Set default pattern selections
@@ -204,7 +205,7 @@ export class DataSonification extends Sonification{
         }
 
         // b. Selection and reference variables
-        const { sceneData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
+        const { projectData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
         
 
         /**
@@ -220,19 +221,20 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
+        group.A.pitch.array = projectData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'A')
 
         // ii. Velocity: constructed from selected data => update params
-        group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value )
+        group.A.velocity.array = projectData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value )
         this.param.A.velocity.pattern = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.velocity.length}`
+
 
         /**
          *  GROUP B: Melodic "bass"
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
+        group.B.pitch.array         = projectData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'B')
 
 
@@ -249,10 +251,10 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern = group.C["2"].sound[this.state.selection.group.C.part["2"].series].pattern
 
         // ii. Velocity 
-        group.C["2"].velocity.array             = sceneData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
+        group.C["2"].velocity.array             = projectData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
         this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
 
         // Part 3. Chord/harmony progression 
-        this.mapHelper.setChordSequence(sceneData, group, 'C', 3)
+        this.mapHelper.setChordSequence(projectData, group, 'C', 3)
     };
 }

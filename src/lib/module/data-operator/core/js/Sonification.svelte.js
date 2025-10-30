@@ -76,7 +76,7 @@ export class Sonification{
                 numKeyAction:   undefined,                  // Track key action state
                 navKeyAction:   undefined,                  // Track key action state
                 heldKeys:       new Set(),                  // Tracks all held keyboard keys / screen buttons
-                sceneIndex:     0,                          // Selector for they sceneIndex of the modelData
+                projectIndex:     0,                          // Selector for they projectIndex of the modelData
                 group: {
                     active:     'master',                   // Active 'mixer' track group
                     A: {
@@ -144,15 +144,16 @@ export class Sonification{
             setEuclideanArray: () =>{
                 if(this.param.A.pitch) this.state.selection.group.A.euclideanArray = util.rotateArray(getPattern(this.param.A.pitch.pulse, this.param.A.pitch.length), this.param.A.pitch.rotation)
                 if(this.param.B.pitch) this.state.selection.group.B.euclideanArray = util.rotateArray(getPattern(this.param.B.pitch.pulse, this.param.B.pitch.length), this.param.B.pitch.rotation)
+
             },
             getDataVariables: () => {
-                const sceneData = this.data.scene[this.state.selection.sceneIndex],
+                const projectData = this.data.project[this.state.selection.projectIndex],
                     scaleNotes  = this.state.selection.group.global.scale.notes,
                     pitchScale  = `pitch${scaleNotes}`,
                     scaleLock   = this.state.selection.group.global.scale.tonalLock ? 'quantized' : 'value'
 
                 return {
-                    sceneData, scaleNotes, pitchScale, scaleLock
+                    projectData, scaleNotes, pitchScale, scaleLock
                 }
             },
             initGroupConfig: () => {
@@ -207,7 +208,7 @@ export class Sonification{
                 }
             },
 
-            setChordSequence: (sceneData, groupObj, group, part) => {
+            setChordSequence: (projectData, groupObj, group, part) => {
                 const musicalScale  = this.param.global.scale.type,
                     scaleChords     = this.schema.musicalScale[musicalScale].chordMap,
                     chordMap = {
@@ -221,7 +222,7 @@ export class Sonification{
                     chordSoundIndex = this.state.selection.group[group].part["3"].series,
                     chordConfig     = groupObj[group][part].sound[chordSoundIndex]
 
-                const chordArray = groupObj[group][part].patternArray = sceneData.scaledData[chordInterval][group][part].chord[chordSeries].map(d => d.quantized).map( d => chordMap[d])
+                const chordArray = groupObj[group][part].patternArray = projectData.scaledData[chordInterval][group][part].chord[chordSeries].map(d => d.quantized).map( d => chordMap[d])
                 this.param[group].part[part].sound.pattern    = `"<${chordArray.map(s => s.replace(/^'|'$/g, "")).join(" ")}>"`
                 this.param[group].part[part].sound.length = chordArray.length
                 this.param[group].part[part].sound.code   = chordConfig.code
@@ -461,9 +462,10 @@ export class Sonification{
             selectPattern: (index, group, part) => {
                 // i. Update pattern selection based on type
                 const type = this.schema.group[group].type
+
                 switch(type){
                     case 'pattern': 
-                        if(!this.schema.group[group].part[part].series.includes(index)) return
+                        if(this.schema.group[group].part[part].series.length <= index) return
                         const patternIndex = this.state.selection.group[group].part[part].series = this.schema.group[group].part[part].series[index]
                         const pattenLabel = sonification.schema.pattern[group][part]?.sound[patternIndex].label ?? `#${patternIndex}`
 
@@ -480,8 +482,10 @@ export class Sonification{
                     case 'pitch':
                     case 'velocity':
                     default:
-                        this.state.selection.group[group][`${type}Pattern`] = this.schema.group[group].series[index]             
-                        const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? param.label
+                        if(this.schema.group[group].series.length <= index) return
+                        this.state.selection.group[group][`${type}Pattern`] = this.schema.group[group].series[index]
+          
+                        const label = sonification.data.schema.map?.series?.label[sonification.state.selection.group[group][`${sonification.schema.group[group].type}Pattern`]]?.label ?? this.param.label
 
                         sonification.state.userMessage.text = `${group} > ${label}` //  Create user message
                         break
@@ -527,16 +531,16 @@ export class Sonification{
                 // => Call update
                 this.handle.update()
             },
-            // Scene/scene (data) select             
-            selectScene: (index) => {
-                this.state.selection.sceneIndex = index
+            // Project/project (data) select             
+            selectProject: (index) => {
+                this.state.selection.projectIndex = index
                 this.handle.update()
             },
-            cycleScene: (dataChange) => {
-                // i. Update sceneIndex
-                this.state.selection.sceneIndex =  util.cycleFromValue(this.schema.sceneIndex, this.state.selection.sceneIndex , dataChange)       
+            cycleProject: (dataChange) => {
+                // i. Update projectIndex
+                this.state.selection.projectIndex =  util.cycleFromValue(this.schema.projectIndex, this.state.selection.projectIndex , dataChange)       
                 /// ii. Handle user message
-                sonification.state.userMessage.text = `> ${sonification.data.getSceneLabel(this.state.selection.sceneIndex)}`
+                sonification.state.userMessage.text = `> ${sonification.data.getProjectLabel(this.state.selection.projectIndex)}`
                 sonification.handle.userMessage()
                 // => Update
                 this.handle.update()
@@ -834,10 +838,10 @@ export class Sonification{
             },
             pulseOnDeltaSequence(group){
                 // i. Turn input array into pulse array
-                const sceneData = sonification.data.scene[sonification.state.selection.sceneIndex],
+                const projectData = sonification.data.project[sonification.state.selection.projectIndex],
                     series      = sonification.state.selection.group.A.pitchPattern, 
                     interval    = sonification.schema.group[group].map.pitch.interval, 
-                    pitchArray = sceneData.scaledData[interval][group].pitch[series].map(d => d.quantized)
+                    pitchArray = projectData.scaledData[interval][group].pitch[series].map(d => d.quantized)
 
                 sonification.state.sequencer[group].onDelta = true
                 sonification.state.sequencer[group].active   = true 

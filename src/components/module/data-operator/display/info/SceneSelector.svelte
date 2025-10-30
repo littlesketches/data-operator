@@ -7,14 +7,14 @@
     const {dataModel, sonification} = model
 
     // Reactive variable references
-    let sceneIndex = $derived(sonification.state.selection.sceneIndex)
-    let label = $derived(dataModel?.getSceneLabel(sceneIndex))
+    let projectIndex = $derived(sonification.state.selection.projectIndex)
+    let label = $derived(dataModel?.getProjectLabel(projectIndex))
 
 
     // Handler
     const handle = {
         click: () => {
-            sonification.handle.cycleScene(sonification.state.selection.shift ? 1 : -1)
+            sonification.handle.cycleProject(sonification.state.selection.shift ? 1 : -1)
         }
     }
 
@@ -22,7 +22,7 @@
 
 
 <!-- HTML COMPONENT MARKUP -->
-<div class = 'scene-label' onclick="{handle.click}">{label}</div> 
+<div class = 'project-label' onclick="{handle.click}">{label}</div> 
 
 
 <!-- STYLES -->

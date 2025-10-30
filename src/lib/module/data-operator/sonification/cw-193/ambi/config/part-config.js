@@ -14,7 +14,7 @@ export const groupPartPresets =  {
     1: { // Part 1. Percussion patters: "membrane" layer
         sound: {
             // A. On the beat:
-            0:  beat.four_on_the_floor,
+            0:  beat.one_four,
             1:  beat.back_beat,
             2:  beat.heartbeat,
             3:  beat.hip_hop_1,

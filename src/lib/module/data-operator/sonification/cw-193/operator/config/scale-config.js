@@ -7,18 +7,18 @@
 
 export const scaleConfig = {
     A: {
-        pitch5:     { min: 0,       max: 5    },
-        pitch6:     { min: 0,       max: 6    },
-        pitch7:     { min: 0,       max: 7    },
+        pitch5:     { min: 0,       max: 10    },
+        pitch6:     { min: 0,       max: 12    },
+        pitch7:     { min: 0,       max: 14    },
         velocity:   { min: 0.5,     max: 1    },
-        lpf:        { min: 400,     max: 1400 },
-        lpq:        { min: 2,       max: 10   }
+        lpf:        { min: 400,     max: 1200 },
+        lpq:        { min: 44,      max: 12   }
     },
     B: {
         pitch5:     { min: 0,       max: 5    },
         pitch6:     { min: 0,       max: 6    },
         pitch7:     { min: 0,       max: 7    },
-        noise:      { min: 0.35,    max: 0.6  }, 
+        noise:      { min: 0.35,    max: 1  }, 
         sub:        { min: 0.25,    max: 0.75 },
     },
     C: {
@@ -30,7 +30,7 @@ export const scaleConfig = {
         }
     },
     global: {
-        bpm:         { min: 70,      max: 110   }
+        bpm:         { min: 70,      max: 100   }
     }
 
 }

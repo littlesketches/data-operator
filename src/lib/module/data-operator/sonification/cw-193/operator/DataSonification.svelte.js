@@ -37,9 +37,9 @@ export class DataSonification extends Sonification{
     // Strudel code derived from state and params
     code = $derived(`
         /* 
-         @title Climate Watch Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
+         @title Climate Watch Data Jam: ${this.data.getProjectLabel(this.state.selection.projectIndex)}   
          @by Data Operator CW-193
-         @details Sonification of Climate Watch data for ${this.data.getSceneLabel(this.state.selection.sceneIndex)}   
+         @details Sonification of Climate Watch data for ${this.data.getProjectLabel(this.state.selection.projectIndex)}   
          @url https://data-operator.littlesketch.es
          @license CC BY-NC-SA
          */
@@ -47,7 +47,7 @@ export class DataSonification extends Sonification{
         setcpm(${this.param.global.bpm / timingConfig.beats.perBar})
 
         stack(
-            // Group A. "303-esque synth"
+            // Group A. "Lead" synth
             n("${this.param.A.pitch.pattern}")      // Data for "${this.state.selection.group.A.pitchPattern}" scaled to pitch 
                 .scale("${this.param.global.scale.root}${this.param.A.octave}:${this.param.global.scale.type}")            
                 .scaleTranspose(${this.param.A.pitch.scaleTranspose})
@@ -58,13 +58,13 @@ export class DataSonification extends Sonification{
                 .velocity("${this.param.A.velocity.pattern}")
                 .adsr("${this.param.synth.lead.ampEnv.A}:${this.param.synth.lead.ampEnv.D}:${this.param.synth.lead.ampEnv.S}:${this.param.synth.lead.ampEnv.R}")                         
                 .ftype("${this.param.synth.lead.filter.type}")                                        
-                .lpf(${this.param.synth.lead.filter.cutoff})         // LPF cutoff modulated with sine wave whose range is mapped to scaled "${this.state.selection.group.A.pitchPattern}" data at "${this.schema.group.A.map.lpf.interval}" intervals
-                .lpq(${this.param.synth.lead.filter.Q})              // LPF resonance modulated sine wave whose range is mapped to scaled "${this.state.selection.group.A.pitchPattern}" data at "${this.schema.group.A.map.lpq.interval}" intervals
+                .lpf(${this.param.synth.lead.filter.cutoff})         // LPF cutoff modulated with sine wave with range is mapped to scaled "${this.state.selection.group.A.pitchPattern}" data at "${this.schema.group.A.map.lpf.interval}" intervals
+                .lpq(${this.param.synth.lead.filter.Q})              // LPF resonance modulated sine wave with range is mapped to scaled "${this.state.selection.group.A.pitchPattern}" data at "${this.schema.group.A.map.lpq.interval}" intervals
                 .lpenv(${this.param.synth.lead.filter.env.depth})    
                 .lpa(${this.param.synth.lead.filter.env.A})          
                 .lpd(${this.param.synth.lead.filter.env.D})          
                 .lps(${this.param.synth.lead.filter.env.S})          
-                .swingBy(${this.param.A.swing.level}, 8)              // - swing applied on 1/8 notes
+                .swingBy(${this.param.A.swing.level}, 8)            
                 ${this.param.A.fx.juxRev       ? `${this.param.global.fx.juxRev}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.juxPress     ? `${this.param.global.fx.juxPress}.gain(${this.param.A.gain * 0.75})` : ''}
                 ${this.param.A.fx.crusher      ? this.param.global.fx.crusher : ''}
@@ -81,17 +81,17 @@ export class DataSonification extends Sonification{
                 ${this.param.A.mute            ? this.param.global.fx.mute : `.gain(${this.param.A.gain})`}  
                 .color("${this.param.visual.color.A}")
             ,
-            // Group B. "Moog-ish bass" 
+            // Group B. "Bass" synth 
             n("${this.param.B.pitch.pattern}")      // Data for "${this.state.selection.group.B.pitchPattern}" scaled to pitch 
             .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")      
             .scaleTranspose(${this.param.B.pitch.scaleTranspose})
             .layer(
                 x=>x.s("sawtooth").vib(4).velocity("${this.param.synth.bass.mix.osc1}"),
                 x=>x.s("triangle").velocity("${this.param.synth.bass.mix.osc2}"),
-                x=>x.s("triangle").add(note(-12)).velocity("${this.param.synth.bass.mix.sub}") ,
+                x=>x.s("sawtooth").add(note(-12)).velocity("${this.param.synth.bass.mix.sub}") ,
                 x=>x.s("pink").velocity("${this.param.synth.bass.mix.noise}")
             )
-            .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
+            .transpose(${this.param.B.pitch.transpose})             
             .adsr("${this.param.synth.bass.ampEnv.A}:${this.param.synth.bass.ampEnv.D}:${this.param.synth.bass.ampEnv.S}:${this.param.synth.bass.ampEnv.R}")    
             ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato !== "" ?this.param.B.pitch.structLegato :  this.param.B.pitch.struct : this.param.B.pitch.struct}")`
                 : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
@@ -101,7 +101,7 @@ export class DataSonification extends Sonification{
             .lpq(${this.param.synth.bass.filter.Q})           
             .lpenv(${this.param.synth.bass.filter.env.depth})   
             .lpa(${this.param.synth.bass.filter.env.A}).lpd(${this.param.synth.bass.filter.env.D}).lps(${this.param.synth.bass.filter.env.S}).lpr(${this.param.synth.bass.filter.env.R})         
-            .swingBy(${this.param.B.swing.level}, 8)          // - swing applied on 1/8 notes
+            .swingBy(${this.param.B.swing.level}, 8)         
             ${this.param.B.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.B.gain * 0.75})` : ''}
             ${this.param.B.fx.crusher      ? this.param.global.fx.crusher : ''}
             ${this.param.B.fx.distortion   ? this.param.global.fx.distortion  : ''}
@@ -117,7 +117,7 @@ export class DataSonification extends Sonification{
             .color("${this.param.visual.color.B}")
             ,
             // Group C.
-            stack( // Part 1: Membrane percussion sounds
+            stack( // Part 1: Membrane percussion sounds 
                 s("${this.param.C.part["1"].sound.pattern}").bank("${this.param.C.part["1"].sound.bank}")  // Beat
                     .slow(${this.param.C.part["1"].sound.clockDivider})                
                     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}  
@@ -127,14 +127,14 @@ export class DataSonification extends Sonification{
                     .slow(${this.param.C.part["2"].sound.clockDivider})    
                     ${this.param.C.part["2"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["2"].gain * this.param.C.gain})`}                     
                 , // Part 3: Harmony: sampled chord
-                n(${ this.param.C.part["3"].sound.pattern }) // I IV V VI
+                n(${ this.param.C.part["3"].sound.pattern })    // Data for "${this.state.selection.group.A.pitchPattern}" scaled to chord progression at "${this.schema.group.A.map.lpf.interval}" intervals
                     .scale("${this.param.global.scale.root}${this.param.C.part["3"].octave}:${this.param.global.scale.type}")     
                     ${this.param.C.part["3"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["3"].gain * this.param.C.gain})`}  
                     .slow(${this.param.C.part["3"].sound.clockDivider})                
                     ${this.param.C.part["3"].sound.code}
             )
             .color("${this.param.visual.color.C}")
-            .swingBy(${this.param.C.swing.level}, 8)          // - swing applied on 1/8 pitchs
+            .swingBy(${this.param.C.swing.level}, 8)          
             ${this.param.C.fx.juxRev       ?`${this.param.global.fx.juxRev}.gain(${this.param.C.gain * 0.75})` : ''}
             ${this.param.C.fx.crusher      ? this.param.global.fx.crusher : ''}
             ${this.param.C.fx.distortion   ? this.param.global.fx.distortion  : ''}
@@ -177,14 +177,15 @@ export class DataSonification extends Sonification{
         this.app    = app
         this.data   = dataModel
 
-        // Add state
-        this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
-        this.state.selection.bpmSeries = true
-
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
-        this.schema.sceneIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
+        this.schema.projectIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
+
+        // Add state
+        this.state.selection.projectIndex = util.randomItem(this.schema.projectIndex)                           // Randomise project
+        this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
+        this.state.selection.group.global.bpm.dataLinked = true                                                               // Apply bpm-data series link
 
         // Update params with model group and FX config to match data selection
         this.initParam(config.fx)
@@ -217,8 +218,8 @@ export class DataSonification extends Sonification{
          }
 
         // b. Selection and reference variables
-        const { sceneData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
-        
+        const { projectData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
+
 
         /**
          *  II. UPDATE + CUSTOM DATA SERIES MAPPING  
@@ -228,13 +229,11 @@ export class DataSonification extends Sonification{
         group.C["3"].chord.series = group.A.pitch.series 
         group.C["2"].velocity.series = group.B.pitch.series
 
-        // iII. Set BPM 
-        const countryCode = this.data.schema.list.countryCodes[this.state.selection.sceneIndex]             
-
-        if(this.state.selection.bpmSeries){
-            const bpmSeries = 'climateRiskIndex'
-            this.param.global.bpm = Math.round(sceneData.scaledData.global.bpm[bpmSeries])
-            console.log(countryCode, this.data.model.adaptation.byCountry[countryCode][bpmSeries], '>', Math.round(sceneData.scaledData.global.bpm[bpmSeries]))
+        // Set BPM 
+        const countryCode = this.data.schema.list.countryCodes[this.state.selection.projectIndex]             
+        if(this.state.selection.group.global.bpm.dataLinked){
+            const bpmSeries =  this.state.selection.group.global.bpm.series = 'vulnerabilityScore'
+            this.param.global.bpm = Math.round(projectData.scaledData.global.bpm[bpmSeries])
         }
 
         /**
@@ -242,20 +241,20 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
+        group.A.pitch.array = projectData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
         this.mapHelper.setPitchSequence(group, 'A')
 
         // ii. Velocity: constructed from selected data => update params
-        group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => { return d.value})
+        group.A.velocity.array = projectData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => { return d.value})
         this.param.A.velocity.pattern  = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
 
         // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
-        group.A.lpf.array = sceneData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
+        group.A.lpf.array = projectData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
         const cutoffRangeString     = `"[${util.rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
         this.param.synth.lead.filter.cutoff = `sine.range(${cutoffRangeString}).slow(${clockDividerMap[group.A.lpf.interval]})`
 
         // iii. Filter resonance:  constructed from selected data => update params: set for change on 2n
-        group.A.lpq.array = sceneData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
+        group.A.lpq.array = projectData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
         const resonanceRangeString  = `"[${util.rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
         this.param.synth.lead.filter.resonance = `sine.range(${resonanceRangeString}).slow(${clockDividerMap[group.A.lpq.interval]})`
 
@@ -265,11 +264,11 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.pitch.array         = sceneData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
+        group.B.pitch.array         = projectData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'B')
 
         // ii. Noise part level "velocity": constructed from data 
-        group.B.noise.array = sceneData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value )
+        group.B.noise.array = projectData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value )
         this.param.synth.bass.mix.noise = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
 
@@ -286,11 +285,12 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
 
         // ii. Velocity 
-        group.C["2"].velocity.array             = sceneData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
+        group.C["2"].velocity.array             = projectData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
         this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
 
 
         // Part 3. Chord progression notes and params
-        this.mapHelper.setChordSequence(sceneData, group, 'C', 3)
+        this.mapHelper.setChordSequence(projectData, group, 'C', 3)
+console.log(group)
     };
 }

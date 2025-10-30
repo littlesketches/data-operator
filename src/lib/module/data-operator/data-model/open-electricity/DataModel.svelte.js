@@ -63,7 +63,7 @@ export class DataModel_OE extends DataModel{
         return inputData
     }
   
-    #createDataScenes(inputData){
+    #createDataProjects(inputData){
 
         /**
          *  CUSTOM DATA TRANSFORMATION AND SHAPING
@@ -322,13 +322,13 @@ export class DataModel_OE extends DataModel{
         this.input = await this.#loadData()
 
         // ii. Transform data for sonification
-        this.scene = this.#createDataScenes(this.input)
+        this.project = this.#createDataProjects(this.input)
 
         // iii. Extract schema for UI and visuals
-        this.schema = this.#extractSchema(this.input, this.scene)
+        this.schema = this.#extractSchema(this.input, this.project)
     };
 
-    getSceneLabel(sceneIndex){
-        return d3.timeFormat("%d-%m-%y")(this.scene[sceneIndex].day)
+    getProjectLabel(projectIndex){
+        return d3.timeFormat("%d-%m-%y")(this.project[projectIndex].day)
     }
 };

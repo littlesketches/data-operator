@@ -6,9 +6,9 @@
 import { groupPartPresets } from "./part-config";
 
 const series = [  
-    'stockTotal',   'stockConflict',    'stockDisaster', 
-    'annualTotal',  'annualConflict',   'annualDisaster',  
-    'disasterCount',   'stockConflict',    'stockDisaster', 
+    'stockTotal',       'stockConflict',    'stockDisaster', 
+    'annualTotal',      'annualConflict',   'annualDisaster',  
+    'disasterCount',    'stockConflict',    'stockDisaster', 
 ]
 
 export const groupConfig = {

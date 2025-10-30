@@ -1,0 +1,44 @@
+.isSideGuide h1, 
+.isSideGuide h2,
+.isSideGuide h3{
+    font-family:            'Orbit';
+}
+
+.isSideGuide h1{
+    text-align:             end;
+    font-size:              x-large;
+    text-transform:         uppercase;
+    color:                  var(--col-highlight);
+    margin-block-start:     0rem;
+    margin-block-end:       3rem;
+}
+
+.isSideGuide .subtitle-block{
+    display: flex;
+    justify-content:             end;
+}
+.isSideGuide  h2,
+.isSideGuide  h3{
+    margin-block-end:       0rem;
+    font-size:              medium;
+}
+
+.sonification-note ul{
+    padding-inline-start:   1rem;
+}
+
+.sonification-note li{
+    margin-bottom:          0.5rem;
+}
+
+.isSideGuide .subtitle-block{
+    font-size:          x-small;
+    display:            flex;
+    text-transform:     uppercase;
+    margin-top:         3.5rem;
+    padding-right:      0rem;
+}
+.isSideGuide .subtitle-block div{
+    padding-left:      0.5rem;
+    padding-right:      0rem;
+}

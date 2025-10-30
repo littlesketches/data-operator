@@ -104,7 +104,7 @@ export class DataSonification extends Sonification{
                     ${this.param.synth.DFAM.duck  ? `.duckorbit(2).duckattack(0.1).duckdepth(1)` : ''}
                     .slow(${this.param.C.part["1"].sound.clockDivider})                
                     ${this.param.C.part["1"].mute ? this.param.global.fx.mute : `.gain(${this.param.C.part["1"].gain * this.param.C.gain})`}
-                    .delay(0.25).delayfb(0.5) 
+                    .delay(0.55).delayfb(0.5) 
                 // Beat: "nomrmal" part
                 ${this.param.C.part["1"].sound.pattern.normal ? `,
                     s("${this.param.C.part["1"].sound.pattern.normal}").bank("${this.param.C.part["1"].sound.bank}")
@@ -176,7 +176,7 @@ export class DataSonification extends Sonification{
         this.state.selection.sceneIndex     = util.randomItem(this.schema.sceneIndex)       // Randomise scene
         this.state.selection.group.B.chart  = 'velocity'
         this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
-        this.state.sequencer.A.onDelta      = true  // i. Apply the onDelta pulse for A and B as the default
+        // this.state.sequencer.A.onDelta      = true  // i. Apply the onDelta pulse for A and B as the default
 
 
 
@@ -198,12 +198,13 @@ export class DataSonification extends Sonification{
         // a. On init setup
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern    = util.randomItem(this.schema.group.A.series)
-            this.state.selection.group.B.velocityPattern = util.randomItem(this.schema.group.B.series)
+            this.state.selection.group.A.pitchPattern    = 'annualTotal' 
+            this.state.selection.group.B.velocityPattern = 'stockTotal'
             // ii. Init group object
             group = this.mapHelper.initGroupConfig()
 
             // iv. Set euclidean array (stored for visual and updated manually in adjustEuclideanRhythm
+            this.param.A.pitch.pulse = util.randomItem([12, 13, 14, 15]) 
             this.mapHelper.setEuclideanArray()
         }
 
@@ -225,15 +226,8 @@ export class DataSonification extends Sonification{
 
         // i. Pitch: constructed from selected data => update params
         group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
+        this.mapHelper.setPitchSequence(group, 'A')
 
-        this.param.A.pitch.pattern  = `${JSON.stringify(group.A.pitch.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.pitch.length}`
-
-        if(this.state.sequencer.A.onDelta){  // Create a custom onchange pulse pattern for A
-            this.state.sequencer.A.active   = true 
-            this.state.sequencer.A.array    = util.deltaArray( group.A.pitch.array)
-            this.param.A.pitch.struct       = this.state.sequencer.A.array.map(n => n && 'x' || '-').join(' ')   
-            this.param.A.pitch.structLegato = util.legatoStruct(this.state.sequencer.A.array )
-        }
 
         // ii. LPF cutoff: 
         group.A.lpf.array  = sceneData.scaledData[group.A.lpf.interval].A.lpf[group.A.pitch.series].map(d => d.value)
@@ -253,7 +247,8 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.velocity.array = sceneData.scaledData[group.B.velocity.interval].B.velocity[group.B.velocity.series].map(d => d.value )
+        const velocityArrayB = sceneData.scaledData[group.B.velocity.interval].B.velocity[group.B.velocity.series].map(d => d.value )
+        group.B.velocity.array = d3.sum(velocityArrayB) === 0 ? velocityArrayB.map(d => 0.5) :  velocityArrayB  // Ensure no zero array
         this.param.B.velocity.pattern  = `${JSON.stringify(group.B.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.velocity.length}`
 
 

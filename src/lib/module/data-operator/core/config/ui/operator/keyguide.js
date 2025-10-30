@@ -96,12 +96,12 @@ export const keyguide = {
             group:  'Select<br>MIX'
         },
         plus: {
-            master: 'Next<br>scene',
-            group:  'Next<br>scene'
+            master: 'Next<br>project',
+            group:  'Next<br>project'
         },
         minus: {
-            master: 'Previous<br>scene',
-            group:  'Previous<br>scene'
+            master: 'Previous<br>project',
+            group:  'Previous<br>project'
         },
     },
     modify:{

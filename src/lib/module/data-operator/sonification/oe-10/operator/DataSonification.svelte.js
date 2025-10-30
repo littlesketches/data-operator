@@ -39,9 +39,9 @@ export class DataSonification extends Sonification{
     // Strudel code derived from state and params
     code = $derived(`
         /* 
-         @title Open Electricity Data Jam: ${this.data.getSceneLabel(this.state.selection.sceneIndex)} 
+         @title Open Electricity Data Jam: ${this.data.getProjectLabel(this.state.selection.projectIndex)} 
          @by Data Operator OE-10:Operator
-         @details Sonification of Open Electricity (NEM) data over 24hrs for the date of ${this.data.getSceneLabel(this.state.selection.sceneIndex)} 
+         @details Sonification of Open Electricity (NEM) data over 24hrs for the date of ${this.data.getProjectLabel(this.state.selection.projectIndex)} 
          @url https://data-operator.littlesketch.es/model/oe-10/operator
          @license CC BY-NC-SA
          */
@@ -187,7 +187,7 @@ export class DataSonification extends Sonification{
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
-        this.schema.sceneIndex  = this.data.schema.list.dayIndex
+        this.schema.projectIndex  = this.data.schema.list.dayIndex
 
         // Update params with model group and FX config to match data selection
         this.initParam(config.fx)
@@ -219,7 +219,7 @@ export class DataSonification extends Sonification{
         }
 
         // b. Selection and reference variables
-        const { sceneData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
+        const { projectData, pitchScale, scaleLock } = this.mapHelper.getDataVariables()
         
         /**
          *  II. UPDATE + CUSTOM DATA SERIES MAPPING  
@@ -235,21 +235,21 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.A.pitch.array = sceneData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
+        group.A.pitch.array = projectData.scaledData[group.A.pitch.interval].A[pitchScale][group.A.pitch.series].map(d => d.quantized)
         this.mapHelper.setPitchSequence(group, 'A')
 
         // ii. Velocity: constructed from selected data => update params
-        group.A.velocity.array = sceneData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value)
+        group.A.velocity.array = projectData.scaledData[group.A.velocity.interval].A.velocity[group.A.velocity.series].map(d => d.value)
         this.param.A.velocity.pattern = `${JSON.stringify(group.A.velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.A.velocity.length}`
 
         // iii. Filter cutoff:  constructed from selected data => update params: set for change on 4n
-        group.A.lpf.array = sceneData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
-        const cutoffRangeString     = `"[${util.rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
+        group.A.lpf.array = projectData.scaledData[group.A.lpf.interval].A.lpf[group.A.lpf.series].map(d => Math.round(d.value))
+        const cutoffRangeString = `"[${util.rotateArray(group.A.lpf.array, 1).join(" ") }]", "[${group.A.lpf.array.join(" ")}]"`
         this.param.synth.lead.filter.cutoff = `sine.range(${cutoffRangeString}).slow(${clockDividerMap[group.A.lpf.interval]})`
 
         // iV. Filter resonance:  constructed from selected data => update params: set for change on 2n
-        group.A.lpq.array = sceneData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
-        const resonanceRangeString  = `"[${util.rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
+        group.A.lpq.array = projectData.scaledData[group.A.lpq.interval].A.lpq[group.A.lpq.series].map(d => d.value)
+        const resonanceRangeString = `"[${util.rotateArray(group.A.lpq.array, 1).join(" ") }]", "[${group.A.lpq.array.join(" ")}]"`
         this.param.synth.lead.filter.resonance = `sine.range(${resonanceRangeString}).slow(${clockDividerMap[group.A.lpq.interval]})`
 
 
@@ -258,11 +258,11 @@ export class DataSonification extends Sonification{
          */ 
 
         // i. Pitch: constructed from selected data => update params
-        group.B.pitch.array = sceneData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
+        group.B.pitch.array = projectData.scaledData[group.B.pitch.interval].B[pitchScale][group.B.pitch.series].map(d => d[scaleLock])
         this.mapHelper.setPitchSequence(group, 'B')
 
         // ii. Noise part level "velocity": constructed from data 
-        group.B.noise.array = sceneData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value )
+        group.B.noise.array = projectData.scaledData[group.B.noise.interval].B.noise[group.B.noise.series].map(d => d.value )
         this.param.synth.bass.mix.noise = `${JSON.stringify(group.B.noise.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.B.pitch.length}`
 
 
@@ -279,10 +279,10 @@ export class DataSonification extends Sonification{
         this.param.C.part["2"].sound.pattern    = group.C["2"].sound?.[this.state.selection.group.C.part["2"].series].pattern
 
         // ii. Hats velocity 
-        group.C["2"].velocity.array             = sceneData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
+        group.C["2"].velocity.array             = projectData.scaledData[group.C["2"].velocity.interval].C["2"].velocity[group.C["2"].velocity.series].map(d => d.value)
         this.param.C.part["2"].velocity.pattern = `${JSON.stringify(group.C["2"].velocity.array).replaceAll(',', ' ').replaceAll('[', '<').replaceAll(']', '>')}*${this.param.C.part["2"].velocity.length}`
 
         // Part 3. Chord/harmony progression 
-        this.mapHelper.setChordSequence(sceneData, group, 'C', 3)
+        this.mapHelper.setChordSequence(projectData, group, 'C', 3)
     };
 }
