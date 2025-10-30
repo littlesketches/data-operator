@@ -50,11 +50,23 @@ export class DataSonification extends Sonification{
         stack(
             // Group A. Lead 
             n("${this.param.A.pitch.pattern}")      // Data for "${this.state.selection.group.A.pitchPattern}" scaled to pitch 
-                .scale("${this.param.global.scale.root}${this.param.A.octave}:${this.param.global.scale.type}")            
+                .scale("${this.param.global.scale.root}${this.param.global.scale.octave}:${this.param.global.scale.type}")            
                 .scaleTranspose(${this.param.A.pitch.scaleTranspose})
                 ${this.state.sequencer.A.active ? `.struct("${this.param.A.pitch.legato ?  this.param.A.pitch.structLegato !== "" ?this.param.A.pitch.structLegato :  this.param.A.pitch.struct  : this.param.A.pitch.struct}")` 
                     : this.param.A.pitch.legato ? `.euclidLegatoRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})` : `.euclidRot(${this.param.A.pitch.pulse}, ${this.param.A.pitch.length}, ${this.param.A.pitch.rotation})`  }                             
-                .s("${this.param.synth.lead.sound}")
+                .layer(
+                    x => x.s("supersaw"),
+                    x => x.s("supersaw").add(0.1),
+                    x => x.s("pulse").add(note(-12))
+                )
+                .adsr("${this.param.synth.bass.ampEnv.A}:${this.param.synth.lead.ampEnv.D}:${this.param.synth.lead.ampEnv.S}:${this.param.synth.lead.ampEnv.R}")    
+                .lpf(${this.param.synth.lead.filter.cutoff}) 
+                .lpq(${this.param.synth.lead.filter.Q})           
+                .lpenv(${this.param.synth.lead.filter.env.depth})   
+                .lpa(${this.param.synth.lead.filter.env.A}).lpd(${this.param.synth.lead.filter.env.D}).lps(${this.param.synth.lead.filter.env.S}).lpr(${this.param.synth.lead.filter.env.R})         
+                .phaser(0.25)
+                .pan(sine.slow(2))
+                .distort(1.2)
                 .slow(${this.param.A.pitch.clockDivider})            
                 .velocity("${this.param.A.velocity.pattern}")
                 .swingBy(${this.param.A.swing.level}, 8)
@@ -84,7 +96,7 @@ export class DataSonification extends Sonification{
                     x => x.s("square").add(note(-12)).velocity("${this.param.synth.bass.mix.sub}"),
                     x => x.s("white").velocity("${this.param.synth.bass.mix.noise}")
                 )
-                .transpose(${this.param.B.pitch.transpose})             // "Global" Scale transposed                   
+                .transpose(${this.param.B.pitch.transpose})       
                 .adsr("${this.param.synth.bass.ampEnv.A}:${this.param.synth.bass.ampEnv.D}:${this.param.synth.bass.ampEnv.S}:${this.param.synth.bass.ampEnv.R}")    // Amp envelope (ADSR)
                 ${this.state.sequencer.B.active ? `.struct("${this.param.B.pitch.legato ? this.param.B.pitch.structLegato !== "" ?this.param.B.pitch.structLegato :  this.param.B.pitch.struct : this.param.B.pitch.struct}")`
                         : this.param.B.pitch.legato ? `.euclidLegatoRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})` : `.euclidRot(${this.param.B.pitch.pulse}, ${this.param.B.pitch.length}, ${this.param.B.pitch.rotation})`}
@@ -171,13 +183,17 @@ export class DataSonification extends Sonification{
         this.app    = app
         this.data   = dataModel
 
-        // Add state
-        this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
 
         // Add model-specific config to schema
         this.schema.group       = config.group,
         this.schema.pattern     = { C: config.preset.C }
         this.schema.projectIndex  = this.data.schema.list.countryCodes.map((d, i) => i)
+
+        // Add state
+        this.state.selection.projectIndex     = util.randomItem(this.schema.projectIndex)       // Randomise scene
+        this.state.selection.group.global.scale.notes = musicalScale[this.param.global.scale.type].notes
+        this.state.sequencer.A.onDelta      = true  // i. Apply the onDelta pulse for A and B as the default
+
 
         // Update params with model group and FX config to match data selection
         this.initParam(config.fx)
@@ -196,10 +212,12 @@ export class DataSonification extends Sonification{
         // a. On init setup
         if(init){
             // i. Set default pattern selections
-            this.state.selection.group.A.pitchPattern = util.randomItem(this.schema.group.A.series)
-            this.state.selection.group.B.pitchPattern = util.randomItem(this.schema.group.B.series)
+            this.state.selection.group.A.pitchPattern    = 'annualTotal' 
+            this.state.selection.group.B.pitchPattern   = 'stockTotal'
             // ii. Init group object
             group = this.mapHelper.initGroupConfig()
+            // iii. Set pulses
+            this.param.B.pitch.pulse = util.randomItem([12, 13, 14])
             // iv. Set euclidean array references (stored for visual and updated manually in adjustEuclideanRhythm
             this.mapHelper.setEuclideanArray()
         }

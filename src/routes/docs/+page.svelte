@@ -3,20 +3,6 @@
      // Libs and utils
 	import { fade, slide } from 'svelte/transition';
 
-    // Variables 
-    const view = {
-        'story': false,
-        'release-notes': false,
-
-        'roadmap': false,
-    }
-
-    const handle = {
-        toggleView: function(){
-            const sectionId = this.getAttribute('data-section')
-            view[sectionId] = !view[sectionId]
-        }
-    }
 </script>
 
 
@@ -28,6 +14,7 @@
             <div>データオペレーター</div>
             <div>Data Operator</div>
         </section>
+
         <h1>// About</h1>
 
         <section>
@@ -117,11 +104,6 @@
         </section>
 
         <!-- <section>
-            <h2>Inspiration and acknowledgements</h2>
-
-        </section> -->
-
-        <!-- <section>
             <h2>Release notes</h2>
             <div class = 'slide-button' data-section = 'release-notes' onclick = {handle.toggleView}>
                 {#if view['release-notes']}&#8854; Hide{:else}&#8853; Show{/if}
@@ -154,20 +136,10 @@
         padding-right:      0.5rem;
     }
 
+    /* Overrides */
     h1{
         margin-block-start: 0;
     }
-
-    /* Slide container */
-    .slide-button{
-        text-decoration:    underline dotted;
-        cursor:             pointer;
-    }
-    .slide-button:hover{
-        width: 100%;
-    }
-
-    /* Overrides */
     li{
         margin-bottom: 1rem;
     } 

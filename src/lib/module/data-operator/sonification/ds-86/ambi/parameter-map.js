@@ -9,59 +9,58 @@ import { strudelVisOptions, strudelVisPalette }     from "../../_shared/strudel-
 export const paramInit = {
     synth: {
         lead: {
-            sound:        'piano',
             filter: {
-                cutoff:     `sine.range(200,2000).slow(16)`,    // Default replaced with data-driven ranges
-                Q:          'sine.range(2,6).slow(2)',  
+                cutoff:     `sine.range(2000,4000).slow(16)`,    // Default replaced with data-driven ranges
+                Q:          'sine.range(6,10).slow(2)',  
                 env: {
-                    A:      '0.005',     
+                    A:      '1',     
                     D:      'perlin.range(.02,.2)',     
                     S:      'perlin.range(0,.5).slow(3)',  
-                    depth:  'perlin.range(1,4).slow(2)',  
+                    R:      '0.5',  
+                    depth:  'perlin.range(1,3).slow(2)',  
                 }
             },
             ampEnv: {
-                A: 0.01, D: 0.1, S: 0.8, R: 0.5
+                A: 1, D: 0.1, S: 0.8, R: 0.5
             }
         },
         bass: {
             mix: {  
                 osc1:   1,
-                osc2:   1,
-                sub:    0.25,
-                noise:  0.25
+                osc2:   0.7,
+                sub:    0.95,
+                noise:  0
             },
             ampEnv: {
                 A: 0.0,     D: 0.1,     S: 0.8,     R: 0.5
             },
             filter: {
-                cutoff:     440,    // Default replaced with data-driven ranges
-                Q:          4,  
+                cutoff:     240,    // Default replaced with data-driven ranges
+                Q:          0,  
                 env: {
-                    A: 0,   D: 0.1,     S: 0.2,    R: 0.5,
-                    depth:  2.5,  
+                    A: 0,   D: 0.1,     S: 0.8,    R: 0.5,
+                    depth:  2,  
                 }
             }
         },
     },
     // Group A: [melodic] 'synth'    
     A: {
-        gain:           0.65,            // Group level gain 
+        gain:           0.35,            // Group level gain 
         mute:           false,          // Mute available at group level
-        octave:         5,              // Scale octave
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([5, 7, 9, 11, 13]),             // Euclidean pulse: default to all pitchs
-            rotation:           randomInteger(16),               // Euclidean rotation
+            pulse:              16,             // Euclidean pulse: default to all pitchs
+            rotation:           0,               // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch 
             scaleTranspose:     0,              // Transpose along the scale
             struct:             undefined,      // Pulse sequencer pattern
             structLegato:       undefined,       // Legato version of pulse sequencer pattern
-            clockDivider:       2              // Clock divider
+            clockDivider:       4              // Clock divider
         },
         velocity: {
             pattern:            undefined
@@ -69,7 +68,7 @@ export const paramInit = {
     },
     // Group B: [melodic] bass 
     B: {
-        gain:           0.5,           // Group level gain
+        gain:           0.45,           // Group level gain
         mute:           false,          // Mute available at group level
         swing: {
             index:      0,              // Min to max swing index
@@ -77,14 +76,14 @@ export const paramInit = {
         },
         pitch: {       
             pattern:            undefined,      // From via updateParameterMap
-            pulse:              randomItem([7, 9, 11, 13]),    // Euclidean pulse (default on load)
-            rotation:           randomInteger(16),          // Euclidean rotation
+            pulse:              16,    // Euclidean pulse (default on load)
+            rotation:           0,          // Euclidean rotation
             legato:             true,           // Switch for euclidean pitch
             transpose:          -12,            // Operates one octave lower (i.e. "bass"), combined with a more limited scale range (1 octave)
             scaleTranspose:     0,              // Transposition within scale
             struct:             undefined,      // Pulse sequencer pattern
             structLegato:       undefined,       // Legato version of pulse sequencer pattern
-            clockDivider:       4               // Clock divider
+            clockDivider:       2               // Clock divider
         },
         noise: {
             pattern:            undefined       // Mapped to noise velocity
@@ -92,14 +91,14 @@ export const paramInit = {
     },
     // Group C: [pattern] percussion
     C: {
-        gain:           0.25,            // Used for group level and mute
+        gain:           0.45,            // Used for group level and mute
         swing: {
             index:      0,              // Min to max swing index
             level:      0               // calculated swing level
         },
         part: {     
             1: {  // "Beat":  
-                gain:           0.8,            // Sets group level with group
+                gain:           0.5,            // Sets group level with group
                 mute:           false,
                 sound: {
                     pattern:        undefined,      // sound part pattern
@@ -129,7 +128,7 @@ export const paramInit = {
                 }
             },
             3: {    // Chords
-                gain:           0.35,           // Sets group level with group
+                gain:           1,           // Sets group level with group
                 mute:           false,
                 octave:         3,              // Scale octave
                 sound: {
@@ -137,7 +136,7 @@ export const paramInit = {
                     code:           undefined,
                     length:         undefined,
                     ampEnv:         undefined,
-                    clockDivider:   1               // Clock divider
+                    clockDivider:   2               // Clock divider
                 }
             }
         }
