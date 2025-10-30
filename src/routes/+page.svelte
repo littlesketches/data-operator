@@ -25,8 +25,8 @@
             description: `Instruments to explore climate data.`
         },
         { 
-            id: 4,      title: "DS-86",   
-            href:       "./model/ds-86/", 
+            id: 4,      title: "IDP-86",   
+            href:       "./model/idp-86/", 
             description: `Instruments to explore data on people displaced by conflict and disaster.`
         },
     ];

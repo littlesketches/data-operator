@@ -5,9 +5,9 @@
     import OE10Operator     from "../docs/sonifcation-notes/OE-10-Operator.svelte";
     import OE10DFAM         from "../docs/sonifcation-notes/OE-10-DFAM.svelte";
     import OE10AMBI         from "../docs/sonifcation-notes/OE-10-AMBI.svelte";
-    import DS86Operator     from "../docs/sonifcation-notes/DS-86-Operator.svelte";
-    import DS86DFAM         from "../docs/sonifcation-notes/DS-86-DFAM.svelte";
-    import DS86AMBI         from "../docs/sonifcation-notes/DS-86-AMBI.svelte";
+    import IDP86Operator    from "../docs/sonifcation-notes/IDP-86-Operator.svelte";
+    import IDP86DFAM        from "../docs/sonifcation-notes/IDP-86-DFAM.svelte";
+    import IDP86AMBI        from "../docs/sonifcation-notes/IDP-86-AMBI.svelte";
     import CW193Operator    from "../docs/sonifcation-notes/CW-193-Operator.svelte";
     import CW193DFAM        from "../docs/sonifcation-notes/CW-193-DFAM.svelte";
     import CW193AMBI        from "../docs/sonifcation-notes/CW-193-AMBI.svelte";
@@ -48,13 +48,13 @@
             {:else if  operatorConfig.model.edition === 'ambi'}
             <CW193AMBI isSideGuide = {true}/>
             {/if}
-        {:else if operatorConfig.model.name === 'ds-86'}
+        {:else if operatorConfig.model.name === 'idp-86'}
             {#if operatorConfig.model.edition === 'operator'}
-            <DS86Operator isSideGuide = {true}/>
+            <IDP86Operator isSideGuide = {true}/>
             {:else if  operatorConfig.model.edition === 'dfam'}
-            <DS86DFAM isSideGuide = {true}/>
+            <IDP86DFAM isSideGuide = {true}/>
             {:else if  operatorConfig.model.edition === 'ambi'}
-            <DS86AMBI isSideGuide = {true}/>
+            <IDP86AMBI isSideGuide = {true}/>
             {/if}
         {/if}
     {/if}
