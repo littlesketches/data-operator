@@ -87,13 +87,15 @@
     }
 
     .mobile .button__container{
-        /* aspect-ratio:           1 / 1; */
         display:                flex;
         align-items:            end;
         justify-content:        center;
-        padding:                calc(var(--margin-std) * 1);
+        padding-bottom:         calc(1 * var(--margin-std));
     }   
 
+    .mobile .button__label span{
+        margin-left:            calc(2 * var(--margin-std));
+    }
     .button__label span{
         font-size:              8.5vh;
         line-height:            1;
@@ -105,9 +107,9 @@
     }
 
     .mobile .button__container{
-        aspect-ratio: initial;
-
+        aspect-ratio:           initial;
     }
+
     .mobile h1.title{
         font-size:              5vh;
     }
