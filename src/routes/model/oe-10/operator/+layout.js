@@ -35,7 +35,7 @@ const operatorConfig = {
         type:       'operator',         // Specify UI
         animation:  {
             group:  'band',
-            type:   'unicorse',
+            type:   'robot',
         },
         keyguide,
         punchFX

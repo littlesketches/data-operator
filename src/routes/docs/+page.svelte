@@ -37,7 +37,6 @@
                 <li><a href = '/docs/quick-start'><strong>Quick start guide</strong>: the place to start &rarr;</a></li>
                 <li><a href = '/docs/user-manual'><strong>User manual</strong>: a more detailed documentation of features &rarr;</a></li>
                 <li><a href = '/docs/design'><strong>Operator design</strong>: a set of design and interface notes &rarr;</a></li>
-                <!-- <li><a href = '/docs/design' style="pointer-events:none; opacity: 0.5"><strong>Sonification notes</strong>: details of approaches and lessons (coming soon) &rarr;</a></li> -->
             </ul>
         </section>
 

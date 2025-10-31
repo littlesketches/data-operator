@@ -145,7 +145,7 @@
             {@const cycleIndex = strudel.state.time.cycle - 1}
             {@const divAdd = cycleIndex * config.steps}
                 {#if yPos === Math.floor(yPos) || chartType === 'full' }
-                <g class = 'grid-marker__wrapper' transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(yPos)})">
+                <g class = 'grid-marker__wrapper' style = "transform: translate({scale.drumkit.x(i)}px, {scale.drumkit.y(yPos)}px)">
                     <path class = 'grid-marker' d = {d3.symbol(d3.symbolCircle).size(symbolSize)()}
                         class:active={(strudel.state.time.step + divAdd ) ===  i  && strudel.state.transport === 'playing'} 
                     />
@@ -165,10 +165,9 @@
                 <g class = 'marker__wrapper {d.type}'
                     class:solo={sonification.state.snapshot.solo.current?.part === 1 }
                     class:mute={sonification.param[group].part["1"].mute}
-                    transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(d.pos)})">
+                    style = "transform: translate({scale.drumkit.x(i)}px, {scale.drumkit.y(d.pos)}px)">
                     <path class = 'marker pulse' 
                         class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length.part1) * clockDivider["1"]) && strudel.state.transport === 'playing'} 
-    
                         d = {config.drumkit[drum].symbol()}
                     />
                 </g>
@@ -182,7 +181,7 @@
             <g class = 'marker-wrapper {d.type}'
                 class:solo={sonification.state.snapshot.solo.current?.part === 2 }
                 class:mute={sonification.param[group].part["2"].mute}
-                transform = "translate({scale.drumkit.x(i)} , {scale.drumkit.y(d.pos)})" >
+                style = "transform: translate({scale.drumkit.x(i)}px, {scale.drumkit.y(d.pos)}px)" >
                 <path class = 'marker pulse' 
                     class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length.part2) * clockDivider["2"]) && strudel.state.transport === 'playing'} 
                     d = {config.drumkit[drum].symbol()}
@@ -203,7 +202,7 @@
             {@const dur = chordEnv.A +chordEnv.D +chordEnv.R}
             {@const path = `M0, 0 L${width * chordEnv.A /dur}, ${-height} L${width * (chordEnv.A + chordEnv.D) /dur}, ${-height * chordEnv.S} L${width}, 0 
                             L${width * (chordEnv.A + chordEnv.D) /dur}, ${height * chordEnv.S} L${width * chordEnv.A /dur}, ${height} z`}
-            <g  class = 'chord-marker-group'  transform =  'translate({scale.chord.x(i)}, {scale.chord.y(d) + height})' >
+            <g  class = 'chord-marker-group'  style = "transform: translate({scale.chord.x(i)}px, {scale.chord.y(d) + height}px)" >
                 <path  class = 'chord-marker' class:active={( Math.floor(cycleIndex /clockDivider["3"])%  length.part3 ) === i  && strudel.state.transport === 'playing'}  
                     d = {path}/>
             </g>

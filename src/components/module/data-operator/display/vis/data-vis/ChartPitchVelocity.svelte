@@ -100,7 +100,7 @@
             {@const cycleIndex = strudel.state.time.cycle - 1}
             {@const divAdd = cycleIndex % clockDivider * config.steps}
             {#if chartType === 'quarter' ? scale.y.domain()[1] > 5 ? scaleDegree % 2 === 0 : true : true}
-            <g class = 'grid-marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(scaleDegree)})">
+            <g class = 'grid-marker__wrapper' style = "transform: translate({scale.x(i)}px , {scale.y(scaleDegree)}px)">
                 <path class = 'grid-marker' d = {config.symbol.A()}
                     class:active={(strudel.state.time.step + divAdd ) === ( i  * clockDivider) && strudel.state.transport === 'playing'} 
                 />
@@ -114,7 +114,7 @@
             {#each pitchSeriesData as d, i}     
             {@const cycleIndex = strudel.state.time.cycle - 1}
             {@const divAdd = cycleIndex % clockDivider * config.steps}
-            <g class = 'marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(d)}) scale({scale.r(velocitySeriesData[i])})">
+            <g class = 'marker__wrapper' style = "transform: translate({scale.x(i)}px, {scale.y(d)}px) scale({scale.r(velocitySeriesData[i])})">
                 <path class = 'marker' 
                     class:active={(strudel.state.time.step + divAdd ) === ( i  * clockDivider) && strudel.state.transport === 'playing'} 
                     class:pulse={pulseArray[i]}

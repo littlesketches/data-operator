@@ -105,7 +105,7 @@
             {@const cycleIndex = strudel.state.time.cycle - 1}
             {@const divAdd = cycleIndex % clockDivider * config.steps}
             {#if chartType === 'quarter' ? scale.y.domain()[1] > 5 ? scaleDegree % 2 === 0 : true : true}
-            <g class = 'grid-marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(scaleDegree)})">
+            <g class = 'grid-marker__wrapper' style = "transform: translate({scale.x(i)}px , {scale.y(scaleDegree)}px )">
                 <path class = 'grid-marker' d = {config.symbol[group]()}
                     class:active={(strudel.state.time.step + divAdd  ) === ( i  * clockDivider) && strudel.state.transport === 'playing'} 
                 />
@@ -120,7 +120,7 @@
             {@const cycleIndex = strudel.state.time.cycle - 1}
             {@const divAdd = cycleIndex % clockDivider * config.steps}
             {#if pulseArray}                
-            <g class = 'marker__wrapper' transform = "translate({scale.x(i)} , {scale.y(d)})">
+            <g class = 'marker__wrapper' style = "transform: translate({scale.x(i)}px , {scale.y(d)}px )">
                 <path class = 'marker' 
                     class:active={(strudel.state.time.step + divAdd ) === (( i * config.steps / length) * clockDivider) && strudel.state.transport === 'playing'} 
                     class:pulse={pulseArray[i] }
@@ -151,7 +151,7 @@
     }
 
     .marker__wrapper{
-        transition: all 500ms;
+        transition:     all 500ms;
     }
     .marker{
         fill:           none;

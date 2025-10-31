@@ -291,6 +291,5 @@ export class DataSonification extends Sonification{
 
         // Part 3. Chord progression notes and params
         this.mapHelper.setChordSequence(projectData, group, 'C', 3)
-console.log(group)
     };
 }

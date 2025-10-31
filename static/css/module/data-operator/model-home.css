@@ -133,3 +133,15 @@ ul.do_model-page__menu {
     background-blend-mode: screen;
 }
 
+/* Mobile*/
+@media (max-width: 600px) {
+    .do_model-page__menu li h2{
+        font-size:              small; 
+    }
+    .do_model-page__menu li h3{
+        font-size:              small;  
+    }
+    .do_model-page__menu li .arrow{
+        font-size:              large; 
+    }
+}
