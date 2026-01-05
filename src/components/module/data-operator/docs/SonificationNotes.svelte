@@ -29,7 +29,7 @@
                 </li>
                 <li>Data sourced were deliberately 'static' in natured and fairly limited in their sophistication. Although they wre chosen for their familiarity (from teh authors prior work), they were/are not treated with any 'depth' of analysis or transformation. This is mainly due to other development priorities and limits some parameter mapping and sound design potential
                 </li>
-                <li>The user interface - partcualry the chose button control layout and limited 'screen' - does limit what sound parameter controls can be made accessible to users.</li>
+                <li>The user interface - particulalry the chose button control layout and limited 'screen' - does limit what sound parameter controls can be made accessible to users.</li>
             </ul>
         </section>
 
