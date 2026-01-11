@@ -64,8 +64,6 @@
                 <li class = 'arrow-marker'><strong>Sonification</strong>: another custom model that maps <i>Data model</i> output to parameters that control virtual instruments<label for="sn-007" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-007" class="margin-toggle"/><span class="sidenote">For brevity, the <i>design</i> of a the set of virtual instruments is not detailed. However each <i>Data Operator</i> can contain multiple instruments, all of which will have multiple parameters for that could be mapped to data. FOr tonal instruments, the most common parameter to map is note pitch and length, but there many parameters available to control dynamics (i.e. volume) and timbre.</span></li> 
             </ul>
 
-            <!-- <p>If you're interested in learning more about sonification the context of the <i>Data Operator</i> project, feel free to read through <a href ='/docs/operator-design'>Sonification notes</a>.</p> -->
-
         </section>
 
         <hr>

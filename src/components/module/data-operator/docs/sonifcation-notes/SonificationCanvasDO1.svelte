@@ -124,8 +124,8 @@
             <tspan x="0" y="0">Indexical: is sound directly produced by the phenomenon you want to represent?</tspan>
             <tspan x="0" y="8.4">Iconic: is sound similar to the phenomenon you want to represent?</tspan>
             <tspan x="0" y="16.8">Symbolic: is sound arbitrarily related to the phenomenon you want to represent?</tspan>
-            <tspan x="0" y="42">e.g.</tspan>
-            <tspan x="0" y="50.4">Indexical: the intensity of rain is detected by listening to the sound it emits.</tspan>  
+            <!-- <tspan x="0" y="42">e.g.</tspan>
+            <tspan x="0" y="50.4">Indexical: the intensity of rain is detected by listening to the sound it emits.</tspan>   -->
             
             <!-- <tspan x="0" y="58.8">Iconic: the intensity of rain is mimicked by the sound of rice grains falling on a surface.</tspan>
             <tspan x="0" y="67.2">Symbolic: the intensity of rain is represented by the sound of different musical instruments.</tspan>
@@ -244,7 +244,7 @@
 
         <foreignObject x = "790" y = "475" width= "440" height="115">
             <div class="content functions"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>The functions are all symbolic and mapped to virtual instruments. Instruments used are differentiated by tonality vs atonality (i.e. percussive sounds);  frequency range (e.g. monophonic lead an bass sequencers) and harmonic content (e.g. pads/drones/chords). </p>
+                <p>The functions are all symbolic and mapped to virtual instruments. Instruments used are differentiated by tonality vs atonality (i.e. percussive sounds); frequency range (e.g. monophonic lead an bass sequencers) and harmonic content (e.g. pads/drones/chords). </p>
            
                 <p>A clock divider (that can be set by the user) is available for instruments (and is shown visually) as a way to create 'space' and rhythm in the compositions.</p>
             </div>
@@ -280,7 +280,7 @@
 
         <foreignObject x = "65" y = "720" width= "330" height="210">
             <div class="content analytical"  xmlns="http://www.w3.org/1999/xhtml">
-                <p>Data values from a range of (<u></u>ser selectable) data series is what is being represented by sound. These values are (mostly) however, aggregated to musically-suitable intervals (e.g. 16steps/16n, 8n, 4n, 2n and 1m ) for mapping/quantization to conventional music time.
+                <p>Data values from a range of (user selectable) data series is what is being represented by sound. These values are (mostly) however, aggregated to musically-suitable intervals (e.g. 16steps/16n, 8n, 4n, 2n and 1m ) for mapping/quantization to conventional music time.
                 </p>
                 <ul>
                     <li>Mapping to note frequency (pitch) is also scaled to musical scale degrees, which are then transformed by a (user selected) musical scale (that can also be transposed).</li>
