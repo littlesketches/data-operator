@@ -102,6 +102,17 @@
 
         </section>
 
+
+        <hr>
+        <section>
+            <h2>License and code</h2>
+
+            <p><i>Data Operator</i> has been developed using open source libraries and will itself be open sourced under the AGPL-3.0 license (once/if it ever gets 'finished' and has some sort of 'release'<label for="sn-020" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-020" class="margin-toggle"/><span class="sidenote"> The current github repo is <a href = 'https://github.com/littlesketches/data-operator' target = '_blank'>here</a> although its set to 'private' while in development. Ultimately, it should probably be moved to another git service...
+            </span>).  
+            </p>
+
+        </section>
+
         <!-- <section>
             <h2>Release notes</h2>
             <div class = 'slide-button' data-section = 'release-notes' onclick = {handle.toggleView}>
